@@ -1,4 +1,3 @@
-// app/(app)/dashboard/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -10,7 +9,6 @@ export default async function DashboardPage() {
   const userId = session!.user.id;
   const isPro = session!.user.plan !== "free";
 
-  // Métricas
   const [total, enviadas, aprovadas, rejeitadas, recentes] = await Promise.all([
     prisma.cotacao.count({ where: { userId } }),
     prisma.cotacao.count({ where: { userId, status: "enviada" } }),
@@ -25,8 +23,9 @@ export default async function DashboardPage() {
 
   const taxaAprovacao = total > 0 ? Math.round((aprovadas / total) * 100) : 0;
 
-  // Limite free: 10 cotações/mês
-  const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
+  const inicioMes = new Date();
+  inicioMes.setDate(1);
+  inicioMes.setHours(0, 0, 0, 0);
   const cotacoesMes = await prisma.cotacao.count({
     where: { userId, createdAt: { gte: inicioMes } },
   });
@@ -35,9 +34,9 @@ export default async function DashboardPage() {
 
   const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
     rascunho: { label: "Rascunho", cls: "badge-gray" },
-    enviada:  { label: "Enviada",  cls: "badge-yellow" },
+    enviada: { label: "Enviada", cls: "badge-yellow" },
     aprovada: { label: "Aprovada", cls: "badge-green" },
-    rejeitada:{ label: "Rejeitada",cls: "badge-red" },
+    rejeitada: { label: "Rejeitada", cls: "badge-red" },
   };
 
   return (
@@ -45,7 +44,7 @@ export default async function DashboardPage() {
       <div className="app-topbar">
         <h1>Dashboard</h1>
         <Link
-          href={atingiuLimite ? "/checkout?plan=pro" : "/cotacoes/nova"}
+          href={atingiuLimite ? "/checkout?plan=pro" : "/cotacoes"}
           className="btn-primary"
           style={{ fontSize: ".875rem", padding: "8px 16px" }}
         >
@@ -54,10 +53,8 @@ export default async function DashboardPage() {
       </div>
 
       <div className="app-content">
-        {/* Banner upgrade */}
         {!isPro && <UpgradeBanner cotacoesMes={cotacoesMes} limite={limiteFree} />}
 
-        {/* Stats */}
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-label">Total de cotações</div>
@@ -86,15 +83,9 @@ export default async function DashboardPage() {
                 </Link>
               </div>
             )}
-            {isPro && session!.user.planExpiresAt && (
-              <div className="stat-sub">
-                Expira em {new Date(session!.user.planExpiresAt).toLocaleDateString("pt-BR")}
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Cotações recentes */}
         <div className="section-header">
           <h2>Cotações recentes</h2>
           <Link href="/cotacoes" style={{ fontSize: ".875rem", color: "var(--text-2)" }}>
@@ -103,19 +94,17 @@ export default async function DashboardPage() {
         </div>
 
         {recentes.length === 0 ? (
-          <div
-            style={{
-              background: "var(--bg-2)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--radius-lg)",
-              padding: "48px",
-              textAlign: "center",
-              color: "var(--text-3)",
-            }}
-          >
+          <div style={{
+            background: "var(--bg-2)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-lg)",
+            padding: "48px",
+            textAlign: "center",
+            color: "var(--text-3)",
+          }}>
             <p style={{ fontSize: "2rem", marginBottom: "12px" }}>📋</p>
             <p style={{ marginBottom: "16px" }}>Nenhuma cotação ainda.</p>
-            <Link href="/cotacoes/nova" className="btn-primary">
+            <Link href="/cotacoes" className="btn-primary">
               Criar primeira cotação
             </Link>
           </div>
