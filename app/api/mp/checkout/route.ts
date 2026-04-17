@@ -1,3 +1,4 @@
+console.log("[DEBUG] TOKEN:", process.env.MP_ACCESS_TOKEN?.slice(0, 20));
 // app/api/mp/checkout/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
