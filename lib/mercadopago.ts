@@ -1,7 +1,6 @@
-// lib/mercadopago.ts
-import MercadoPagoConfig, { Payment, Preference } from "mercadopago";
+import MercadoPagoConfig, { Payment } from "mercadopago";
 
-export const mp = new MercadoPagoConfig({
+const getMP = () => new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
@@ -20,7 +19,6 @@ export const PLANS = {
   },
 };
 
-// Gera cobrança PIX (pagamento único ou primeiro mês)
 export async function createPixPayment({
   planId,
   userEmail,
@@ -33,6 +31,7 @@ export async function createPixPayment({
   userId: string;
 }) {
   const plan = PLANS[planId];
+  const mp = getMP();
   const payment = new Payment(mp);
 
   const result = await payment.create({
@@ -50,7 +49,7 @@ export async function createPixPayment({
         plan_id: planId,
       },
       notification_url: `${process.env.NEXTAUTH_URL}/api/mp/webhook`,
-      date_of_expiration: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30min
+      date_of_expiration: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
     },
   });
 
