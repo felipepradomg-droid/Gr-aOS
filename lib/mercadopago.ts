@@ -1,21 +1,17 @@
 import MercadoPagoConfig, { Payment } from "mercadopago";
 
-const getMP = () => new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
-});
-
 export const PLANS = {
   pro: {
     id: "pro",
-    name: "GrúaOS Pro",
+    name: "GrúaOS Pro", 
     price: 97,
-    description: "Cotações ilimitadas, 3 usuários, envio WhatsApp",
+    description: "Cotações ilimitadas",
   },
   enterprise: {
     id: "enterprise",
     name: "GrúaOS Enterprise",
     price: 247,
-    description: "Tudo do Pro + usuários ilimitados + suporte prioritário",
+    description: "Tudo do Pro + suporte",
   },
 };
 
@@ -24,17 +20,19 @@ export async function createPixPayment({
   userEmail,
   userName,
   userId,
+  accessToken,
 }: {
   planId: "pro" | "enterprise";
   userEmail: string;
   userName: string;
   userId: string;
+  accessToken: string;
 }) {
   const plan = PLANS[planId];
-  const mp = getMP();
+  const mp = new MercadoPagoConfig({ accessToken });
   const payment = new Payment(mp);
 
-  const result = await payment.create({
+  return await payment.create({
     body: {
       transaction_amount: plan.price,
       description: plan.name,
@@ -44,14 +42,9 @@ export async function createPixPayment({
         first_name: userName.split(" ")[0],
         last_name: userName.split(" ").slice(1).join(" ") || ".",
       },
-      metadata: {
-        user_id: userId,
-        plan_id: planId,
-      },
+      metadata: { user_id: userId, plan_id: planId },
       notification_url: `${process.env.NEXTAUTH_URL}/api/mp/webhook`,
       date_of_expiration: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
     },
   });
-
-  return result;
 }
