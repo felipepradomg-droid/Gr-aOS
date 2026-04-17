@@ -6,27 +6,3 @@
     }
   ]
 }
-
-// ─── O QUE FAZ ────────────────────────────────────────────────
-// Executa todo dia às 03:00 UTC (meia-noite no horário de Brasília)
-// Verifica usuários com plano expirado e rebaixa para Free
-//
-// ─── SEGURANÇA ───────────────────────────────────────────────
-// A Vercel envia automaticamente o header:
-//   Authorization: Bearer {CRON_SECRET}
-// Adicione a variável CRON_SECRET nas env vars da Vercel:
-//   CRON_SECRET = "string-aleatoria-segura"
-//
-// ─── RENOVAÇÃO DO PLANO ──────────────────────────────────────
-// Quando o usuário paga via PIX, o webhook do MP ativa por 30 dias.
-// Se o usuário pagar novamente (manualmente ou via link),
-// o webhook estende mais 30 dias a partir de hoje.
-//
-// Fluxo recomendado para lembrar usuário de renovar:
-// 1. 7 dias antes de expirar → enviar email de aviso
-// 2. No dia de expirar → enviar email com link de pagamento
-// 3. Após expirar → cron rebaixa para free
-//
-// Para automação de pagamento recorrente (sem intervenção manual),
-// use a API de Assinaturas do Mercado Pago:
-// https://www.mercadopago.com.br/developers/pt/docs/subscriptions/landing
