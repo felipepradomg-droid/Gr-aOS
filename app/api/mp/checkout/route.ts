@@ -6,8 +6,8 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const token = process.env.MP_ACCESS_TOKEN!;
-    console.log("[DEBUG] TOKEN INICIO:", token?.slice(0, 15));
+    const token = process.env.MERCADOPAGO_TOKEN!;
+    console.log("[DEBUG] TOKEN:", token?.slice(0, 15));
 
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
