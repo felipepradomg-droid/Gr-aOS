@@ -131,13 +131,14 @@ export default async function CotacoesPage({
                         {new Date(c.createdAt).toLocaleDateString("pt-BR")}
                       </td>
                       <td>
-                        <Link
-                          href={`/cotacoes/${c.id}`}
-                          style={{ fontSize: ".8rem", color: "var(--brand)", fontWeight: 600 }}
-                        >
-                          Ver →
-                        </Link>
-                      </td>
+  <a
+    href={`/cotacoes/${c.id}`}
+    style={{ fontSize: ".8rem", color: "var(--brand)", fontWeight: 600, display: "block", padding: "8px 0" }}
+  >
+    Ver →
+  </a>
+</td>
+
                     </tr>
                   );
                 })}
