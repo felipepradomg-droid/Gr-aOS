@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const token = process.env.MERCADOPAGO_TOKEN!;
-    console.log("[DEBUG] TOKEN:", token?.slice(0, 15));
 
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -28,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     const payment = await createPixPayment({
-      planId: planId as "pro" | "enterprise",
+      planId: planId as keyof typeof PLANS,
       userEmail: user.email!,
       userName: user.name || "Cliente",
       userId: user.id,
