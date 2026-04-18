@@ -44,7 +44,7 @@ export default async function DashboardPage() {
       <div className="app-topbar">
         <h1>Dashboard</h1>
         <Link
-          href={atingiuLimite ? "/checkout?plan=pro" : "/cotacoes"}
+          href={atingiuLimite ? "/planos" : "/cotacoes"}
           className="btn-primary"
           style={{ fontSize: ".875rem", padding: "8px 16px" }}
         >
@@ -78,7 +78,7 @@ export default async function DashboardPage() {
             </div>
             {!isPro && (
               <div className="stat-sub">
-                <Link href="/checkout?plan=pro" style={{ color: "var(--brand)" }}>
+                <Link href="/planos" style={{ color: "var(--brand)" }}>
                   Fazer upgrade →
                 </Link>
               </div>
