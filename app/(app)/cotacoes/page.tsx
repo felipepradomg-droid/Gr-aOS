@@ -1,4 +1,3 @@
-// app/(app)/cotacoes/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -8,13 +7,15 @@ import NovaCotacaoModal from "@/components/NovaCotacaoModal";
 export default async function CotacoesPage({
   searchParams,
 }: {
-  searchParams: { status?: string; q?: string };
+  searchParams: { status?: string };
 }) {
   const session = await getServerSession(authOptions);
   const userId = session!.user.id;
   const isPro = session!.user.plan !== "free";
 
-  const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
+  const inicioMes = new Date();
+  inicioMes.setDate(1);
+  inicioMes.setHours(0, 0, 0, 0);
   const cotacoesMes = await prisma.cotacao.count({
     where: { userId, createdAt: { gte: inicioMes } },
   });
@@ -22,12 +23,6 @@ export default async function CotacoesPage({
 
   const where: any = { userId };
   if (searchParams.status) where.status = searchParams.status;
-  if (searchParams.q) {
-    where.OR = [
-      { clienteNome: { contains: searchParams.q, mode: "insensitive" } },
-      { descricao: { contains: searchParams.q, mode: "insensitive" } },
-    ];
-  }
 
   const cotacoes = await prisma.cotacao.findMany({
     where,
@@ -36,9 +31,9 @@ export default async function CotacoesPage({
 
   const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
     rascunho: { label: "Rascunho", cls: "badge-gray" },
-    enviada:  { label: "Enviada",  cls: "badge-yellow" },
+    enviada: { label: "Enviada", cls: "badge-yellow" },
     aprovada: { label: "Aprovada", cls: "badge-green" },
-    rejeitada:{ label: "Rejeitada",cls: "badge-red" },
+    rejeitada: { label: "Rejeitada", cls: "badge-red" },
   };
 
   const FILTERS = [
@@ -56,14 +51,13 @@ export default async function CotacoesPage({
         {podeNova ? (
           <NovaCotacaoModal />
         ) : (
-          <Link href="/checkout?plan=pro" className="btn-primary" style={{ fontSize: ".875rem", padding: "8px 16px" }}>
-            ⚡ Upgrade para criar mais
+          <Link href="/checkout?plan=starter" className="btn-primary" style={{ fontSize: ".875rem", padding: "8px 16px" }}>
+            Fazer upgrade
           </Link>
         )}
       </div>
 
       <div className="app-content">
-        {/* Filtros */}
         <div style={{ display: "flex", gap: "8px", marginBottom: "20px", flexWrap: "wrap" }}>
           {FILTERS.map((f) => (
             <Link
@@ -74,12 +68,8 @@ export default async function CotacoesPage({
                 borderRadius: "999px",
                 fontSize: ".825rem",
                 fontWeight: 500,
-                background: searchParams.status === f.value || (!searchParams.status && !f.value)
-                  ? "var(--brand)"
-                  : "var(--bg-2)",
-                color: searchParams.status === f.value || (!searchParams.status && !f.value)
-                  ? "#fff"
-                  : "var(--text-2)",
+                background: searchParams.status === f.value || (!searchParams.status && !f.value) ? "var(--brand)" : "var(--bg-2)",
+                color: searchParams.status === f.value || (!searchParams.status && !f.value) ? "#fff" : "var(--text-2)",
                 border: "1px solid var(--border)",
                 textDecoration: "none",
               }}
@@ -89,18 +79,15 @@ export default async function CotacoesPage({
           ))}
         </div>
 
-        {/* Tabela */}
         {cotacoes.length === 0 ? (
-          <div
-            style={{
-              background: "var(--bg-2)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--radius-lg)",
-              padding: "56px",
-              textAlign: "center",
-              color: "var(--text-3)",
-            }}
-          >
+          <div style={{
+            background: "var(--bg-2)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-lg)",
+            padding: "56px",
+            textAlign: "center",
+            color: "var(--text-3)",
+          }}>
             <p style={{ fontSize: "2.5rem", marginBottom: "12px" }}>📋</p>
             <p style={{ marginBottom: "8px", color: "var(--text-2)", fontWeight: 500 }}>
               Nenhuma cotação encontrada
@@ -116,7 +103,7 @@ export default async function CotacoesPage({
                   <th>Descrição</th>
                   <th>Valor</th>
                   <th>Status</th>
-                  <th>Criada em</th>
+                  <th>Data</th>
                   <th></th>
                 </tr>
               </thead>
@@ -131,7 +118,7 @@ export default async function CotacoesPage({
                           <div style={{ fontSize: ".75rem", color: "var(--text-3)" }}>{c.clienteTel}</div>
                         )}
                       </td>
-                      <td style={{ color: "var(--text-2)", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      <td style={{ color: "var(--text-2)", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {c.descricao}
                       </td>
                       <td style={{ fontWeight: 600 }}>
@@ -146,7 +133,7 @@ export default async function CotacoesPage({
                       <td>
                         <Link
                           href={`/cotacoes/${c.id}`}
-                          style={{ fontSize: ".8rem", color: "var(--text-2)" }}
+                          style={{ fontSize: ".8rem", color: "var(--brand)", fontWeight: 600 }}
                         >
                           Ver →
                         </Link>
