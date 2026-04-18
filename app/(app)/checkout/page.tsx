@@ -1,20 +1,22 @@
 "use client";
-// app/(app)/checkout/page.tsx
-
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 
 const PLAN_LABELS: Record<string, { name: string; price: number; features: string[] }> = {
+  starter: {
+    name: "GrúaOS Starter",
+    price: 97,
+    features: ["50 cotações/mês", "1 usuário", "PDF com sua marca", "Suporte por email"],
+  },
   pro: {
     name: "GrúaOS Pro",
-    price: 97,
-    features: ["Cotações ilimitadas", "3 usuários", "PDF com sua marca", "Envio WhatsApp"],
+    price: 197,
+    features: ["Cotações ilimitadas", "3 usuários", "PDF com sua marca", "Envio WhatsApp", "Relatórios mensais"],
   },
-  enterprise: {
-    name: "GrúaOS Enterprise",
-    price: 247,
-    features: ["Tudo do Pro", "Usuários ilimitados", "Suporte 24h", "API de integração"],
+  business: {
+    name: "GrúaOS Business",
+    price: 397,
+    features: ["Tudo do Pro", "10 usuários", "API de integração", "Suporte prioritário 24h", "Onboarding dedicado"],
   },
 };
 
@@ -29,7 +31,6 @@ export default function CheckoutPage() {
     pixQrCodeBase64?: string;
     pixCopyPaste?: string;
     paymentId?: number;
-    expiresAt?: string;
   } | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -45,8 +46,6 @@ export default function CheckoutPage() {
       if (!res.ok) throw new Error(data.error);
       setPixData(data);
       setStep("pix");
-
-      // Polling para verificar pagamento aprovado
       startPolling(data.paymentId);
     } catch (e) {
       alert("Erro ao gerar PIX. Tente novamente.");
@@ -65,9 +64,7 @@ export default function CheckoutPage() {
           setStep("success");
         }
       } catch {}
-    }, 5000); // verifica a cada 5s
-
-    // Para após 30min (expiração do PIX)
+    }, 5000);
     setTimeout(() => clearInterval(interval), 30 * 60 * 1000);
   }
 
@@ -82,14 +79,13 @@ export default function CheckoutPage() {
   return (
     <div className="checkout-page">
       <div className="checkout-card">
-        {/* STEP 1 — Resumo */}
+
         {step === "summary" && (
           <>
             <div className="checkout-header">
               <h1>Assinar {plan.name}</h1>
               <p>Acesso imediato após confirmação do pagamento</p>
             </div>
-
             <div className="plan-summary">
               <div className="plan-summary-price">
                 <span className="currency">R$</span>
@@ -102,7 +98,6 @@ export default function CheckoutPage() {
                 ))}
               </ul>
             </div>
-
             <div className="payment-method">
               <div className="pix-badge">
                 <span className="pix-icon">PIX</span>
@@ -112,29 +107,21 @@ export default function CheckoutPage() {
                 </div>
               </div>
             </div>
-
-            <button
-              className="btn-checkout"
-              onClick={generatePix}
-              disabled={loading}
-            >
+            <button className="btn-checkout" onClick={generatePix} disabled={loading}>
               {loading ? "Gerando PIX..." : `Pagar R$ ${plan.price} via PIX`}
             </button>
-
             <p className="checkout-note">
-              🔒 Pagamento seguro via Mercado Pago · Renovação mensal · Cancele quando quiser
+              🔒 Pagamento seguro via Mercado Pago · Cancele quando quiser
             </p>
           </>
         )}
 
-        {/* STEP 2 — QR Code PIX */}
         {step === "pix" && pixData && (
           <>
             <div className="checkout-header">
               <h1>Pague via PIX</h1>
               <p>O QR Code expira em <strong>30 minutos</strong></p>
             </div>
-
             <div className="pix-qr-wrapper">
               {pixData.pixQrCodeBase64 && (
                 <img
@@ -144,36 +131,27 @@ export default function CheckoutPage() {
                 />
               )}
             </div>
-
             <p className="pix-instructions">
               Abra o app do seu banco → Pix → Ler QR Code
             </p>
-
             {pixData.pixCopyPaste && (
               <div className="pix-copypaste">
-                <input
-                  readOnly
-                  value={pixData.pixCopyPaste}
-                  className="pix-code-input"
-                />
+                <input readOnly value={pixData.pixCopyPaste} className="pix-code-input" />
                 <button onClick={copyPix} className="btn-copy">
                   {copied ? "✓ Copiado!" : "Copiar código"}
                 </button>
               </div>
             )}
-
             <div className="pix-waiting">
               <div className="spinner" />
               <p>Aguardando confirmação do pagamento...</p>
             </div>
-
             <p className="checkout-note">
-              Após o pagamento, seu plano será ativado automaticamente em segundos.
+              Após o pagamento, seu plano será ativado automaticamente.
             </p>
           </>
         )}
 
-        {/* STEP 3 — Sucesso */}
         {step === "success" && (
           <div className="checkout-success">
             <div className="success-icon">🎉</div>
@@ -184,6 +162,7 @@ export default function CheckoutPage() {
             </a>
           </div>
         )}
+
       </div>
     </div>
   );
