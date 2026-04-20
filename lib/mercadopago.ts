@@ -1,4 +1,4 @@
-import MercadoPagoConfig, { Payment } from "mercadopago";
+import MercadoPagoConfig, { Preference } from "mercadopago";
 
 export const PLANS = {
   starter: {
@@ -6,57 +6,68 @@ export const PLANS = {
     name: "GrúaOS Starter",
     price: 97,
     description: "50 cotações/mês, 1 usuário",
-    cotacoesLimit: 50,
-    usuarios: 1,
   },
   pro: {
     id: "pro",
     name: "GrúaOS Pro",
     price: 197,
     description: "Cotações ilimitadas, 3 usuários, WhatsApp",
-    cotacoesLimit: 999999,
-    usuarios: 3,
   },
   business: {
     id: "business",
     name: "GrúaOS Business",
     price: 397,
     description: "Tudo do Pro + 10 usuários + suporte prioritário",
-    cotacoesLimit: 999999,
-    usuarios: 10,
   },
 };
 
-export async function createPixPayment({
+export async function createCheckoutPro({
   planId,
   userEmail,
-  userName,
   userId,
   accessToken,
 }: {
   planId: keyof typeof PLANS;
   userEmail: string;
-  userName: string;
   userId: string;
   accessToken: string;
 }) {
   const plan = PLANS[planId];
   const mp = new MercadoPagoConfig({ accessToken });
-  const payment = new Payment(mp);
+  const preference = new Preference(mp);
 
-  return await payment.create({
+  const result = await preference.create({
     body: {
-      transaction_amount: plan.price,
-      description: plan.name,
-      payment_method_id: "pix",
+      items: [
+        {
+          id: planId,
+          title: plan.name,
+          description: plan.description,
+          quantity: 1,
+          unit_price: plan.price,
+          currency_id: "BRL",
+        },
+      ],
       payer: {
         email: userEmail,
-        first_name: userName.split(" ")[0],
-        last_name: userName.split(" ").slice(1).join(" ") || ".",
       },
-      metadata: { user_id: userId, plan_id: planId },
+      metadata: {
+        user_id: userId,
+        plan_id: planId,
+      },
+      back_urls: {
+        success: `${process.env.NEXTAUTH_URL}/checkout/sucesso`,
+        failure: `${process.env.NEXTAUTH_URL}/checkout/erro`,
+        pending: `${process.env.NEXTAUTH_URL}/checkout/pendente`,
+      },
+      auto_return: "approved",
       notification_url: `${process.env.NEXTAUTH_URL}/api/mp/webhook`,
-      date_of_expiration: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      payment_methods: {
+        excluded_payment_types: [],
+        installments: 12,
+      },
     },
   });
+
+  return result;
 }
