@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const PLAN_LABELS: Record<string, { name: string; price: number; features: string[] }> = {
   starter: {
@@ -20,21 +21,13 @@ const PLAN_LABELS: Record<string, { name: string; price: number; features: strin
   },
 };
 
-export default function CheckoutPage() {
+function CheckoutForm() {
   const params = useSearchParams();
   const planId = params.get("plan") || "pro";
   const plan = PLAN_LABELS[planId] || PLAN_LABELS.pro;
-
-  const [step, setStep] = useState<"summary" | "pix" | "success">("summary");
   const [loading, setLoading] = useState(false);
-  const [pixData, setPixData] = useState<{
-    pixQrCodeBase64?: string;
-    pixCopyPaste?: string;
-    paymentId?: number;
-  } | null>(null);
-  const [copied, setCopied] = useState(false);
 
-  async function generatePix() {
+  async function handleCheckout() {
     setLoading(true);
     try {
       const res = await fetch("/api/mp/checkout", {
@@ -44,126 +37,74 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      setPixData(data);
-      setStep("pix");
-      startPolling(data.paymentId);
+      window.location.href = data.checkoutUrl;
     } catch (e) {
-      alert("Erro ao gerar PIX. Tente novamente.");
-    } finally {
+      alert("Erro ao criar checkout. Tente novamente.");
       setLoading(false);
-    }
-  }
-
-  function startPolling(paymentId: number) {
-    const interval = setInterval(async () => {
-      try {
-        const res = await fetch(`/api/mp/status?paymentId=${paymentId}`);
-        const data = await res.json();
-        if (data.status === "approved") {
-          clearInterval(interval);
-          setStep("success");
-        }
-      } catch {}
-    }, 5000);
-    setTimeout(() => clearInterval(interval), 30 * 60 * 1000);
-  }
-
-  function copyPix() {
-    if (pixData?.pixCopyPaste) {
-      navigator.clipboard.writeText(pixData.pixCopyPaste);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
     }
   }
 
   return (
     <div className="checkout-page">
       <div className="checkout-card">
+        <div className="checkout-header">
+          <h1>Assinar {plan.name}</h1>
+          <p>Acesso imediato após confirmação do pagamento</p>
+        </div>
 
-        {step === "summary" && (
-          <>
-            <div className="checkout-header">
-              <h1>Assinar {plan.name}</h1>
-              <p>Acesso imediato após confirmação do pagamento</p>
-            </div>
-            <div className="plan-summary">
-              <div className="plan-summary-price">
-                <span className="currency">R$</span>
-                <span className="amount">{plan.price}</span>
-                <span className="period">/mês</span>
-              </div>
-              <ul className="plan-summary-features">
-                {plan.features.map((f) => (
-                  <li key={f}>✓ {f}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="payment-method">
-              <div className="pix-badge">
-                <span className="pix-icon">PIX</span>
-                <div>
-                  <strong>Pagamento via PIX</strong>
-                  <p>Aprovação em segundos</p>
-                </div>
-              </div>
-            </div>
-            <button className="btn-checkout" onClick={generatePix} disabled={loading}>
-              {loading ? "Gerando PIX..." : `Pagar R$ ${plan.price} via PIX`}
-            </button>
-            <p className="checkout-note">
-              🔒 Pagamento seguro via Mercado Pago · Cancele quando quiser
-            </p>
-          </>
-        )}
-
-        {step === "pix" && pixData && (
-          <>
-            <div className="checkout-header">
-              <h1>Pague via PIX</h1>
-              <p>O QR Code expira em <strong>30 minutos</strong></p>
-            </div>
-            <div className="pix-qr-wrapper">
-              {pixData.pixQrCodeBase64 && (
-                <img
-                  src={`data:image/png;base64,${pixData.pixQrCodeBase64}`}
-                  alt="QR Code PIX"
-                  className="pix-qr"
-                />
-              )}
-            </div>
-            <p className="pix-instructions">
-              Abra o app do seu banco → Pix → Ler QR Code
-            </p>
-            {pixData.pixCopyPaste && (
-              <div className="pix-copypaste">
-                <input readOnly value={pixData.pixCopyPaste} className="pix-code-input" />
-                <button onClick={copyPix} className="btn-copy">
-                  {copied ? "✓ Copiado!" : "Copiar código"}
-                </button>
-              </div>
-            )}
-            <div className="pix-waiting">
-              <div className="spinner" />
-              <p>Aguardando confirmação do pagamento...</p>
-            </div>
-            <p className="checkout-note">
-              Após o pagamento, seu plano será ativado automaticamente.
-            </p>
-          </>
-        )}
-
-        {step === "success" && (
-          <div className="checkout-success">
-            <div className="success-icon">🎉</div>
-            <h1>Pagamento confirmado!</h1>
-            <p>Seu plano <strong>{plan.name}</strong> está ativo.</p>
-            <a href="/dashboard" className="btn-checkout">
-              Acessar meu painel →
-            </a>
+        <div className="plan-summary">
+          <div className="plan-summary-price">
+            <span className="currency">R$</span>
+            <span className="amount">{plan.price}</span>
+            <span className="period">/mês</span>
           </div>
-        )}
+          <ul className="plan-summary-features">
+            {plan.features.map((f) => (
+              <li key={f}>✓ {f}</li>
+            ))}
+          </ul>
+        </div>
 
+        <div style={{
+          background: "var(--bg-3)",
+          border: "1px solid var(--border)",
+          borderRadius: "var(--radius)",
+          padding: "16px",
+          marginBottom: "20px",
+        }}>
+          <div style={{ fontWeight: 600, marginBottom: "8px" }}>Formas de pagamento aceitas:</div>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            {["💳 Cartão de crédito", "💳 Cartão de débito", "🔑 PIX", "📄 Boleto"].map((m) => (
+              <span key={m} style={{ background: "var(--bg-2)", border: "1px solid var(--border)", padding: "4px 12px", borderRadius: "999px", fontSize: ".8rem", color: "var(--text-2)" }}>
+                {m}
+              </span>
+            ))}
+          </div>
+          <div style={{ marginTop: "12px", fontSize: ".8rem", color: "var(--text-3)" }}>
+            Até 12x no cartão · Processado pelo Mercado Pago
+          </div>
+        </div>
+
+        <button
+          className="btn-checkout"
+          onClick={handleCheckout}
+          disabled={loading}
+        >
+          {loading ? "Redirecionando..." : `Pagar R$ ${plan.price} →`}
+        </button>
+
+        <p className="checkout-note">
+          🔒 Pagamento 100% seguro via Mercado Pago · Cancele quando quiser
+        </p>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense>
+      <CheckoutForm />
+    </Suspense>
   );
 }
