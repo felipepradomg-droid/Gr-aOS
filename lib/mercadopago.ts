@@ -56,12 +56,12 @@ export async function createCheckoutPro({
         plan_id: planId,
       },
       back_urls: {
-        success: `${process.env.NEXTAUTH_URL}/checkout/sucesso`,
-        failure: `${process.env.NEXTAUTH_URL}/checkout/erro`,
-        pending: `${process.env.NEXTAUTH_URL}/checkout/pendente`,
+        success: "https://gruaos.vercel.app/checkout/sucesso",
+        failure: "https://gruaos.vercel.app/checkout/erro",
+        pending: "https://gruaos.vercel.app/checkout/pendente",
       },
       auto_return: "approved",
-      notification_url: `${process.env.NEXTAUTH_URL}/api/mp/webhook`,
+      notification_url: "https://gruaos.vercel.app/api/mp/webhook",
       payment_methods: {
         excluded_payment_types: [],
         installments: 12,
