@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { createPixPayment, PLANS } from "@/lib/mercadopago";
+import { createCheckoutPro, PLANS } from "@/lib/mercadopago";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
     const token = process.env.MERCADOPAGO_TOKEN!;
-
     const session = await getServerSession(authOptions);
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
@@ -26,35 +26,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
     }
 
-    const payment = await createPixPayment({
+    const preference = await createCheckoutPro({
       planId: planId as keyof typeof PLANS,
       userEmail: user.email!,
-      userName: user.name || "Cliente",
       userId: user.id,
       accessToken: token,
     });
 
-    await prisma.payment.create({
-      data: {
-        userId: user.id,
-        mpPaymentId: String(payment.id),
-        planId,
-        amount: PLANS[planId as keyof typeof PLANS].price,
-        status: "pending",
-      },
-    });
-
     return NextResponse.json({
-      paymentId: payment.id,
-      pixQrCode: payment.point_of_interaction?.transaction_data?.qr_code,
-      pixQrCodeBase64: payment.point_of_interaction?.transaction_data?.qr_code_base64,
-      pixCopyPaste: payment.point_of_interaction?.transaction_data?.qr_code,
-      expiresAt: payment.date_of_expiration,
-      amount: PLANS[planId as keyof typeof PLANS].price,
-      planName: PLANS[planId as keyof typeof PLANS].name,
+      checkoutUrl: preference.init_point,
+      preferenceId: preference.id,
     });
   } catch (error) {
     console.error("[MP_CHECKOUT]", error);
-    return NextResponse.json({ error: "Erro ao gerar PIX" }, { status: 500 });
+    return NextResponse.json({ error: "Erro ao criar checkout" }, { status: 500 });
   }
 }
