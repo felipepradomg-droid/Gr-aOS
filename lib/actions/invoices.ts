@@ -49,98 +49,114 @@ export async function getInvoiceById(id: string) {
 }
 
 export async function createInvoiceFromOS(serviceOrderId: string) {
-  const userId = await getUserId()
+  try {
+    const userId = await getUserId()
 
-  const os = await prisma.serviceOrder.findFirst({
-    where: { id: serviceOrderId, userId },
-  })
+    const os = await prisma.serviceOrder.findFirst({
+      where: { id: serviceOrderId, userId },
+    })
 
-  if (!os) return { error: 'OS não encontrada' }
+    if (!os) return { data: null, error: 'OS não encontrada' }
 
-  const existing = await prisma.invoice.findFirst({
-    where: { serviceOrderId },
-  })
-  if (existing) return { error: 'Já existe uma fatura para esta OS' }
+    const existing = await prisma.invoice.findFirst({
+      where: { serviceOrderId },
+    })
+    if (existing) return { data: null, error: 'Já existe uma fatura para esta OS' }
 
-  const count = await prisma.invoice.count({ where: { userId } })
-  const invoiceNumber = generateInvoiceNumber(count + 1)
+    const count = await prisma.invoice.count({ where: { userId } })
+    const invoiceNumber = generateInvoiceNumber(count + 1)
 
-  const dueDate = new Date()
-  dueDate.setDate(dueDate.getDate() + 30)
+    const dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + 30)
 
-  const amount = os.totalAmount ?? 0
+    const amount = os.totalAmount ?? 0
 
-  const invoice = await prisma.invoice.create({
-    data: {
-      userId,
-      invoiceNumber,
-      serviceOrderId,
-      clienteNome: os.clienteNome,
-      clienteTel: os.clienteTel || null,
-      status: 'draft',
-      dueDate,
-      amount,
-      taxAmount: 0,
-      totalAmount: amount,
-    },
-  })
+    const invoice = await prisma.invoice.create({
+      data: {
+        userId,
+        invoiceNumber,
+        serviceOrderId,
+        clienteNome: os.clienteNome,
+        clienteTel: os.clienteTel || null,
+        status: 'draft',
+        dueDate,
+        amount,
+        taxAmount: 0,
+        totalAmount: amount,
+      },
+    })
 
-  revalidatePath('/faturas')
-  revalidatePath(`/os/${serviceOrderId}`)
-  return { data: invoice }
+    revalidatePath('/faturas')
+    revalidatePath(`/os/${serviceOrderId}`)
+    return { data: invoice, error: null }
+  } catch (e) {
+    return { data: null, error: 'Erro ao criar fatura' }
+  }
 }
 
 export async function createInvoice(formData: FormData) {
-  const userId = await getUserId()
+  try {
+    const userId = await getUserId()
 
-  const count = await prisma.invoice.count({ where: { userId } })
-  const invoiceNumber = generateInvoiceNumber(count + 1)
+    const count = await prisma.invoice.count({ where: { userId } })
+    const invoiceNumber = generateInvoiceNumber(count + 1)
 
-  const amount = parseFloat(formData.get('amount') as string)
-  const taxAmount = parseFloat(formData.get('taxAmount') as string) || 0
+    const amount = parseFloat(formData.get('amount') as string)
+    const taxAmount = parseFloat(formData.get('taxAmount') as string) || 0
 
-  const invoice = await prisma.invoice.create({
-    data: {
-      userId,
-      invoiceNumber,
-      clienteNome: formData.get('clienteNome') as string,
-      clienteTel: (formData.get('clienteTel') as string) || null,
-      clienteEmail: (formData.get('clienteEmail') as string) || null,
-      status: 'draft',
-      issueDate: new Date(formData.get('issueDate') as string),
-      dueDate: new Date(formData.get('dueDate') as string),
-      amount,
-      taxAmount,
-      totalAmount: amount + taxAmount,
-      paymentMethod: (formData.get('paymentMethod') as string) || null,
-      notes: (formData.get('notes') as string) || null,
-    },
-  })
+    const invoice = await prisma.invoice.create({
+      data: {
+        userId,
+        invoiceNumber,
+        clienteNome: formData.get('clienteNome') as string,
+        clienteTel: (formData.get('clienteTel') as string) || null,
+        clienteEmail: (formData.get('clienteEmail') as string) || null,
+        status: 'draft',
+        issueDate: new Date(formData.get('issueDate') as string),
+        dueDate: new Date(formData.get('dueDate') as string),
+        amount,
+        taxAmount,
+        totalAmount: amount + taxAmount,
+        paymentMethod: (formData.get('paymentMethod') as string) || null,
+        notes: (formData.get('notes') as string) || null,
+      },
+    })
 
-  revalidatePath('/faturas')
-  return { data: invoice }
+    revalidatePath('/faturas')
+    return { data: invoice, error: null }
+  } catch (e) {
+    return { data: null, error: 'Erro ao criar fatura' }
+  }
 }
 
 export async function markInvoicePaid(id: string) {
-  const userId = await getUserId()
-  await prisma.invoice.updateMany({
-    where: { id, userId },
-    data: { status: 'paid', paidAt: new Date() },
-  })
-  revalidatePath('/faturas')
-  revalidatePath(`/faturas/${id}`)
-  return { success: true }
+  try {
+    const userId = await getUserId()
+    await prisma.invoice.updateMany({
+      where: { id, userId },
+      data: { status: 'paid', paidAt: new Date() },
+    })
+    revalidatePath('/faturas')
+    revalidatePath(`/faturas/${id}`)
+    return { success: true, error: null }
+  } catch (e) {
+    return { success: false, error: 'Erro ao atualizar fatura' }
+  }
 }
 
 export async function markInvoiceSent(id: string) {
-  const userId = await getUserId()
-  await prisma.invoice.updateMany({
-    where: { id, userId },
-    data: { status: 'sent' },
-  })
-  revalidatePath('/faturas')
-  revalidatePath(`/faturas/${id}`)
-  return { success: true }
+  try {
+    const userId = await getUserId()
+    await prisma.invoice.updateMany({
+      where: { id, userId },
+      data: { status: 'sent' },
+    })
+    revalidatePath('/faturas')
+    revalidatePath(`/faturas/${id}`)
+    return { success: true, error: null }
+  } catch (e) {
+    return { success: false, error: 'Erro ao atualizar fatura' }
+  }
 }
 
 export async function getDashboardData() {
@@ -223,7 +239,9 @@ export async function getDashboardData() {
     utilization:
       fleet.length > 0
         ? Math.round(
-            (fleet.filter((e) => e.status === 'in_use').length / fleet.length) * 100
+            (fleet.filter((e) => e.status === 'in_use').length /
+              fleet.length) *
+              100
           )
         : 0,
   }
@@ -263,7 +281,10 @@ export async function getMonthlyRevenue() {
     orderBy: { issueDate: 'asc' },
   })
 
-  const grouped: Record<string, { month: string; invoiced: number; received: number }> = {}
+  const grouped: Record<
+    string,
+    { month: string; invoiced: number; received: number }
+  > = {}
 
   invoices.forEach((inv) => {
     const key = inv.issueDate.toISOString().substring(0, 7)
@@ -276,5 +297,7 @@ export async function getMonthlyRevenue() {
     }
   })
 
-  return Object.values(grouped).sort((a, b) => a.month.localeCompare(b.month))
+  return Object.values(grouped).sort((a, b) =>
+    a.month.localeCompare(b.month)
+  )
 }
