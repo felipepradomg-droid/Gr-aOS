@@ -51,56 +51,66 @@ export async function getEquipmentForSelect() {
 }
 
 export async function createEquipment(formData: FormData) {
-  const userId = await getUserId()
+  try {
+    const userId = await getUserId()
 
-  const specsRaw = formData.get('specs') as string
-  const specs = specsRaw ? JSON.parse(specsRaw) : []
+    const specsRaw = formData.get('specs') as string
+    const specs = specsRaw ? JSON.parse(specsRaw) : []
 
-  const equipment = await prisma.equipment.create({
-    data: {
-      userId,
-      name: formData.get('name') as string,
-      type: formData.get('type') as string,
-      brand: (formData.get('brand') as string) || null,
-      model: (formData.get('model') as string) || null,
-      year: formData.get('year') ? parseInt(formData.get('year') as string) : null,
-      plate: (formData.get('plate') as string) || null,
-      serialNumber: (formData.get('serialNumber') as string) || null,
-      capacityTons: formData.get('capacityTons')
-        ? parseFloat(formData.get('capacityTons') as string)
-        : null,
-      dailyRate: formData.get('dailyRate')
-        ? parseFloat(formData.get('dailyRate') as string)
-        : null,
-      hourlyRate: formData.get('hourlyRate')
-        ? parseFloat(formData.get('hourlyRate') as string)
-        : null,
-      notes: (formData.get('notes') as string) || null,
-      specs: {
-        create: specs
-          .filter((s: { key: string; value: string }) => s.key && s.value)
-          .map((s: { key: string; value: string; unit?: string }) => ({
-            key: s.key,
-            value: s.value,
-            unit: s.unit || null,
-          })),
+    const equipment = await prisma.equipment.create({
+      data: {
+        userId,
+        name: formData.get('name') as string,
+        type: formData.get('type') as string,
+        brand: (formData.get('brand') as string) || null,
+        model: (formData.get('model') as string) || null,
+        year: formData.get('year')
+          ? parseInt(formData.get('year') as string)
+          : null,
+        plate: (formData.get('plate') as string) || null,
+        serialNumber: (formData.get('serialNumber') as string) || null,
+        capacityTons: formData.get('capacityTons')
+          ? parseFloat(formData.get('capacityTons') as string)
+          : null,
+        dailyRate: formData.get('dailyRate')
+          ? parseFloat(formData.get('dailyRate') as string)
+          : null,
+        hourlyRate: formData.get('hourlyRate')
+          ? parseFloat(formData.get('hourlyRate') as string)
+          : null,
+        notes: (formData.get('notes') as string) || null,
+        specs: {
+          create: specs
+            .filter((s: { key: string; value: string }) => s.key && s.value)
+            .map((s: { key: string; value: string; unit?: string }) => ({
+              key: s.key,
+              value: s.value,
+              unit: s.unit || null,
+            })),
+        },
       },
-    },
-  })
+    })
 
-  revalidatePath('/frota')
-  return { data: equipment }
+    revalidatePath('/frota')
+    return { data: equipment, error: null }
+  } catch (e) {
+    return { data: null, error: 'Erro ao cadastrar equipamento' }
+  }
 }
 
 export async function updateEquipmentStatus(id: string, status: string) {
-  const userId = await getUserId()
-  await prisma.equipment.updateMany({
-    where: { id, userId },
-    data: { status },
-  })
-  revalidatePath('/frota')
-  revalidatePath(`/frota/${id}`)
-  return { success: true }
+  try {
+    const userId = await getUserId()
+    await prisma.equipment.updateMany({
+      where: { id, userId },
+      data: { status },
+    })
+    revalidatePath('/frota')
+    revalidatePath(`/frota/${id}`)
+    return { success: true, error: null }
+  } catch (e) {
+    return { success: false, error: 'Erro ao atualizar status' }
+  }
 }
 
 export async function deleteEquipment(id: string) {
