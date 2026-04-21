@@ -1,18 +1,34 @@
+import { ElementType } from 'react'
 import { formatDate, formatCurrency } from '@/lib/utils'
 import { Wrench, AlertTriangle, CheckCircle } from 'lucide-react'
 
 const TYPE_CONFIG: Record<string, {
   label: string
-  Icon: React.ElementType
+  Icon: ElementType
   color: string
   bg: string
 }> = {
-  preventive: { label: 'Preventiva', Icon: Wrench, color: 'text-blue-600', bg: 'bg-blue-100' },
-  corrective: { label: 'Corretiva', Icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-100' },
-  inspection: { label: 'Inspeção', Icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
+  preventive: {
+    label: 'Preventiva',
+    Icon: Wrench,
+    color: 'text-blue-600',
+    bg: 'bg-blue-100',
+  },
+  corrective: {
+    label: 'Corretiva',
+    Icon: AlertTriangle,
+    color: 'text-red-600',
+    bg: 'bg-red-100',
+  },
+  inspection: {
+    label: 'Inspeção',
+    Icon: CheckCircle,
+    color: 'text-green-600',
+    bg: 'bg-green-100',
+  },
 }
 
-interface Record {
+interface MaintenanceItem {
   id: string
   maintenanceType: string
   description: string
@@ -22,7 +38,11 @@ interface Record {
   status: string
 }
 
-export function MaintenanceTimeline({ records }: { records: Record[] }) {
+export function MaintenanceTimeline({
+  records,
+}: {
+  records: MaintenanceItem[]
+}) {
   if (records.length === 0) {
     return (
       <p className="text-sm text-gray-400 text-center py-4">
@@ -48,7 +68,8 @@ export function MaintenanceTimeline({ records }: { records: Record[] }) {
                     {record.description}
                   </p>
                   <p className="text-xs text-gray-500 mt-0.5">
-                    {config.label} · {formatDate(record.startDate as string)}
+                    {config.label} ·{' '}
+                    {formatDate(record.startDate as string)}
                     {record.provider && ` · ${record.provider}`}
                   </p>
                 </div>
