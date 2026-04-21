@@ -267,7 +267,6 @@ export default async function DashboardPage() {
                         height: 8,
                         borderRadius: "50%",
                         background: OS_STATUS_COLORS[os.status] ?? "#9ca3af",
-                        shrink: 0,
                         flexShrink: 0,
                       }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
