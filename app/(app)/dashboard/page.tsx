@@ -137,7 +137,6 @@ export default async function DashboardPage() {
 
         {/* KPIs principais */}
         <div className="stats-grid">
-          {/* Frota */}
           <div className="stat-card" style={{ borderColor: "#bfdbfe" }}>
             <div className="stat-label">🏗️ Frota</div>
             <div className="stat-value">
@@ -147,21 +146,16 @@ export default async function DashboardPage() {
               </span>
             </div>
             <div className="stat-sub">
-              {fleetStats.utilization}% em uso ·{" "}
-              {fleetStats.in_use} operando
+              {fleetStats.utilization}% em uso · {fleetStats.in_use} operando
             </div>
           </div>
 
-          {/* OS Ativas */}
           <div className="stat-card" style={{ borderColor: "#fde68a" }}>
             <div className="stat-label">📋 OS Ativas</div>
             <div className="stat-value">{activeOS}</div>
-            <div className="stat-sub">
-              ordens em andamento
-            </div>
+            <div className="stat-sub">ordens em andamento</div>
           </div>
 
-          {/* Faturado no mês */}
           <div className="stat-card" style={{ borderColor: "#bbf7d0" }}>
             <div className="stat-label">💰 Faturado (mês)</div>
             <div className="stat-value" style={{ fontSize: "1.4rem" }}>
@@ -172,7 +166,6 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* Taxa de aprovação */}
           <div className="stat-card">
             <div className="stat-label">📊 Taxa de Aprovação</div>
             <div className="stat-value">{taxaAprovacao}%</div>
@@ -227,8 +220,12 @@ export default async function DashboardPage() {
         )}
 
         {/* OS Recentes + Frota */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
-
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "20px",
+          marginBottom: "24px",
+        }}>
           {/* OS Recentes */}
           <div style={{
             background: "var(--bg-2)",
@@ -247,7 +244,7 @@ export default async function DashboardPage() {
                 Nenhuma OS criada ainda
               </p>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                 {recentOS.map((os) => (
                   <Link key={os.id} href={`/os/${os.id}`}>
                     <div style={{
@@ -257,11 +254,8 @@ export default async function DashboardPage() {
                       padding: "8px 10px",
                       borderRadius: "8px",
                       cursor: "pointer",
-                      transition: "background 0.15s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-3, #f3f4f6)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                    >
+                      background: "transparent",
+                    }}>
                       <div style={{
                         width: 8,
                         height: 8,
@@ -270,7 +264,14 @@ export default async function DashboardPage() {
                         flexShrink: 0,
                       }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: "0.8rem", fontWeight: 600, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <p style={{
+                          fontSize: "0.8rem",
+                          fontWeight: 600,
+                          margin: 0,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}>
                           {os.clienteNome}
                         </p>
                         <p style={{ fontSize: "0.72rem", color: "var(--text-3)", margin: 0 }}>
@@ -313,7 +314,11 @@ export default async function DashboardPage() {
                 <p style={{ fontSize: "0.875rem", color: "var(--text-3)", marginBottom: "12px" }}>
                   Nenhum equipamento cadastrado
                 </p>
-                <Link href="/frota/novo" className="btn-primary" style={{ fontSize: "0.8rem", padding: "6px 14px" }}>
+                <Link
+                  href="/frota/novo"
+                  className="btn-primary"
+                  style={{ fontSize: "0.8rem", padding: "6px 14px" }}
+                >
                   Cadastrar equipamento
                 </Link>
               </div>
@@ -341,7 +346,6 @@ export default async function DashboardPage() {
                   </div>
                 ))}
                 <div style={{
-                  marginTop: "4px",
                   padding: "10px 14px",
                   background: "var(--bg-3, #f3f4f6)",
                   borderRadius: "8px",
@@ -367,7 +371,7 @@ export default async function DashboardPage() {
         </div>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
           gap: "12px",
           marginBottom: "24px",
         }}>
@@ -387,17 +391,7 @@ export default async function DashboardPage() {
                 padding: "16px",
                 textAlign: "center",
                 cursor: "pointer",
-                transition: "all 0.15s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--brand)"
-                e.currentTarget.style.background = "var(--bg-3, #f3f4f6)"
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--border)"
-                e.currentTarget.style.background = "var(--bg-2)"
-              }}
-              >
+              }}>
                 <div style={{ fontSize: "1.5rem", marginBottom: "6px" }}>
                   {action.icon}
                 </div>
@@ -438,23 +432,21 @@ export default async function DashboardPage() {
               <thead>
                 <tr>
                   <th>Cliente</th>
-                  <th>Descrição</th>
-                  <th>Valor</th>
+                  <th>Equipamento</th>
+                  <th>Total</th>
                   <th>Status</th>
                   <th>Data</th>
                 </tr>
               </thead>
               <tbody>
-                {recentOS.slice(0, 5).map((os) => (
+                {recentOS.map((os) => (
                   <tr key={os.id}>
                     <td style={{ fontWeight: 500 }}>{os.clienteNome}</td>
                     <td style={{ color: "var(--text-2)" }}>
                       {os.equipment?.name ?? "—"}
                     </td>
                     <td>
-                      {os.totalAmount
-                        ? formatCurrency(os.totalAmount)
-                        : "—"}
+                      {os.totalAmount ? formatCurrency(os.totalAmount) : "—"}
                     </td>
                     <td>
                       <span style={{
