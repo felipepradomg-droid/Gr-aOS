@@ -115,8 +115,9 @@ export default async function EquipmentDetailPage({
           </div>
           <p className="text-sm text-blue-600 mt-1">{activeBooking.title}</p>
           <p className="text-xs text-blue-500 mt-0.5">
-            {formatDate(activeBooking.startDate as string)} —{' '}
-            {formatDate(activeBooking.endDate as string)}
+            {formatDate(activeBooking.startDate as unknown as string)} —{' '}
+{formatDate(activeBooking.endDate as unknown as string)}
+
           </p>
         </div>
       )}
