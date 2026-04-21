@@ -9,19 +9,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================
+// AUTENTICAÇÃO (existente — não alterado)
+// ============================================================
+
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String?   // hash bcrypt
+  password      String?
 
-  // Plano
-  plan          String    @default("free") // free | pro | enterprise
+  plan          String    @default("free")
   planExpiresAt DateTime?
 
-  // Relações
   accounts  Account[]
   sessions  Session[]
   payments  Payment[]
@@ -72,7 +74,7 @@ model Payment {
   mpPaymentId String   @unique
   planId      String
   amount      Float
-  status      String   @default("pending") // pending | approved | rejected | cancelled
+  status      String   @default("pending")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -80,19 +82,204 @@ model Payment {
   updatedAt DateTime @updatedAt
 }
 
-model Cotacao {
-  id          String   @id @default(cuid())
-  userId      String
-  clienteNome String
-  clienteEmail String?
-  clienteTel  String?
-  descricao   String   @db.Text
-  valor       Float?
-  status      String   @default("rascunho") // rascunho | enviada | aprovada | rejeitada
-  observacoes String?  @db.Text
+// ============================================================
+// COTAÇÕES (existente — adicionado equipmentId)
+// ============================================================
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Cotacao {
+  id           String  @id @default(cuid())
+  userId       String
+  clienteNome  String
+  clienteEmail String?
+  clienteTel   String?
+  descricao    String  @db.Text
+  valor        Float?
+  status       String  @default("rascunho")
+  observacoes  String? @db.Text
+
+  // Novo: vínculo com equipamento
+  equipmentId  String?
+  equipment    Equipment? @relation(fields: [equipmentId], references: [id])
+
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Novo: OS gerada a partir desta cotação
+  serviceOrder ServiceOrder?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// FROTA
+// ============================================================
+
+model Equipment {
+  id           String  @id @default(cuid())
+  userId       String
+  name         String
+  type         String  // crane | forklift | truck | platform | other
+  brand        String?
+  model        String?
+  year         Int?
+  plate        String?
+  serialNumber String?
+  capacityTons Float?
+  status       String  @default("available") // available | in_use | maintenance | inactive
+  dailyRate    Float?
+  hourlyRate   Float?
+  notes        String? @db.Text
+
+  photos       EquipmentPhoto[]
+  documents    EquipmentDocument[]
+  specs        EquipmentSpec[]
+  bookings     Booking[]
+  serviceOrders ServiceOrder[]
+  maintenance  MaintenanceRecord[]
+  cotacoes     Cotacao[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EquipmentPhoto {
+  id          String    @id @default(cuid())
+  equipmentId String
+  url         String
+  isCover     Boolean   @default(false)
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
+model EquipmentDocument {
+  id          String    @id @default(cuid())
+  equipmentId String
+  docType     String    // crlv | art | insurance | inspection | other
+  name        String
+  url         String
+  expiresAt   DateTime?
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
+model EquipmentSpec {
+  id          String    @id @default(cuid())
+  equipmentId String
+  key         String
+  value       String
+  unit        String?
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================
+// AGENDAMENTOS
+// ============================================================
+
+model Booking {
+  id          String     @id @default(cuid())
+  userId      String
+  equipmentId String
+  title       String
+  startDate   DateTime
+  endDate     DateTime
+  bookingType String     @default("confirmed") // confirmed | tentative | maintenance | blocked
+  notes       String?    @db.Text
+  clientName  String?
+
+  equipment   Equipment  @relation(fields: [equipmentId], references: [id])
+  serviceOrder ServiceOrder?
+
+  createdAt   DateTime   @default(now())
+}
+
+// ============================================================
+// ORDENS DE SERVIÇO
+// ============================================================
+
+model ServiceOrder {
+  id             String    @id @default(cuid())
+  userId         String
+  osNumber       String    @unique
+  cotacaoId      String?   @unique
+  equipmentId    String
+  bookingId      String?   @unique
+  clienteNome    String
+  clienteTel     String?
+  operatorName   String?
+  status         String    @default("pending")
+  // pending | confirmed | in_progress | completed | cancelled
+
+  startDate      DateTime
+  endDate        DateTime
+  actualStart    DateTime?
+  actualEnd      DateTime?
+
+  serviceAddress String?
+  serviceCity    String?
+  serviceNotes   String?   @db.Text
+
+  totalDays      Int?
+  dailyRate      Float?
+  totalAmount    Float?
+
+  cotacao        Cotacao?  @relation(fields: [cotacaoId], references: [id])
+  equipment      Equipment @relation(fields: [equipmentId], references: [id])
+  booking        Booking?  @relation(fields: [bookingId], references: [id])
+  invoice        Invoice?
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+// ============================================================
+// MANUTENÇÃO
+// ============================================================
+
+model MaintenanceRecord {
+  id              String    @id @default(cuid())
+  userId          String
+  equipmentId     String
+  maintenanceType String    // preventive | corrective | inspection
+  description     String    @db.Text
+  provider        String?
+  cost            Float?
+  startDate       DateTime
+  endDate         DateTime?
+  hoursAtService  Float?
+  status          String    @default("scheduled") // scheduled | in_progress | completed
+  notes           String?   @db.Text
+
+  equipment       Equipment @relation(fields: [equipmentId], references: [id])
+
+  createdAt       DateTime  @default(now())
+}
+
+// ============================================================
+// FATURAS
+// ============================================================
+
+model Invoice {
+  id             String    @id @default(cuid())
+  userId         String
+  invoiceNumber  String    @unique
+  serviceOrderId String?   @unique
+  clienteNome    String
+  clienteTel     String?
+  clienteEmail   String?
+  status         String    @default("draft")
+  // draft | sent | paid | overdue | cancelled
+
+  issueDate      DateTime  @default(now())
+  dueDate        DateTime
+  amount         Float
+  taxAmount      Float     @default(0)
+  totalAmount    Float
+  paymentMethod  String?   // pix | boleto | transfer | cash | other
+  paidAt         DateTime?
+  notes          String?   @db.Text
+
+  serviceOrder   ServiceOrder? @relation(fields: [serviceOrderId], references: [id])
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
