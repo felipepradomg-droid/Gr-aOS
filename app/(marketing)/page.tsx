@@ -47,7 +47,7 @@ export default function LandingPage() {
           }}>
             Entrar
           </Link>
-          <Link href="/register" style={{
+          <Link href="/login" style={{
             background: "#f97316",
             color: "white",
             padding: "8px 20px",
@@ -56,7 +56,7 @@ export default function LandingPage() {
             fontSize: "0.9rem",
             fontWeight: 600,
           }}>
-            Começar grátis
+            Acessar o sistema
           </Link>
         </div>
       </nav>
@@ -109,7 +109,7 @@ export default function LandingPage() {
         </p>
 
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/register" style={{
+          <Link href="/login" style={{
             background: "#f97316",
             color: "white",
             padding: "14px 32px",
@@ -118,7 +118,7 @@ export default function LandingPage() {
             fontSize: "1rem",
             fontWeight: 700,
           }}>
-            Começar grátis →
+            Entrar no sistema →
           </Link>
           <Link href="/login" style={{
             background: "#1a1a1a",
@@ -139,7 +139,7 @@ export default function LandingPage() {
           fontSize: "0.8rem",
           color: "#525252",
         }}>
-          Sem cartão de crédito · Setup em 5 minutos · Cancele quando quiser
+          Setup em 5 minutos · Suporte dedicado · Cancele quando quiser
         </p>
       </section>
 
@@ -353,29 +353,15 @@ export default function LandingPage() {
 
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
           gap: "20px",
         }}>
           {[
             {
-              name: "Free",
-              price: "R$0",
-              period: "/mês",
-              desc: "Para experimentar",
-              features: [
-                "10 cotações/mês",
-                "1 equipamento",
-                "1 usuário",
-                "Dashboard básico",
-              ],
-              cta: "Começar grátis",
-              highlight: false,
-            },
-            {
               name: "Starter",
               price: "R$97",
               period: "/mês",
-              desc: "Para começar",
+              desc: "Para começar com o pé direito",
               features: [
                 "Até 3 equipamentos",
                 "50 cotações/mês",
@@ -391,15 +377,15 @@ export default function LandingPage() {
               name: "Pro",
               price: "R$197",
               period: "/mês",
-              desc: "Para crescer",
+              desc: "Para locadoras em crescimento",
               features: [
                 "Frota ilimitada",
                 "Cotações ilimitadas",
-                "Agenda + Gantt",
+                "Agenda + Gantt completo",
                 "OS ilimitadas",
                 "Manutenção completa",
-                "Faturamento",
-                "Dashboard completo",
+                "Faturamento integrado",
+                "Dashboard de performance",
                 "3 usuários",
                 "WhatsApp integrado",
               ],
@@ -499,7 +485,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/register" style={{
+              <Link href="/login" style={{
                 display: "block",
                 textAlign: "center",
                 padding: "11px",
@@ -540,9 +526,9 @@ export default function LandingPage() {
           maxWidth: "500px",
           margin: "0 auto 36px",
         }}>
-          Comece grátis hoje. Sem cartão de crédito. Configure em menos de 5 minutos.
+          Configure em menos de 5 minutos e comece a operar hoje mesmo.
         </p>
-        <Link href="/register" style={{
+        <Link href="/login" style={{
           background: "#f97316",
           color: "white",
           padding: "16px 40px",
@@ -552,7 +538,7 @@ export default function LandingPage() {
           fontWeight: 700,
           display: "inline-block",
         }}>
-          Criar conta grátis →
+          Acessar o sistema →
         </Link>
       </section>
 
@@ -588,9 +574,9 @@ export default function LandingPage() {
           <Link href="/login" style={{ color: "#525252", textDecoration: "none", fontSize: "0.8rem" }}>
             Entrar
           </Link>
-          <Link href="/register" style={{ color: "#525252", textDecoration: "none", fontSize: "0.8rem" }}>
-            Cadastrar
-          </Link>
+          <a href="mailto:gruaossolucoes@gmail.com" style={{ color: "#525252", textDecoration: "none", fontSize: "0.8rem" }}>
+            Suporte
+          </a>
         </div>
       </footer>
 
