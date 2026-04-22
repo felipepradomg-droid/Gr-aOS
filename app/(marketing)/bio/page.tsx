@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SocialProofNotification from "@/components/SocialProofNotification";
 
 export default function BioPage() {
   const whatsappMsg = encodeURIComponent(
@@ -15,10 +16,13 @@ export default function BioPage() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      padding: "40px 24px 60px",
+      padding: "40px 24px 80px",
       maxWidth: "480px",
       margin: "0 auto",
     }}>
+
+      {/* Notificação de prova social */}
+      <SocialProofNotification />
 
       {/* Logo */}
       <div style={{
@@ -151,7 +155,7 @@ export default function BioPage() {
         gap: "12px",
         marginBottom: "32px",
       }}>
-        {/* WhatsApp - CTA principal */}
+        {/* WhatsApp */}
         <a
           href={whatsappUrl}
           target="_blank"
@@ -174,7 +178,7 @@ export default function BioPage() {
           Falar com especialista no WhatsApp
         </a>
 
-        {/* Acessar o sistema */}
+        {/* Teste grátis */}
         <Link
           href="/login"
           style={{
@@ -247,11 +251,8 @@ export default function BioPage() {
         </p>
       </div>
 
-      {/* Comparativo rápido */}
-      <div style={{
-        width: "100%",
-        marginBottom: "32px",
-      }}>
+      {/* Comparativo */}
+      <div style={{ width: "100%", marginBottom: "32px" }}>
         <p style={{
           fontSize: "0.8rem",
           color: "#525252",
