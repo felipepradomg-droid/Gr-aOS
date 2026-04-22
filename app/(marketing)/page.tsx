@@ -109,7 +109,7 @@ export default function LandingPage() {
         </p>
 
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/login" style={{
+          <Link href="/checkout?plan=pro" style={{
             background: "#f97316",
             color: "white",
             padding: "14px 32px",
@@ -118,7 +118,7 @@ export default function LandingPage() {
             fontSize: "1rem",
             fontWeight: 700,
           }}>
-            Entrar no sistema →
+            Assinar agora →
           </Link>
           <Link href="/login" style={{
             background: "#1a1a1a",
@@ -371,6 +371,7 @@ export default function LandingPage() {
                 "PDF com sua marca",
               ],
               cta: "Assinar Starter",
+              href: "/checkout?plan=starter",
               highlight: false,
             },
             {
@@ -390,6 +391,7 @@ export default function LandingPage() {
                 "WhatsApp integrado",
               ],
               cta: "Assinar Pro",
+              href: "/checkout?plan=pro",
               highlight: true,
             },
             {
@@ -407,6 +409,7 @@ export default function LandingPage() {
                 "Onboarding dedicado",
               ],
               cta: "Falar com vendas",
+              href: "https://wa.me/5534991103401?text=Olá!%20Tenho%20interesse%20no%20plano%20Business%20do%20GrúaOS.%20Pode%20me%20passar%20mais%20informações%3F",
               highlight: false,
             },
           ].map((plan) => (
@@ -485,7 +488,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/login" style={{
+              <a href={plan.href} style={{
                 display: "block",
                 textAlign: "center",
                 padding: "11px",
@@ -498,7 +501,7 @@ export default function LandingPage() {
                 border: plan.highlight ? "none" : "1px solid #333",
               }}>
                 {plan.cta}
-              </Link>
+              </a>
             </div>
           ))}
         </div>
@@ -528,7 +531,7 @@ export default function LandingPage() {
         }}>
           Configure em menos de 5 minutos e comece a operar hoje mesmo.
         </p>
-        <Link href="/login" style={{
+        <Link href="/checkout?plan=pro" style={{
           background: "#f97316",
           color: "white",
           padding: "16px 40px",
@@ -538,7 +541,7 @@ export default function LandingPage() {
           fontWeight: 700,
           display: "inline-block",
         }}>
-          Acessar o sistema →
+          Assinar agora →
         </Link>
       </section>
 
@@ -574,7 +577,10 @@ export default function LandingPage() {
           <Link href="/login" style={{ color: "#525252", textDecoration: "none", fontSize: "0.8rem" }}>
             Entrar
           </Link>
-          <a href="mailto:gruaossolucoes@gmail.com" style={{ color: "#525252", textDecoration: "none", fontSize: "0.8rem" }}>
+          <a
+            href="https://wa.me/5534991103401"
+            style={{ color: "#525252", textDecoration: "none", fontSize: "0.8rem" }}
+          >
             Suporte
           </a>
         </div>
