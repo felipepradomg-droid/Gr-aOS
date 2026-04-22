@@ -14,13 +14,10 @@ export const authOptions: NextAuthOptions = {
     error: "/login",
   },
   providers: [
-    // Login com Google (opcional, mas recomendado)
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-
-    // Login com email + senha
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -48,14 +45,18 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
       }
-      // Busca plano atualizado do banco a cada refresh
       if (token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { plan: true, planExpiresAt: true },
+          select: {
+            plan: true,
+            planExpiresAt: true,
+            trialEndsAt: true,
+          },
         });
         token.plan = dbUser?.plan ?? "free";
         token.planExpiresAt = dbUser?.planExpiresAt ?? null;
+        token.trialEndsAt = dbUser?.trialEndsAt ?? null;
       }
       return token;
     },
@@ -64,6 +65,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.plan = token.plan as string;
         session.user.planExpiresAt = token.planExpiresAt as Date | null;
+        session.user.trialEndsAt = token.trialEndsAt as Date | null;
       }
       return session;
     },
@@ -80,6 +82,16 @@ declare module "next-auth" {
       image?: string | null;
       plan: string;
       planExpiresAt: Date | null;
+      trialEndsAt: Date | null;
     };
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    plan: string;
+    planExpiresAt: Date | null;
+    trialEndsAt: Date | null;
   }
 }
