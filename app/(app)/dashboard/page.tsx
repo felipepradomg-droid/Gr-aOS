@@ -122,7 +122,7 @@ export default async function DashboardPage() {
           </p>
         </div>
         <Link
-          href={atingiuLimite ? "/planos" : "/cotacoes/nova"}
+          href={atingiuLimite ? "/planos" : "/cotacoes"}
           className="btn-primary"
           style={{ fontSize: ".875rem", padding: "8px 16px" }}
         >
@@ -254,7 +254,6 @@ export default async function DashboardPage() {
                       padding: "8px 10px",
                       borderRadius: "8px",
                       cursor: "pointer",
-                      background: "transparent",
                     }}>
                       <div style={{
                         width: 8,
@@ -376,7 +375,7 @@ export default async function DashboardPage() {
           marginBottom: "24px",
         }}>
           {[
-            { href: "/cotacoes/nova", icon: "📋", label: "Nova Cotação" },
+            { href: "/cotacoes", icon: "📋", label: "Nova Cotação" },
             { href: "/os/nova", icon: "📝", label: "Nova OS" },
             { href: "/frota/novo", icon: "🏗️", label: "Novo Equipamento" },
             { href: "/agenda", icon: "📅", label: "Ver Agenda" },
@@ -422,7 +421,7 @@ export default async function DashboardPage() {
           }}>
             <p style={{ fontSize: "2rem", marginBottom: "12px" }}>📋</p>
             <p style={{ marginBottom: "16px" }}>Nenhuma cotação ainda.</p>
-            <Link href="/cotacoes/nova" className="btn-primary">
+            <Link href="/cotacoes" className="btn-primary">
               Criar primeira cotação
             </Link>
           </div>
