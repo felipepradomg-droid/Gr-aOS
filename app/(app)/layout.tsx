@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SidebarClient from "@/components/SidebarClient";
 import { Toaster } from "sonner";
+import TrialBanner from "@/components/TrialBanner";
 
 export default async function AppLayout({
   children,
@@ -15,7 +16,12 @@ export default async function AppLayout({
   return (
     <div className="app-layout">
       <SidebarClient session={session} />
-      <main className="app-main">{children}</main>
+      <main className="app-main">
+        <div style={{ padding: "16px 16px 0" }}>
+          <TrialBanner />
+        </div>
+        {children}
+      </main>
       <Toaster richColors position="top-right" />
     </div>
   );
