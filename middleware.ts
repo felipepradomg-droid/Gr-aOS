@@ -15,7 +15,7 @@ export default withAuth(
     // Verificar se o usuário tem plano pago ativo
     const isPago = token?.plan && token.plan !== "free";
     const planExpiresAt = token?.planExpiresAt
-      ? new Date(token.planExpiresAt as string)
+      ? new Date(token.planExpiresAt as unknown as string)
       : null;
     const planAtivo = isPago && (!planExpiresAt || planExpiresAt > new Date());
 
@@ -24,7 +24,7 @@ export default withAuth(
 
     // Verificar trial
     const trialEndsAt = token?.trialEndsAt
-      ? new Date(token.trialEndsAt as string)
+      ? new Date(token.trialEndsAt as unknown as string)
       : null;
     const trialAtivo = trialEndsAt && trialEndsAt > new Date();
 
