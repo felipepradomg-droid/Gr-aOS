@@ -253,7 +253,7 @@ model MaintenanceRecord {
 }
 
 // ============================================================
-// FATURAS
+// FATURAS (model original mantido + campos fiscais adicionados)
 // ============================================================
 
 model Invoice {
@@ -264,7 +264,9 @@ model Invoice {
   clienteNome    String
   clienteTel     String?
   clienteEmail   String?
+  clienteCnpjCpf String?
   status         String    @default("draft")
+  // draft → pending_emission → emitted → cancelled → error
 
   issueDate      DateTime  @default(now())
   dueDate        DateTime
@@ -275,8 +277,215 @@ model Invoice {
   paidAt         DateTime?
   notes          String?   @db.Text
 
+  // --- CAMPOS FISCAIS (NFS-e) ---
+  municipalityConfigId String?
+  municipalityConfig   MunicipalityTaxConfig? @relation(fields: [municipalityConfigId], references: [id])
+
+  rpsNumber            Int?
+  rpsSeries            String?
+  nfseNumber           String?
+  nfseVerificationCode String?
+  nfsePdfUrl           String?
+  nfseXml              String?   @db.Text
+  providerProtocol     String?
+  providerResponse     Json?
+  errorMessage         String?   @db.Text
+  emittedAt            DateTime?
+  cancelledAt          DateTime?
+
+  // --- ENVIO WHATSAPP ---
+  whatsappSentAt       DateTime?
+  whatsappMessageId    String?
+
   serviceOrder   ServiceOrder? @relation(fields: [serviceOrderId], references: [id])
+  receivable     Receivable?
 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+}
+
+// ============================================================
+// FISCAL — Configuração por Município
+// ============================================================
+
+model NfseProvider {
+  id           String  @id @default(cuid())
+  // 'enotas', 'focusnfe', 'nfeio'
+  name         String  @unique
+  baseUrl      String
+  // 'api_key' | 'oauth2'
+  authType     String
+  isActive     Boolean @default(true)
+
+  municipalities MunicipalityTaxConfig[]
+
+  createdAt DateTime @default(now())
+}
+
+model MunicipalityTaxConfig {
+  id          String  @id @default(cuid())
+  // Código IBGE de 7 dígitos — ex: '3550308' = São Paulo
+  ibgeCode    String  @unique
+  cityName    String
+  state       String  @db.Char(2)
+  providerId  String
+  provider    NfseProvider @relation(fields: [providerId], references: [id])
+
+  // Credenciais desta prefeitura neste provedor (token, cnpj, etc.)
+  providerCredentials Json?
+
+  // Parâmetros tributários
+  issRate            Float?
+  // Código de serviço ABRASF — ex: '07.09'
+  serviceCode        String?
+  serviceDescription String?
+  requiresRps        Boolean @default(true)
+  // 'producao' | 'homologacao'
+  nfseEnvironment    String  @default("homologacao")
+  isActive           Boolean @default(true)
+
+  invoices    Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// FINANCEIRO — Contas Bancárias
+// ============================================================
+
+model BankAccount {
+  id          String  @id @default(cuid())
+  userId      String
+  // 'asaas' | 'starkbank' | 'itau' | 'bradesco'
+  bankName    String
+  bankCode    String?
+  agency      String?
+  accountNumber String?
+  // 'checking' | 'savings'
+  accountType String?
+
+  // 'direct_api' | 'open_finance' | 'ofx_upload'
+  integrationType  String?
+  // Armazenar encriptado em produção
+  apiCredentials   Json?
+  externalAccountId String?
+
+  currentBalance   Float     @default(0)
+  balanceUpdatedAt DateTime?
+  isActive         Boolean   @default(true)
+
+  transactions BankTransaction[]
+  receivables  Receivable[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// FINANCEIRO — Títulos a Receber (Boleto / PIX)
+// ============================================================
+
+model Receivable {
+  id            String  @id @default(cuid())
+  userId        String
+  invoiceId     String? @unique
+  invoice       Invoice? @relation(fields: [invoiceId], references: [id])
+  bankAccountId String?
+  bankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
+
+  clienteNome   String
+  clienteCnpjCpf String?
+
+  // 'boleto' | 'pix' | 'credit_card' | 'manual'
+  paymentMethod String
+  amount        Float
+  dueDate       DateTime
+
+  // Dados retornados pelo Asaas
+  externalId    String?  @unique
+  barcode       String?  @db.Text
+  pixKey        String?
+  pixQrcode     String?  @db.Text
+  paymentUrl    String?
+
+  // pending → sent → viewed → paid → overdue → cancelled
+  status        String   @default("pending")
+
+  paidAmount    Float?
+  paidAt        DateTime?
+  paymentMethodUsed String?
+
+  // Multa e juros após vencimento
+  fineAmount     Float @default(0)
+  interestAmount Float @default(0)
+  discountAmount Float @default(0)
+
+  // Conciliação
+  bankTransactionId String?        @unique
+  bankTransaction   BankTransaction? @relation(fields: [bankTransactionId], references: [id])
+  reconciledAt      DateTime?
+  // 'auto' ou userId de quem conciliou manualmente
+  reconciledBy      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// FINANCEIRO — Extrato Bancário
+// ============================================================
+
+model BankTransaction {
+  id            String  @id @default(cuid())
+  bankAccountId String
+  bankAccount   BankAccount @relation(fields: [bankAccountId], references: [id])
+  userId        String
+
+  transactionDate  DateTime
+  description      String
+  // Positivo = crédito, Negativo = débito
+  amount           Float
+  balanceAfter     Float?
+
+  // ID único do banco — evita importar duplicatas
+  externalId       String?  @unique
+  documentNumber   String?
+  // CPF/CNPJ de quem pagou
+  counterpartDocument String?
+  counterpartName     String?
+  // 'pix' | 'ted' | 'boleto' | 'doc'
+  paymentType         String?
+
+  // pending → matched → manually_matched → ignored
+  reconciliationStatus String @default("pending")
+
+  // Score de 0 a 1 do match automático
+  confidenceScore Float?
+
+  receivable         Receivable?
+  reconciliationLogs ReconciliationLog[]
+
+  importedAt DateTime @default(now())
+}
+
+// ============================================================
+// FINANCEIRO — Log de Conciliação (Auditoria)
+// ============================================================
+
+model ReconciliationLog {
+  id                String  @id @default(cuid())
+  userId            String
+  bankTransactionId String
+  bankTransaction   BankTransaction @relation(fields: [bankTransactionId], references: [id])
+  receivableId      String?
+
+  // 'auto_matched' | 'manual_match' | 'unmatched' | 'ignored'
+  action          String
+  // NULL = sistema automático
+  performedBy     String?
+  confidenceScore Float?
+  notes           String? @db.Text
+
+  createdAt DateTime @default(now())
 }
