@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SidebarClient from "@/components/SidebarClient";
+import { MobileNav } from "@/components/MobileNav";
 import { Toaster } from "sonner";
 import TrialBanner from "@/components/TrialBanner";
 
@@ -22,6 +23,7 @@ export default async function AppLayout({
         </div>
         {children}
       </main>
+      <MobileNav />
       <Toaster richColors position="top-right" />
     </div>
   );
