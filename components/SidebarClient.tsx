@@ -27,6 +27,8 @@ const NAV = [
     group: "Financeiro",
     items: [
       { href: "/faturas", icon: "💰", label: "Faturas" },
+      { href: "/financeiro", icon: "🏦", label: "Cobranças e PIX" },
+      { href: "/fiscal", icon: "🧾", label: "Notas Fiscais" },
     ],
   },
   {
