@@ -1,0 +1,2 @@
+-- Baseline migration: marca o banco existente como ponto de partida
+-- Este arquivo diz ao Prisma que as tabelas já existem no banco
