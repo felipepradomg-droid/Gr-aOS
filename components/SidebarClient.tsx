@@ -12,6 +12,7 @@ const NAV = [
     items: [
       { href: "/dashboard", icon: "📊", label: "Dashboard" },
       { href: "/cotacoes", icon: "📋", label: "Cotações" },
+      { href: "/bi", icon: "🧠", label: "Inteligência" },
     ],
   },
   {
@@ -35,8 +36,6 @@ const NAV = [
   {
     group: "Gestão",
     items: [
-      { href: "/clientes", icon: "👥", label: "Clientes" },
-      { href: "/relatorios", icon: "📈", label: "Relatórios", proOnly: true },
       { href: "/configuracoes", icon: "⚙️", label: "Configurações" },
     ],
   },
@@ -90,33 +89,18 @@ export default function SidebarClient({ session }: { session: Session }) {
             </div>
 
             {group.items.map((item) => {
-              const isActive = pathname === item.href ||
+              const isActive =
+                pathname === item.href ||
                 pathname.startsWith(item.href + "/");
-              const href =
-                item.proOnly && !isPro
-                  ? "/checkout?plan=pro"
-                  : item.href;
 
               return (
                 <Link
                   key={item.href}
-                  href={href}
+                  href={item.href}
                   className={`sidebar-link ${isActive ? "active" : ""}`}
                 >
                   <span className="icon">{item.icon}</span>
                   {item.label}
-                  {item.proOnly && !isPro && (
-                    <span
-                      style={{
-                        marginLeft: "auto",
-                        fontSize: ".7rem",
-                        color: "var(--brand)",
-                        fontWeight: 700,
-                      }}
-                    >
-                      PRO
-                    </span>
-                  )}
                 </Link>
               );
             })}
