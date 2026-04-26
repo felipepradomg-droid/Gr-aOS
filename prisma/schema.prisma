@@ -137,6 +137,11 @@ model Equipment {
   maintenance   MaintenanceRecord[]
   cotacoes      Cotacao[]
 
+  hourMeters        HourMeter[]
+  maintenancePlans  MaintenancePlan[]
+  maintenanceAlerts MaintenanceAlert[]
+  equipmentCosts    EquipmentCost[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -253,7 +258,7 @@ model MaintenanceRecord {
 }
 
 // ============================================================
-// FATURAS (model original mantido + campos fiscais adicionados)
+// FATURAS
 // ============================================================
 
 model Invoice {
@@ -266,7 +271,6 @@ model Invoice {
   clienteEmail   String?
   clienteCnpjCpf String?
   status         String    @default("draft")
-  // draft → pending_emission → emitted → cancelled → error
 
   issueDate      DateTime  @default(now())
   dueDate        DateTime
@@ -277,7 +281,6 @@ model Invoice {
   paidAt         DateTime?
   notes          String?   @db.Text
 
-  // --- CAMPOS FISCAIS (NFS-e) ---
   municipalityConfigId String?
   municipalityConfig   MunicipalityTaxConfig? @relation(fields: [municipalityConfigId], references: [id])
 
@@ -292,8 +295,6 @@ model Invoice {
   errorMessage         String?   @db.Text
   emittedAt            DateTime?
   cancelledAt          DateTime?
-
-  // --- ENVIO WHATSAPP ---
   whatsappSentAt       DateTime?
   whatsappMessageId    String?
 
@@ -310,10 +311,8 @@ model Invoice {
 
 model NfseProvider {
   id           String  @id @default(cuid())
-  // 'enotas', 'focusnfe', 'nfeio'
   name         String  @unique
   baseUrl      String
-  // 'api_key' | 'oauth2'
   authType     String
   isActive     Boolean @default(true)
 
@@ -324,23 +323,17 @@ model NfseProvider {
 
 model MunicipalityTaxConfig {
   id          String  @id @default(cuid())
-  // Código IBGE de 7 dígitos — ex: '3550308' = São Paulo
   ibgeCode    String  @unique
   cityName    String
   state       String  @db.Char(2)
   providerId  String
   provider    NfseProvider @relation(fields: [providerId], references: [id])
 
-  // Credenciais desta prefeitura neste provedor (token, cnpj, etc.)
   providerCredentials Json?
-
-  // Parâmetros tributários
   issRate            Float?
-  // Código de serviço ABRASF — ex: '07.09'
   serviceCode        String?
   serviceDescription String?
   requiresRps        Boolean @default(true)
-  // 'producao' | 'homologacao'
   nfseEnvironment    String  @default("homologacao")
   isActive           Boolean @default(true)
 
@@ -357,18 +350,14 @@ model MunicipalityTaxConfig {
 model BankAccount {
   id          String  @id @default(cuid())
   userId      String
-  // 'asaas' | 'starkbank' | 'itau' | 'bradesco'
   bankName    String
   bankCode    String?
   agency      String?
   accountNumber String?
-  // 'checking' | 'savings'
   accountType String?
 
-  // 'direct_api' | 'open_finance' | 'ofx_upload'
-  integrationType  String?
-  // Armazenar encriptado em produção
-  apiCredentials   Json?
+  integrationType   String?
+  apiCredentials    Json?
   externalAccountId String?
 
   currentBalance   Float     @default(0)
@@ -383,7 +372,7 @@ model BankAccount {
 }
 
 // ============================================================
-// FINANCEIRO — Títulos a Receber (Boleto / PIX)
+// FINANCEIRO — Títulos a Receber
 // ============================================================
 
 model Receivable {
@@ -394,38 +383,30 @@ model Receivable {
   bankAccountId String?
   bankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
 
-  clienteNome   String
+  clienteNome    String
   clienteCnpjCpf String?
+  paymentMethod  String
+  amount         Float
+  dueDate        DateTime
 
-  // 'boleto' | 'pix' | 'credit_card' | 'manual'
-  paymentMethod String
-  amount        Float
-  dueDate       DateTime
+  externalId  String?  @unique
+  barcode     String?  @db.Text
+  pixKey      String?
+  pixQrcode   String?  @db.Text
+  paymentUrl  String?
 
-  // Dados retornados pelo Asaas
-  externalId    String?  @unique
-  barcode       String?  @db.Text
-  pixKey        String?
-  pixQrcode     String?  @db.Text
-  paymentUrl    String?
-
-  // pending → sent → viewed → paid → overdue → cancelled
-  status        String   @default("pending")
-
-  paidAmount    Float?
-  paidAt        DateTime?
+  status    String   @default("pending")
+  paidAmount Float?
+  paidAt    DateTime?
   paymentMethodUsed String?
 
-  // Multa e juros após vencimento
   fineAmount     Float @default(0)
   interestAmount Float @default(0)
   discountAmount Float @default(0)
 
-  // Conciliação
   bankTransactionId String?        @unique
   bankTransaction   BankTransaction? @relation(fields: [bankTransactionId], references: [id])
   reconciledAt      DateTime?
-  // 'auto' ou userId de quem conciliou manualmente
   reconciledBy      String?
 
   createdAt DateTime @default(now())
@@ -444,24 +425,17 @@ model BankTransaction {
 
   transactionDate  DateTime
   description      String
-  // Positivo = crédito, Negativo = débito
   amount           Float
   balanceAfter     Float?
 
-  // ID único do banco — evita importar duplicatas
-  externalId       String?  @unique
-  documentNumber   String?
-  // CPF/CNPJ de quem pagou
+  externalId          String?  @unique
+  documentNumber      String?
   counterpartDocument String?
   counterpartName     String?
-  // 'pix' | 'ted' | 'boleto' | 'doc'
   paymentType         String?
 
-  // pending → matched → manually_matched → ignored
   reconciliationStatus String @default("pending")
-
-  // Score de 0 a 1 do match automático
-  confidenceScore Float?
+  confidenceScore      Float?
 
   receivable         Receivable?
   reconciliationLogs ReconciliationLog[]
@@ -470,7 +444,7 @@ model BankTransaction {
 }
 
 // ============================================================
-// FINANCEIRO — Log de Conciliação (Auditoria)
+// FINANCEIRO — Log de Conciliação
 // ============================================================
 
 model ReconciliationLog {
@@ -480,12 +454,92 @@ model ReconciliationLog {
   bankTransaction   BankTransaction @relation(fields: [bankTransactionId], references: [id])
   receivableId      String?
 
-  // 'auto_matched' | 'manual_match' | 'unmatched' | 'ignored'
   action          String
-  // NULL = sistema automático
   performedBy     String?
   confidenceScore Float?
   notes           String? @db.Text
+
+  createdAt DateTime @default(now())
+}
+
+// ============================================================
+// MANUTENÇÃO PREDITIVA
+// ============================================================
+
+model HourMeter {
+  id          String    @id @default(cuid())
+  userId      String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  reading     Float
+  readingDate DateTime  @default(now())
+  recordedBy  String?
+  notes       String?   @db.Text
+
+  createdAt   DateTime  @default(now())
+}
+
+model MaintenancePlan {
+  id          String    @id @default(cuid())
+  userId      String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  name          String
+  triggerType   String  @default("hours")
+  intervalHours Float?
+  intervalDays  Int?
+
+  lastDoneAt    DateTime?
+  lastDoneHours Float?
+  nextDueAt     DateTime?
+  nextDueHours  Float?
+
+  estimatedCost Float?
+  status        String  @default("active")
+
+  alerts        MaintenanceAlert[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MaintenanceAlert {
+  id          String    @id @default(cuid())
+  userId      String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  planId      String?
+  plan        MaintenancePlan? @relation(fields: [planId], references: [id])
+
+  alertType     String
+  message       String
+  triggeredAt   Float?
+  dueDate       DateTime?
+
+  status        String  @default("pending")
+  resolvedAt    DateTime?
+  blocksBooking Boolean @default(false)
+
+  whatsappSentAt    DateTime?
+  whatsappMessageId String?
+
+  createdAt DateTime @default(now())
+}
+
+model EquipmentCost {
+  id          String    @id @default(cuid())
+  userId      String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  costType    String
+  description String
+  amount      Float
+  costDate    DateTime  @default(now())
+
+  maintenanceRecordId String?
 
   createdAt DateTime @default(now())
 }
