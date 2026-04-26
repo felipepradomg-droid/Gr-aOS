@@ -20,6 +20,7 @@ const NAV = [
       { href: "/frota", icon: "🏗️", label: "Frota" },
       { href: "/agenda", icon: "📅", label: "Agenda" },
       { href: "/os", icon: "📝", label: "Ordens de Serviço" },
+      { href: "/contratos", icon: "📃", label: "Contratos" },
       { href: "/manutencao", icon: "🔧", label: "Manutenção" },
     ],
   },
@@ -75,7 +76,6 @@ export default function SidebarClient({ session }: { session: Session }) {
       <nav className="sidebar-nav">
         {NAV.map((group) => (
           <div key={group.group} style={{ marginBottom: "8px" }}>
-            {/* Label do grupo */}
             <div
               style={{
                 fontSize: "0.65rem",
@@ -89,7 +89,6 @@ export default function SidebarClient({ session }: { session: Session }) {
               {group.group}
             </div>
 
-            {/* Itens */}
             {group.items.map((item) => {
               const isActive = pathname === item.href ||
                 pathname.startsWith(item.href + "/");
