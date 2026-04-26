@@ -51,6 +51,9 @@ export default async function ContratoDetailPage({
     cancelled: 'Cancelado',
   }
 
+  const fmt = (d: Date | null | undefined) =>
+    d ? formatDate(d.toISOString()) : '-'
+
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-2xl">
       {/* Header */}
@@ -89,12 +92,12 @@ export default async function ContratoDetailPage({
         <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
           <div className="flex items-center gap-1.5">
             <Calendar className="h-3 w-3" />
-            <span>Início: {formatDate(contrato.startDate as string)}</span>
+            <span>Início: {fmt(contrato.startDate)}</span>
           </div>
           {contrato.endDate && (
             <div className="flex items-center gap-1.5">
               <Calendar className="h-3 w-3" />
-              <span>Fim: {formatDate(contrato.endDate as string)}</span>
+              <span>Fim: {fmt(contrato.endDate)}</span>
             </div>
           )}
           {contrato.siteCity && (
@@ -178,7 +181,7 @@ export default async function ContratoDetailPage({
               >
                 <div>
                   <p className="text-xs text-gray-400">
-                    {formatDate(m.measureDate as string)}
+                    {fmt(m.measureDate)}
                     {m.operatorName && ` · ${m.operatorName}`}
                   </p>
                   <p className="text-sm text-gray-600 mt-0.5">
@@ -219,7 +222,7 @@ export default async function ContratoDetailPage({
               >
                 <div>
                   <p className="text-xs text-gray-400">
-                    {formatDate(inv.periodStart as string)} a {formatDate(inv.periodEnd as string)}
+                    {fmt(inv.periodStart)} a {fmt(inv.periodEnd)}
                   </p>
                   <p className="text-sm font-medium text-gray-700 mt-0.5">
                     {inv.totalMeasured} {contrato.billingType === 'hourly' ? 'horas' : 'diárias'}
