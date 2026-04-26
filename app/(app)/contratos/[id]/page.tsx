@@ -3,10 +3,10 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 import { MeasurementForm } from '@/components/MeasurementForm'
+import { FaturarButton } from '@/components/FaturarButton'
 import { formatCurrency, formatDate } from '@/lib/utils'
-import { ArrowLeft, MapPin, Calendar, Clock, Wrench, FileText, Send } from 'lucide-react'
+import { ArrowLeft, MapPin, Calendar, Clock, Wrench, FileText } from 'lucide-react'
 import Link from 'next/link'
-import { faturarContrato } from './actions'
 
 export default async function ContratoDetailPage({
   params,
@@ -54,8 +54,6 @@ export default async function ContratoDetailPage({
 
   const fmt = (d: Date | null | undefined) =>
     d ? formatDate(d.toISOString()) : '-'
-
-  const contratoId = contrato.id
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-2xl">
@@ -166,15 +164,7 @@ export default async function ContratoDetailPage({
             </div>
             <FileText className="h-5 w-5 text-gray-400" />
           </div>
-          <form action={faturarContrato.bind(null, contratoId)}>
-            <button
-              type="submit"
-              className="w-full py-3 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <Send className="h-4 w-4" />
-              Gerar Fatura do Período
-            </button>
-          </form>
+          <FaturarButton contratoId={contrato.id} />
         </div>
       )}
 
