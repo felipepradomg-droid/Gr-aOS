@@ -19,9 +19,7 @@ export async function GET(req: NextRequest) {
     const mesAnterior = new Date(now.getFullYear(), now.getMonth() - 1, 1)
     const fimMesAnterior = new Date(now.getFullYear(), now.getMonth(), 0)
     const trintaDiasAtras = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-    const seteDiasAtras = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
-    // Busca dados em paralelo
     const [
       equipamentos,
       osAtivas,
@@ -112,7 +110,6 @@ export async function GET(req: NextRequest) {
           : null
 
         if (diasOcioso !== null && diasOcioso >= 5) {
-          // Busca clientes que locaram este equipamento
           const clientesQueUsaram = await prisma.serviceOrder.findMany({
             where: { equipmentId: eq.id, userId },
             select: { clienteNome: true, clienteTel: true },
@@ -121,7 +118,7 @@ export async function GET(req: NextRequest) {
           })
 
           const primeiroCliente = clientesQueUsaram[0]
-          let whatsappUrl = null
+          let whatsappUrl: string | undefined = undefined
           if (primeiroCliente?.clienteTel) {
             const tel = primeiroCliente.clienteTel.replace(/\D/g, '')
             const mensagem = encodeURIComponent(
@@ -223,7 +220,7 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    // 6. Clientes frequentes — sugerir contrato
+    // 6. Clientes frequentes
     for (const cliente of clientesRecentes) {
       if (cliente._count.id >= 3) {
         insights.push({
@@ -238,10 +235,8 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Ordena por prioridade
     insights.sort((a, b) => a.priority - b.priority)
 
-    // KPIs resumidos
     const kpis = {
       receitaMesAtual: receitaAtual,
       receitaMesAnterior: receitaAnterior,
