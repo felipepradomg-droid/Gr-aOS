@@ -6,6 +6,7 @@ import { MeasurementForm } from '@/components/MeasurementForm'
 import { formatCurrency, formatDate } from '@/lib/utils'
 import { ArrowLeft, MapPin, Calendar, Clock, Wrench, FileText, Send } from 'lucide-react'
 import Link from 'next/link'
+import { faturarContrato } from './actions'
 
 export default async function ContratoDetailPage({
   params,
@@ -53,6 +54,8 @@ export default async function ContratoDetailPage({
 
   const fmt = (d: Date | null | undefined) =>
     d ? formatDate(d.toISOString()) : '-'
+
+  const contratoId = contrato.id
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-2xl">
@@ -163,7 +166,15 @@ export default async function ContratoDetailPage({
             </div>
             <FileText className="h-5 w-5 text-gray-400" />
           </div>
-          <FaturarButton contratoId={contrato.id} />
+          <form action={faturarContrato.bind(null, contratoId)}>
+            <button
+              type="submit"
+              className="w-full py-3 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <Send className="h-4 w-4" />
+              Gerar Fatura do Período
+            </button>
+          </form>
         </div>
       )}
 
@@ -248,34 +259,5 @@ export default async function ContratoDetailPage({
         </div>
       )}
     </div>
-  )
-}
-
-function FaturarButton({ contratoId }: { contratoId: string }) {
-  return (
-    <form action={async () => {
-      'use server'
-      const session = await (await import('next-auth')).getServerSession(
-        (await import('@/lib/auth')).authOptions
-      )
-      if (!session?.user?.id) return
-
-      await fetch(`${process.env.NEXTAUTH_URL}/api/contratos/${contratoId}/faturar`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-      })
-
-      const { revalidatePath } = await import('next/cache')
-      revalidatePath(`/contratos/${contratoId}`)
-    }}>
-      <button
-        type="submit"
-        className="w-full py-3 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
-      >
-        <Send className="h-4 w-4" />
-        Gerar Fatura do Período
-      </button>
-    </form>
   )
 }
