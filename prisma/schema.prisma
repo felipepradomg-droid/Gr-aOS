@@ -141,6 +141,7 @@ model Equipment {
   maintenancePlans  MaintenancePlan[]
   maintenanceAlerts MaintenanceAlert[]
   equipmentCosts    EquipmentCost[]
+  contracts         Contract[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -542,4 +543,80 @@ model EquipmentCost {
   maintenanceRecordId String?
 
   createdAt DateTime @default(now())
+}
+
+// ============================================================
+// CONTRATOS E MEDIÇÕES
+// ============================================================
+
+model Contract {
+  id          String    @id @default(cuid())
+  userId      String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  contractNumber String  @unique
+  clienteNome    String
+  clienteTel     String?
+  clienteEmail   String?
+  clienteCnpjCpf String?
+
+  // 'hourly' | 'daily' | 'monthly'
+  billingType    String  @default("daily")
+  rate           Float
+  currency       String  @default("BRL")
+
+  startDate      DateTime
+  endDate        DateTime?
+  // 'active' | 'paused' | 'completed' | 'cancelled'
+  status         String  @default("active")
+
+  siteAddress    String?
+  siteCity       String?
+  operatorName   String?
+  notes          String? @db.Text
+
+  measurements   Measurement[]
+  invoices       ContractInvoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Measurement {
+  id         String   @id @default(cuid())
+  userId     String
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id])
+
+  measureDate  DateTime @default(now())
+  hoursWorked  Float?
+  daysWorked   Float?
+  amount       Float
+  operatorName String?
+  notes        String? @db.Text
+
+  // 'pending' | 'invoiced'
+  status       String  @default("pending")
+
+  createdAt DateTime @default(now())
+}
+
+model ContractInvoice {
+  id         String   @id @default(cuid())
+  userId     String
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id])
+
+  periodStart   DateTime
+  periodEnd     DateTime
+  totalMeasured Float
+  totalAmount   Float
+  invoiceId     String?
+
+  // 'draft' | 'sent' | 'paid'
+  status      String  @default("draft")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
