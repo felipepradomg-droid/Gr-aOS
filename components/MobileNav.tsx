@@ -13,19 +13,25 @@ const MAIN_ITEMS = [
 ]
 
 const ALL_ITEMS = [
-  { href: '/dashboard',   icon: '📊', label: 'Dashboard' },
-  { href: '/cotacoes',    icon: '📋', label: 'Cotações' },
-  { href: '/os',          icon: '📝', label: 'Ordens de Serviço' },
-  { href: '/frota',       icon: '🏗️', label: 'Frota' },
-  { href: '/agenda',      icon: '📅', label: 'Agenda' },
-  { href: '/contratos',   icon: '📃', label: 'Contratos' },
-  { href: '/manutencao',  icon: '🔧', label: 'Manutenção' },
-  { href: '/faturas',     icon: '💰', label: 'Faturas' },
-  { href: '/financeiro',  icon: '🏦', label: 'Cobranças e PIX' },
-  { href: '/fiscal',      icon: '🧾', label: 'Notas Fiscais' },
-  { href: '/clientes',    icon: '👥', label: 'Clientes' },
-  { href: '/relatorios',  icon: '📈', label: 'Relatórios' },
-  { href: '/configuracoes', icon: '⚙️', label: 'Configurações' },
+  { group: 'Principal', items: [
+    { href: '/dashboard',   icon: '📊', label: 'Dashboard' },
+    { href: '/cotacoes',    icon: '📋', label: 'Cotações' },
+  ]},
+  { group: 'Operação', items: [
+    { href: '/frota',       icon: '🏗️', label: 'Frota' },
+    { href: '/agenda',      icon: '📅', label: 'Agenda' },
+    { href: '/os',          icon: '📝', label: 'OS' },
+    { href: '/contratos',   icon: '📃', label: 'Contratos' },
+    { href: '/manutencao',  icon: '🔧', label: 'Manutenção' },
+  ]},
+  { group: 'Financeiro', items: [
+    { href: '/faturas',     icon: '💰', label: 'Faturas' },
+    { href: '/financeiro',  icon: '🏦', label: 'Cobranças' },
+    { href: '/fiscal',      icon: '🧾', label: 'Fiscal' },
+  ]},
+  { group: 'Gestão', items: [
+    { href: '/configuracoes', icon: '⚙️', label: 'Config.' },
+  ]},
 ]
 
 export function MobileNav() {
@@ -34,50 +40,93 @@ export function MobileNav() {
 
   return (
     <>
-      {/* Menu completo — drawer de baixo para cima */}
+      {/* Drawer */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
-          {/* Overlay */}
           <div
-            className="absolute inset-0 bg-black/60"
+            className="absolute inset-0 bg-black/70"
             onClick={() => setMenuOpen(false)}
           />
-
-          {/* Drawer */}
-          <div className="relative bg-[#111] border-t border-[#2A2A2A] rounded-t-2xl p-5 pb-10 z-10">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-bold text-white">Menu</p>
+          <div
+            className="relative z-10 rounded-t-2xl pb-10"
+            style={{
+              background: 'var(--bg-2)',
+              borderTop: '1px solid var(--border)',
+              padding: '20px 16px 40px',
+            }}
+          >
+            {/* Header do drawer */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>
+                GrúaOS
+              </span>
               <button
                 onClick={() => setMenuOpen(false)}
-                className="p-1.5 rounded-lg bg-[#1A1A1A] text-gray-400"
+                style={{
+                  background: 'var(--bg-3)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '8px',
+                  padding: '6px',
+                  color: 'var(--text-2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
               >
-                <X className="h-4 w-4" />
+                <X size={16} />
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
-              {ALL_ITEMS.map((item) => {
-                const isActive = pathname === item.href ||
-                  pathname.startsWith(item.href + '/')
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-colors ${
-                      isActive
-                        ? 'bg-orange-500/10 border-orange-500/30 text-orange-500'
-                        : 'bg-[#1A1A1A] border-[#2A2A2A] text-gray-400'
-                    }`}
-                  >
-                    <span className="text-xl">{item.icon}</span>
-                    <span className="text-xs font-medium text-center leading-tight">
-                      {item.label}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
+            {/* Grupos */}
+            {ALL_ITEMS.map((group) => (
+              <div key={group.group} style={{ marginBottom: '16px' }}>
+                <p style={{
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  color: 'var(--text-3)',
+                  marginBottom: '8px',
+                  paddingLeft: '4px',
+                }}>
+                  {group.group}
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '12px 4px',
+                          borderRadius: '12px',
+                          border: `1px solid ${isActive ? 'rgba(249,115,22,0.4)' : 'var(--border)'}`,
+                          background: isActive ? 'rgba(249,115,22,0.1)' : 'var(--bg-3)',
+                          textDecoration: 'none',
+                        }}
+                      >
+                        <span style={{ fontSize: '1.4rem' }}>{item.icon}</span>
+                        <span style={{
+                          fontSize: '0.65rem',
+                          fontWeight: 600,
+                          color: isActive ? 'var(--brand)' : 'var(--text-2)',
+                          textAlign: 'center',
+                          lineHeight: 1.2,
+                        }}>
+                          {item.label}
+                        </span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -85,8 +134,7 @@ export function MobileNav() {
       {/* Barra inferior */}
       <nav className="mobile-nav">
         {MAIN_ITEMS.map((item) => {
-          const isActive = pathname === item.href ||
-            pathname.startsWith(item.href + '/')
+          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
             <Link
               key={item.href}
@@ -99,7 +147,6 @@ export function MobileNav() {
           )
         })}
 
-        {/* Botão Mais */}
         <button
           onClick={() => setMenuOpen(true)}
           className="mobile-nav-item"
