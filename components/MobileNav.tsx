@@ -16,6 +16,7 @@ const ALL_ITEMS = [
   { group: 'Principal', items: [
     { href: '/dashboard',   icon: '📊', label: 'Dashboard' },
     { href: '/cotacoes',    icon: '📋', label: 'Cotações' },
+    { href: '/bi',          icon: '🧠', label: 'Inteligência' },
   ]},
   { group: 'Operação', items: [
     { href: '/frota',       icon: '🏗️', label: 'Frota' },
@@ -48,11 +49,12 @@ export function MobileNav() {
             onClick={() => setMenuOpen(false)}
           />
           <div
-            className="relative z-10 rounded-t-2xl pb-10"
+            className="relative z-10 rounded-t-2xl overflow-y-auto"
             style={{
               background: 'var(--bg-2)',
               borderTop: '1px solid var(--border)',
               padding: '20px 16px 40px',
+              maxHeight: '85vh',
             }}
           >
             {/* Header do drawer */}
