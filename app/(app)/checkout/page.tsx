@@ -27,6 +27,7 @@ const PLAN_LABELS: Record<string, { name: string; price: number; features: strin
       "Onboarding dedicado",
       "Suporte prioritário 24h",
       "Relatórios avançados",
+      "SLA garantido",
     ],
   },
 };
@@ -34,7 +35,11 @@ const PLAN_LABELS: Record<string, { name: string; price: number; features: strin
 function CheckoutForm() {
   const params = useSearchParams();
   const planId = params.get("plan") || "pro";
-  const plan = PLAN_LABELS[planId] || PLAN_LABELS.pro;
+
+  // Garante que só aceita pro ou enterprise
+  const validPlan = planId === "enterprise" ? "enterprise" : "pro"
+  const plan = PLAN_LABELS[validPlan]
+
   const [loading, setLoading] = useState(false);
 
   async function handleCheckout() {
@@ -43,7 +48,7 @@ function CheckoutForm() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
+        body: JSON.stringify({ plan: validPlan }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -59,7 +64,7 @@ function CheckoutForm() {
       <div className="checkout-card">
         <div className="checkout-header">
           <h1>Assinar {plan.name}</h1>
-          <p>Acesso imediato após confirmação do pagamento</p>
+          <p>7 dias grátis · Cartão obrigatório · Cancele quando quiser</p>
         </div>
 
         <div className="plan-summary">
@@ -73,6 +78,20 @@ function CheckoutForm() {
               <li key={f}>✓ {f}</li>
             ))}
           </ul>
+        </div>
+
+        <div style={{
+          background: "rgba(249,115,22,.08)",
+          border: "1px solid rgba(249,115,22,.3)",
+          borderRadius: "var(--radius)",
+          padding: "12px 16px",
+          marginBottom: "20px",
+          fontSize: ".875rem",
+          color: "var(--brand)",
+          fontWeight: 600,
+          textAlign: "center",
+        }}>
+          🎁 7 dias grátis — sem cobrança agora
         </div>
 
         <div style={{
@@ -103,7 +122,7 @@ function CheckoutForm() {
             ))}
           </div>
           <div style={{ marginTop: "12px", fontSize: ".8rem", color: "var(--text-3)" }}>
-            Até 12x no cartão · Processado pelo Stripe · Cancele quando quiser
+            Processado pelo Stripe · Cancele quando quiser
           </div>
         </div>
 
@@ -112,11 +131,11 @@ function CheckoutForm() {
           onClick={handleCheckout}
           disabled={loading}
         >
-          {loading ? "Redirecionando..." : `Pagar R$ ${plan.price}/mês →`}
+          {loading ? "Redirecionando..." : `Começar 7 dias grátis →`}
         </button>
 
         <p className="checkout-note">
-          🔒 Pagamento 100% seguro via Stripe · SSL · Cancele quando quiser
+          🔒 Pagamento 100% seguro via Stripe · Não será cobrado nos primeiros 7 dias
         </p>
       </div>
     </div>
