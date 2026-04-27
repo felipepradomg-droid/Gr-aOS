@@ -1,5 +1,5 @@
 // app/api/stripe/checkout/route.ts
-// Cria sessão de checkout do Stripe
+// Cria sessão de checkout do Stripe com 7 dias de trial
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
@@ -7,9 +7,7 @@ import { authOptions } from '@/lib/auth'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: '2026-04-22.dahlia' as any,
-
-
+  apiVersion: '2026-04-22.dahlia' as any,
 })
 
 export async function POST(req: NextRequest) {
@@ -37,15 +35,16 @@ export async function POST(req: NextRequest) {
       success_url: `${process.env.NEXTAUTH_URL}/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXTAUTH_URL}/checkout/erro`,
       customer_email: session.user.email ?? undefined,
-      metadata: {
-        userId: session.user.id,
-        plan,
-      },
       subscription_data: {
+        trial_period_days: 7,
         metadata: {
           userId: session.user.id,
           plan,
         },
+      },
+      metadata: {
+        userId: session.user.id,
+        plan,
       },
     })
 
