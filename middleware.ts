@@ -6,33 +6,18 @@ export default withAuth(
     const token = req.nextauth.token;
     const pathname = req.nextUrl.pathname;
 
-    // Páginas que não precisam de verificação de trial
+    // Páginas públicas — libera sempre
     const publicAppPaths = ["/assinatura", "/checkout", "/planos"];
     if (publicAppPaths.some((p) => pathname.startsWith(p))) {
       return NextResponse.next();
     }
 
-    // Verificar se o usuário tem plano pago ativo
-    const isPago = token?.plan && token.plan !== "free";
-    const planExpiresAt = token?.planExpiresAt
-      ? new Date(token.planExpiresAt as unknown as string)
-      : null;
-    const planAtivo = isPago && (!planExpiresAt || planExpiresAt > new Date());
+    // Usuário autenticado — libera para todas as páginas
+    // Limitações de plano são controladas na UI, não no middleware
+    if (token) return NextResponse.next();
 
-    // Se tem plano pago ativo, libera
-    if (planAtivo) return NextResponse.next();
-
-    // Verificar trial
-    const trialEndsAt = token?.trialEndsAt
-      ? new Date(token.trialEndsAt as unknown as string)
-      : null;
-    const trialAtivo = trialEndsAt && trialEndsAt > new Date();
-
-    // Se trial ainda está ativo, libera
-    if (trialAtivo) return NextResponse.next();
-
-    // Trial expirado e sem plano pago → redireciona para assinatura
-    return NextResponse.redirect(new URL("/assinatura", req.url));
+    // Não autenticado → redireciona para login
+    return NextResponse.redirect(new URL("/login", req.url));
   },
   {
     callbacks: {
@@ -58,5 +43,13 @@ export const config = {
     "/configuracoes",
     "/planos",
     "/checkout",
+    "/contratos",
+    "/contratos/:path*",
+    "/financeiro",
+    "/financeiro/:path*",
+    "/fiscal",
+    "/fiscal/:path*",
+    "/bi",
+    "/bi/:path*",
   ],
 };
