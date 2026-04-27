@@ -8,24 +8,48 @@ export default async function PlanosPage() {
 
   const planos = [
     {
-      id: "starter",
-      name: "Starter",
-      price: 97,
-      features: ["50 cotações/mês", "1 usuário", "PDF com sua marca", "Suporte por email"],
+      id: "free",
+      name: "Free",
+      price: 0,
+      trial: false,
+      features: [
+        "1 guindaste",
+        "10 OS por mês",
+        "Cotações básicas",
+        "Dashboard",
+      ],
       destaque: false,
     },
     {
       id: "pro",
       name: "Pro",
-      price: 197,
-      features: ["Cotações ilimitadas", "3 usuários", "PDF com sua marca", "Envio por WhatsApp", "Relatórios mensais", "Alertas de follow-up"],
+      price: 97,
+      trial: true,
+      features: [
+        "Frota ilimitada",
+        "OS e Contratos ilimitados",
+        "Boleto e PIX integrados",
+        "NFS-e automática",
+        "Manutenção preditiva",
+        "BI e Inteligência",
+        "Suporte por WhatsApp",
+      ],
       destaque: true,
     },
     {
-      id: "business",
-      name: "Business",
-      price: 397,
-      features: ["Tudo do Pro", "10 usuários", "API de integração", "Onboarding dedicado", "Suporte prioritário", "SLA garantido"],
+      id: "enterprise",
+      name: "Enterprise",
+      price: 197,
+      trial: true,
+      features: [
+        "Tudo do Pro",
+        "Múltiplos usuários",
+        "API de integração",
+        "Onboarding dedicado",
+        "Suporte prioritário 24h",
+        "Relatórios avançados",
+        "SLA garantido",
+      ],
       destaque: false,
     },
   ];
@@ -37,8 +61,14 @@ export default async function PlanosPage() {
       </div>
 
       <div className="app-content">
-        <p style={{ color: "var(--text-2)", marginBottom: "32px", textAlign: "center" }}>
-          Seu plano atual: <strong style={{ color: "var(--brand)", textTransform: "capitalize" }}>{planoAtual}</strong>
+        <p style={{ color: "var(--text-2)", marginBottom: "8px", textAlign: "center" }}>
+          Seu plano atual:{" "}
+          <strong style={{ color: "var(--brand)", textTransform: "capitalize" }}>
+            {planoAtual}
+          </strong>
+        </p>
+        <p style={{ color: "var(--text-3)", marginBottom: "32px", textAlign: "center", fontSize: ".875rem" }}>
+          🎁 7 dias grátis nos planos Pro e Enterprise · Cartão obrigatório · Cancele quando quiser
         </p>
 
         <div className="pricing-grid">
@@ -49,13 +79,33 @@ export default async function PlanosPage() {
                 {plano.name}
               </div>
               <div className="plan-price">
-                R$ {plano.price}<span>/mês</span>
+                {plano.price === 0 ? (
+                  <>Grátis</>
+                ) : (
+                  <>R$ {plano.price}<span>/mês</span></>
+                )}
               </div>
+              {plano.trial && (
+                <div style={{
+                  background: "rgba(249,115,22,.1)",
+                  border: "1px solid rgba(249,115,22,.3)",
+                  borderRadius: "var(--radius)",
+                  padding: "8px 12px",
+                  marginBottom: "16px",
+                  fontSize: ".8rem",
+                  color: "var(--brand)",
+                  fontWeight: 600,
+                  textAlign: "center",
+                }}>
+                  🎁 7 dias grátis com cartão
+                </div>
+              )}
               <ul className="plan-features">
                 {plano.features.map((f) => (
                   <li key={f}>✓ {f}</li>
                 ))}
               </ul>
+
               {planoAtual === plano.id ? (
                 <div style={{
                   textAlign: "center",
@@ -68,20 +118,39 @@ export default async function PlanosPage() {
                 }}>
                   ✓ Plano atual
                 </div>
+              ) : plano.id === "free" ? (
+                <div style={{
+                  textAlign: "center",
+                  padding: "12px",
+                  background: "var(--bg-3)",
+                  borderRadius: "var(--radius)",
+                  color: "var(--text-3)",
+                  fontWeight: 600,
+                  fontSize: ".875rem",
+                }}>
+                  Plano gratuito
+                </div>
               ) : (
                 <Link
                   href={`/checkout?plan=${plano.id}`}
                   className={plano.destaque ? "btn-primary-full" : "btn-outline-full"}
                 >
-                  Assinar {plano.name} →
+                  Começar 7 dias grátis →
                 </Link>
               )}
             </div>
           ))}
         </div>
 
-        <p style={{ textAlign: "center", color: "var(--text-3)", fontSize: ".875rem", marginTop: "32px" }}>
-          Pagamento via PIX · Ativação imediata · Cancele quando quiser
+        <p style={{
+          textAlign: "center",
+          color: "var(--text-3)",
+          fontSize: ".8rem",
+          marginTop: "32px",
+          lineHeight: 1.6,
+        }}>
+          💳 Cartão obrigatório · Não será cobrado nos primeiros 7 dias<br/>
+          Cobrança automática após o trial · Cancele a qualquer momento
         </p>
       </div>
     </>
