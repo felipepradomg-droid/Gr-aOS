@@ -1,5 +1,4 @@
 import Link from "next/link";
-import SocialProofNotification from "@/components/SocialProofNotification";
 
 export default function BioPage() {
   const whatsappMsg = encodeURIComponent(
@@ -9,199 +8,214 @@ export default function BioPage() {
 
   return (
     <main style={{
-      fontFamily: "Inter, sans-serif",
-      background: "#0a0a0a",
-      color: "#f5f5f5",
+      fontFamily: "'Inter', sans-serif",
+      background: "#ffffff",
+      color: "#0a0a0a",
       minHeight: "100vh",
     }}>
-      <SocialProofNotification />
 
-      {/* ======= HERO ======= */}
-      <section style={{
-        background: "linear-gradient(180deg, #0d1a2e 0%, #0a0a0a 100%)",
-        padding: "48px 24px 56px",
-        textAlign: "center",
-        borderBottom: "1px solid #1f1f1f",
+      {/* ======= NAVBAR ======= */}
+      <nav style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        background: "rgba(255,255,255,0.95)",
+        backdropFilter: "blur(12px)",
+        borderBottom: "1px solid #e5e7eb",
+        padding: "0 24px",
+        height: "64px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
       }}>
-        {/* Logo */}
-        <div style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "10px",
-          marginBottom: "28px",
-          background: "#ffffff0a",
-          border: "1px solid #ffffff11",
-          padding: "8px 16px",
-          borderRadius: "20px",
-        }}>
-          <span style={{ fontSize: "1.2rem" }}>🏗️</span>
-          <span style={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.5px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "1.3rem" }}>🏗️</span>
+          <span style={{ fontWeight: 900, fontSize: "1.1rem", letterSpacing: "-0.5px", color: "#0a0a0a" }}>
             Grúa<span style={{ color: "#f97316" }}>OS</span>
           </span>
         </div>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            background: "#f97316",
+            color: "white",
+            padding: "8px 18px",
+            borderRadius: "8px",
+            textDecoration: "none",
+            fontWeight: 700,
+            fontSize: "0.85rem",
+          }}
+        >
+          Falar no WhatsApp
+        </a>
+      </nav>
 
-        {/* Badge */}
-        <div style={{
-          display: "inline-block",
-          background: "#f9731615",
-          border: "1px solid #f9731640",
-          color: "#f97316",
-          padding: "5px 14px",
-          borderRadius: "20px",
-          fontSize: "0.75rem",
-          fontWeight: 700,
-          letterSpacing: "0.05em",
-          textTransform: "uppercase",
-          marginBottom: "20px",
-        }}>
-          🔥 7 dias grátis · sem cartão
-        </div>
-
-        {/* Headline */}
-        <h1 style={{
-          fontSize: "clamp(1.8rem, 7vw, 2.8rem)",
-          fontWeight: 900,
-          lineHeight: 1.1,
-          letterSpacing: "-1px",
-          marginBottom: "16px",
-          maxWidth: "480px",
-          margin: "0 auto 16px",
-        }}>
-          Sua locadora no{" "}
-          <span style={{
-            color: "#f97316",
-            borderBottom: "3px solid #f97316",
-            paddingBottom: "2px",
+      {/* ======= HERO ======= */}
+      <section style={{
+        background: "linear-gradient(135deg, #fff7ed 0%, #ffffff 60%)",
+        padding: "64px 24px 72px",
+        textAlign: "center",
+        borderBottom: "1px solid #f3f4f6",
+      }}>
+        <div style={{ maxWidth: "560px", margin: "0 auto" }}>
+          {/* Badge */}
+          <div style={{
+            display: "inline-block",
+            background: "#fff7ed",
+            border: "1px solid #fed7aa",
+            color: "#ea580c",
+            padding: "6px 16px",
+            borderRadius: "999px",
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            marginBottom: "24px",
           }}>
-            próximo nível
-          </span>
-        </h1>
+            🔥 Sistema especializado em guindastes
+          </div>
 
-        {/* Subheadline */}
-        <p style={{
-          fontSize: "1.05rem",
-          color: "#a3a3a3",
-          lineHeight: 1.7,
-          maxWidth: "400px",
-          margin: "0 auto 32px",
-        }}>
-          Do agendamento ao faturamento — tudo em um sistema
-          feito exclusivamente para locadoras de guindastes.
-        </p>
+          {/* Headline */}
+          <h1 style={{
+            fontSize: "clamp(2rem, 7vw, 3.2rem)",
+            fontWeight: 900,
+            lineHeight: 1.1,
+            letterSpacing: "-1.5px",
+            marginBottom: "20px",
+            color: "#0a0a0a",
+          }}>
+            Gerencie sua locadora de guindastes com{" "}
+            <span style={{
+              color: "#f97316",
+              borderBottom: "4px solid #fed7aa",
+              paddingBottom: "2px",
+            }}>
+              profissionalismo
+            </span>
+          </h1>
 
-        {/* CTAs */}
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          maxWidth: "400px",
-          margin: "0 auto",
-        }}>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              padding: "17px",
-              background: "#25D366",
-              color: "white",
-              borderRadius: "12px",
-              textDecoration: "none",
-              fontWeight: 800,
-              fontSize: "1rem",
-              boxShadow: "0 4px 20px #25D36640",
-            }}
-          >
-            <span style={{ fontSize: "1.2rem" }}>💬</span>
-            Falar com especialista agora
-          </a>
+          {/* Sub */}
+          <p style={{
+            fontSize: "1.1rem",
+            color: "#6b7280",
+            lineHeight: 1.7,
+            marginBottom: "36px",
+          }}>
+            Do agendamento ao faturamento — frota, OS, contratos, NFS-e e PIX
+            em um sistema feito exclusivamente para locadoras de guindastes.
+          </p>
 
-          <Link
-            href="/login"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              padding: "17px",
-              background: "#f97316",
-              color: "white",
-              borderRadius: "12px",
-              textDecoration: "none",
-              fontWeight: 800,
-              fontSize: "1rem",
-              boxShadow: "0 4px 20px #f9731640",
-            }}
-          >
-            <span style={{ fontSize: "1.2rem" }}>🚀</span>
-            Começar teste grátis
-          </Link>
+          {/* CTAs */}
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            maxWidth: "400px",
+            margin: "0 auto 40px",
+          }}>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                padding: "17px",
+                background: "#25D366",
+                color: "white",
+                borderRadius: "12px",
+                textDecoration: "none",
+                fontWeight: 800,
+                fontSize: "1rem",
+                boxShadow: "0 4px 24px #25D36630",
+              }}
+            >
+              💬 Falar com especialista agora
+            </a>
+            <Link
+              href="/login"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                padding: "17px",
+                background: "#f97316",
+                color: "white",
+                borderRadius: "12px",
+                textDecoration: "none",
+                fontWeight: 800,
+                fontSize: "1rem",
+                boxShadow: "0 4px 24px #f9731630",
+              }}
+            >
+              🚀 Começar 7 dias grátis
+            </Link>
+            <Link
+              href="/login"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "14px",
+                background: "transparent",
+                color: "#9ca3af",
+                borderRadius: "12px",
+                textDecoration: "none",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              Já tenho conta → Entrar
+            </Link>
+          </div>
 
-          <Link
-            href="/login"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "14px",
-              background: "transparent",
-              color: "#525252",
-              borderRadius: "12px",
-              textDecoration: "none",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-              border: "1px solid #1f1f1f",
-            }}
-          >
-            Já tenho conta → Entrar
-          </Link>
-        </div>
-
-        {/* Números */}
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "32px",
-          marginTop: "36px",
-          flexWrap: "wrap",
-        }}>
-          {[
-            { number: "7 dias", label: "grátis" },
-            { number: "5 min", label: "pra configurar" },
-            { number: "100%", label: "mobile" },
-          ].map((item) => (
-            <div key={item.label} style={{ textAlign: "center" }}>
-              <p style={{
-                fontSize: "1.4rem",
-                fontWeight: 900,
-                color: "#f97316",
-                margin: 0,
-                letterSpacing: "-0.5px",
-              }}>
-                {item.number}
-              </p>
-              <p style={{
-                fontSize: "0.75rem",
-                color: "#525252",
-                margin: 0,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}>
-                {item.label}
-              </p>
-            </div>
-          ))}
+          {/* Números */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "40px",
+            flexWrap: "wrap",
+          }}>
+            {[
+              { number: "7 dias", label: "grátis com cartão" },
+              { number: "5 min", label: "para configurar" },
+              { number: "100%", label: "mobile" },
+            ].map((item) => (
+              <div key={item.label} style={{ textAlign: "center" }}>
+                <p style={{
+                  fontSize: "1.6rem",
+                  fontWeight: 900,
+                  color: "#f97316",
+                  margin: 0,
+                  letterSpacing: "-1px",
+                }}>
+                  {item.number}
+                </p>
+                <p style={{
+                  fontSize: "0.72rem",
+                  color: "#9ca3af",
+                  margin: 0,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                }}>
+                  {item.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ======= DORES ======= */}
       <section style={{
-        padding: "48px 24px",
-        maxWidth: "480px",
+        padding: "64px 24px",
+        maxWidth: "560px",
         margin: "0 auto",
       }}>
         <p style={{
@@ -216,12 +230,13 @@ export default function BioPage() {
           Você se identifica?
         </p>
         <h2 style={{
-          fontSize: "1.4rem",
+          fontSize: "1.6rem",
           fontWeight: 900,
           textAlign: "center",
-          marginBottom: "28px",
+          marginBottom: "36px",
           lineHeight: 1.2,
           letterSpacing: "-0.5px",
+          color: "#0a0a0a",
         }}>
           Isso ainda acontece na sua locadora?
         </h2>
@@ -231,7 +246,7 @@ export default function BioPage() {
             {
               emoji: "😤",
               dor: "Cotações perdidas no WhatsApp",
-              desc: "O cliente perguntou o orçamento, você mandou, sumiu. Você nunca sabe se ele recebeu ou ignorou.",
+              desc: "O cliente perguntou o orçamento, você mandou, sumiu. Nunca sabe se recebeu ou ignorou.",
             },
             {
               emoji: "📊",
@@ -246,11 +261,11 @@ export default function BioPage() {
             {
               emoji: "🔧",
               dor: "Manutenção esquecida até a máquina quebrar",
-              desc: "Guindaste parou na obra do cliente. Revisão estava atrasada há meses. Prejuízo e desgaste.",
+              desc: "Guindaste parou na obra. Revisão estava atrasada há meses. Prejuízo e desgaste.",
             },
             {
               emoji: "💰",
-              dor: "Fim do mês e você não sabe quanto faturou",
+              dor: "Fim do mês sem saber quanto faturou",
               desc: "Soma nota por nota, conferência manual, horas perdidas para um número que pode estar errado.",
             },
           ].map((item) => (
@@ -258,41 +273,33 @@ export default function BioPage() {
               key={item.dor}
               style={{
                 display: "flex",
-                gap: "14px",
-                background: "#111",
-                border: "1px solid #1f1f1f",
+                gap: "16px",
+                background: "#ffffff",
+                border: "1px solid #f3f4f6",
+                borderLeft: "4px solid #fee2e2",
                 borderRadius: "12px",
-                padding: "16px",
+                padding: "18px",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
               }}
             >
               <div style={{
-                width: 44,
-                height: 44,
-                background: "#1a1a1a",
-                borderRadius: "10px",
+                width: 48,
+                height: 48,
+                background: "#fff7ed",
+                borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1.3rem",
+                fontSize: "1.4rem",
                 flexShrink: 0,
               }}>
                 {item.emoji}
               </div>
               <div>
-                <p style={{
-                  margin: "0 0 4px",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  color: "#f5f5f5",
-                }}>
+                <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: "0.9rem", color: "#0a0a0a" }}>
                   {item.dor}
                 </p>
-                <p style={{
-                  margin: 0,
-                  fontSize: "0.8rem",
-                  color: "#737373",
-                  lineHeight: 1.5,
-                }}>
+                <p style={{ margin: 0, fontSize: "0.8rem", color: "#9ca3af", lineHeight: 1.6 }}>
                   {item.desc}
                 </p>
               </div>
@@ -303,12 +310,12 @@ export default function BioPage() {
 
       {/* ======= SOLUÇÃO ======= */}
       <section style={{
-        background: "#0d1a2e",
-        borderTop: "1px solid #1a2744",
-        borderBottom: "1px solid #1a2744",
-        padding: "48px 24px",
+        background: "#fff7ed",
+        borderTop: "1px solid #fed7aa",
+        borderBottom: "1px solid #fed7aa",
+        padding: "64px 24px",
       }}>
-        <div style={{ maxWidth: "480px", margin: "0 auto" }}>
+        <div style={{ maxWidth: "560px", margin: "0 auto" }}>
           <p style={{
             fontSize: "0.75rem",
             color: "#f97316",
@@ -321,80 +328,54 @@ export default function BioPage() {
             A solução
           </p>
           <h2 style={{
-            fontSize: "1.4rem",
+            fontSize: "1.6rem",
             fontWeight: 900,
             textAlign: "center",
             marginBottom: "8px",
             lineHeight: 1.2,
             letterSpacing: "-0.5px",
+            color: "#0a0a0a",
           }}>
             O GrúaOS resolve tudo isso
           </h2>
           <p style={{
-            fontSize: "0.875rem",
-            color: "#737373",
+            fontSize: "0.9rem",
+            color: "#9ca3af",
             textAlign: "center",
-            marginBottom: "28px",
+            marginBottom: "36px",
           }}>
             Um sistema completo feito para quem vive de guindaste
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {[
-              {
-                icon: "🏗️",
-                title: "Gestão de Frota",
-                desc: "Veja em tempo real quais guindastes estão livres, em operação ou em manutenção.",
-                color: "#3b82f6",
-              },
-              {
-                icon: "📅",
-                title: "Agenda Inteligente",
-                desc: "Calendário visual da sua frota. Nunca mais dois clientes no mesmo guindaste.",
-                color: "#8b5cf6",
-              },
-              {
-                icon: "📋",
-                title: "Ordens de Serviço Digitais",
-                desc: "OS gerada em 1 clique da cotação aprovada. Enviada pelo WhatsApp para o operador.",
-                color: "#f97316",
-              },
-              {
-                icon: "🔧",
-                title: "Controle de Manutenção",
-                desc: "Histórico completo por equipamento. Nunca mais revisão esquecida.",
-                color: "#ef4444",
-              },
-              {
-                icon: "💰",
-                title: "Faturamento Integrado",
-                desc: "Gere a fatura da OS com 1 clique. Envie pelo WhatsApp. Controle o que foi pago.",
-                color: "#22c55e",
-              },
-              {
-                icon: "📊",
-                title: "Dashboard Completo",
-                desc: "Receita do mês, ocupação da frota e alertas — tudo em uma tela só.",
-                color: "#f59e0b",
-              },
+              { icon: "🏗️", title: "Gestão de Frota", desc: "Veja em tempo real quais guindastes estão livres, em operação ou em manutenção.", color: "#3b82f6" },
+              { icon: "📅", title: "Agenda Inteligente", desc: "Calendário visual da sua frota. Nunca mais dois clientes no mesmo guindaste.", color: "#8b5cf6" },
+              { icon: "📋", title: "Ordens de Serviço Digitais", desc: "OS gerada em 1 clique da cotação aprovada. Enviada pelo WhatsApp para o operador.", color: "#f97316" },
+              { icon: "📃", title: "Contratos e Medições", desc: "Contratos por hora ou diária com medições mensais e fatura automática.", color: "#0ea5e9" },
+              { icon: "🔧", title: "Manutenção Preditiva", desc: "Alertas por horímetro. Nunca mais revisão esquecida. TCO por equipamento.", color: "#ef4444" },
+              { icon: "🧾", title: "NFS-e Automática", desc: "Emita nota fiscal de serviço para qualquer prefeitura do Brasil com 1 clique.", color: "#10b981" },
+              { icon: "💰", title: "Boleto e PIX Integrados", desc: "Gere cobranças e receba a baixa automática quando o cliente pagar.", color: "#22c55e" },
+              { icon: "🧠", title: "BI e Inteligência", desc: "Insights automáticos: equipamentos ociosos, clientes frequentes, receita vs mês anterior.", color: "#f59e0b" },
             ].map((item) => (
               <div
                 key={item.title}
                 style={{
                   display: "flex",
                   gap: "14px",
-                  background: "#0a0a0a",
-                  border: "1px solid #1a2744",
-                  borderLeft: `3px solid ${item.color}`,
+                  background: "#ffffff",
+                  border: "1px solid #f3f4f6",
+                  borderLeft: `4px solid ${item.color}`,
                   borderRadius: "12px",
                   padding: "16px",
                   alignItems: "flex-start",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
                 }}
               >
                 <div style={{
-                  width: 40,
-                  height: 40,
-                  background: item.color + "22",
+                  width: 44,
+                  height: 44,
+                  background: item.color + "15",
                   borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",
@@ -405,20 +386,10 @@ export default function BioPage() {
                   {item.icon}
                 </div>
                 <div>
-                  <p style={{
-                    margin: "0 0 4px",
-                    fontWeight: 700,
-                    fontSize: "0.9rem",
-                    color: "#f5f5f5",
-                  }}>
+                  <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: "0.9rem", color: "#0a0a0a" }}>
                     {item.title}
                   </p>
-                  <p style={{
-                    margin: 0,
-                    fontSize: "0.8rem",
-                    color: "#737373",
-                    lineHeight: 1.5,
-                  }}>
+                  <p style={{ margin: 0, fontSize: "0.8rem", color: "#9ca3af", lineHeight: 1.5 }}>
                     {item.desc}
                   </p>
                 </div>
@@ -429,64 +400,42 @@ export default function BioPage() {
       </section>
 
       {/* ======= COMPARATIVO ======= */}
-      <section style={{
-        padding: "48px 24px",
-        maxWidth: "480px",
-        margin: "0 auto",
-      }}>
+      <section style={{ padding: "64px 24px", maxWidth: "560px", margin: "0 auto" }}>
         <h2 style={{
-          fontSize: "1.3rem",
+          fontSize: "1.5rem",
           fontWeight: 900,
           textAlign: "center",
-          marginBottom: "24px",
-          lineHeight: 1.2,
+          marginBottom: "32px",
+          letterSpacing: "-0.5px",
+          color: "#0a0a0a",
         }}>
           Planilha vs GrúaOS
         </h2>
 
         <div style={{
-          background: "#111",
-          border: "1px solid #1f1f1f",
-          borderRadius: "14px",
+          background: "#ffffff",
+          border: "1px solid #e5e7eb",
+          borderRadius: "16px",
           overflow: "hidden",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
         }}>
-          {/* Header */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
-            background: "#1a1a1a",
-            borderBottom: "1px solid #1f1f1f",
+            background: "#f9fafb",
+            borderBottom: "1px solid #e5e7eb",
           }}>
-            <div style={{ padding: "12px 16px", fontSize: "0.8rem", color: "#525252", fontWeight: 600 }}>
-              Recurso
-            </div>
-            <div style={{
-              padding: "12px",
-              fontSize: "0.8rem",
-              color: "#ef4444",
-              fontWeight: 700,
-              textAlign: "center",
-            }}>
-              Planilha
-            </div>
-            <div style={{
-              padding: "12px",
-              fontSize: "0.8rem",
-              color: "#f97316",
-              fontWeight: 700,
-              textAlign: "center",
-            }}>
-              GrúaOS
-            </div>
+            <div style={{ padding: "14px 16px", fontSize: "0.8rem", color: "#9ca3af", fontWeight: 600 }}>Recurso</div>
+            <div style={{ padding: "14px", fontSize: "0.8rem", color: "#ef4444", fontWeight: 700, textAlign: "center" }}>Planilha</div>
+            <div style={{ padding: "14px", fontSize: "0.8rem", color: "#f97316", fontWeight: 700, textAlign: "center" }}>GrúaOS</div>
           </div>
-
           {[
             "Disponibilidade em tempo real",
             "OS digital com 1 clique",
             "Envio por WhatsApp",
-            "Histórico de manutenção",
-            "Faturamento integrado",
-            "Dashboard de receita",
+            "Manutenção preditiva",
+            "NFS-e automática",
+            "Boleto e PIX integrados",
             "Acesso pelo celular",
             "Alertas automáticos",
           ].map((item, i) => (
@@ -495,44 +444,102 @@ export default function BioPage() {
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1fr",
-                borderBottom: i < 7 ? "1px solid #1a1a1a" : "none",
+                borderBottom: i < 7 ? "1px solid #f3f4f6" : "none",
                 alignItems: "center",
               }}
             >
-              <div style={{
-                padding: "11px 16px",
-                fontSize: "0.78rem",
-                color: "#a3a3a3",
-              }}>
-                {item}
-              </div>
-              <div style={{
-                padding: "11px",
-                textAlign: "center",
-                fontSize: "1rem",
-              }}>
-                ❌
-              </div>
-              <div style={{
-                padding: "11px",
-                textAlign: "center",
-                fontSize: "1rem",
-              }}>
-                ✅
-              </div>
+              <div style={{ padding: "12px 16px", fontSize: "0.78rem", color: "#6b7280" }}>{item}</div>
+              <div style={{ padding: "12px", textAlign: "center" }}>❌</div>
+              <div style={{ padding: "12px", textAlign: "center" }}>✅</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ======= PLANOS ======= */}
+      {/* ======= DEPOIMENTOS ======= */}
       <section style={{
-        background: "#0d1a2e",
-        borderTop: "1px solid #1a2744",
-        borderBottom: "1px solid #1a2744",
-        padding: "48px 24px",
+        background: "#f9fafb",
+        borderTop: "1px solid #e5e7eb",
+        borderBottom: "1px solid #e5e7eb",
+        padding: "64px 24px",
       }}>
-        <div style={{ maxWidth: "480px", margin: "0 auto" }}>
+        <div style={{ maxWidth: "560px", margin: "0 auto" }}>
+          <p style={{
+            fontSize: "0.75rem",
+            color: "#f97316",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            textAlign: "center",
+            marginBottom: "12px",
+          }}>
+            Depoimentos
+          </p>
+          <h2 style={{
+            fontSize: "1.5rem",
+            fontWeight: 900,
+            textAlign: "center",
+            marginBottom: "36px",
+            letterSpacing: "-0.5px",
+            color: "#0a0a0a",
+          }}>
+            O que dizem os clientes
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            {[
+              {
+                rating: "⭐⭐⭐⭐⭐",
+                text: "Antes eu controlava tudo no WhatsApp e em planilha. Hoje sei exatamente quais guindastes estão livres e faturei 30% mais no primeiro mês usando o GrúaOS.",
+                name: "Carlos M.",
+                role: "Locadora de guindastes, MG",
+              },
+              {
+                rating: "⭐⭐⭐⭐⭐",
+                text: "O sistema é muito simples e funciona no celular. Configurei em menos de 5 minutos e já estava emitindo OS digital. Não erro mais na agenda.",
+                name: "Roberto S.",
+                role: "Operador e proprietário, SP",
+              },
+              {
+                rating: "⭐⭐⭐⭐⭐",
+                text: "O módulo de manutenção preditiva me salvou. O sistema avisou que a revisão estava vencendo antes de eu esquecer. Nunca mais vou perder equipamento parado na obra.",
+                name: "Marcos F.",
+                role: "Locadora de guindastes, RJ",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "14px",
+                  padding: "20px",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                }}
+              >
+                <p style={{ margin: "0 0 4px", fontSize: "0.9rem" }}>{item.rating} 5/5</p>
+                <p style={{
+                  margin: "0 0 14px",
+                  fontSize: "0.875rem",
+                  color: "#374151",
+                  lineHeight: 1.7,
+                  fontStyle: "italic",
+                }}>
+                  "{item.text}"
+                </p>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "0.85rem", color: "#0a0a0a" }}>
+                  — {item.name}
+                </p>
+                <p style={{ margin: 0, fontSize: "0.75rem", color: "#9ca3af" }}>{item.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ======= PLANOS ======= */}
+      <section style={{ padding: "64px 24px" }}>
+        <div style={{ maxWidth: "560px", margin: "0 auto" }}>
           <p style={{
             fontSize: "0.75rem",
             color: "#f97316",
@@ -545,44 +552,50 @@ export default function BioPage() {
             Planos
           </p>
           <h2 style={{
-            fontSize: "1.4rem",
+            fontSize: "1.5rem",
             fontWeight: 900,
             textAlign: "center",
             marginBottom: "8px",
+            letterSpacing: "-0.5px",
+            color: "#0a0a0a",
           }}>
             Preço justo, sem surpresa
           </h2>
           <p style={{
-            fontSize: "0.85rem",
-            color: "#737373",
+            fontSize: "0.875rem",
+            color: "#9ca3af",
             textAlign: "center",
-            marginBottom: "28px",
+            marginBottom: "36px",
           }}>
-            Sem contrato anual · Cancele quando quiser
+            7 dias grátis com cartão · Cancele quando quiser
           </p>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {[
               {
-                name: "Starter",
-                price: "R$97",
-                desc: "Até 3 equipamentos · 1 usuário · OS básica",
+                name: "Free",
+                price: "Grátis",
+                desc: "1 guindaste · 10 OS por mês · Dashboard básico",
                 highlight: false,
-                href: "/checkout?plan=starter",
+                href: "/login",
+                cta: "Começar grátis",
               },
               {
                 name: "Pro",
-                price: "R$197",
-                desc: "Frota ilimitada · 3 usuários · Tudo incluído",
+                price: "R$ 97",
+                desc: "Frota ilimitada · OS, Contratos, NFS-e, PIX, BI",
                 highlight: true,
                 href: "/checkout?plan=pro",
+                cta: "Começar 7 dias grátis",
+                badge: "MAIS POPULAR",
               },
               {
-                name: "Business",
-                price: "R$347",
-                desc: "10 usuários · API · Suporte prioritário",
+                name: "Enterprise",
+                price: "R$ 197",
+                desc: "Tudo do Pro · Múltiplos usuários · Suporte prioritário",
                 highlight: false,
-                href: whatsappUrl,
+                href: "/checkout?plan=enterprise",
+                cta: "Começar 7 dias grátis",
               },
             ].map((plan) => (
               <a
@@ -592,12 +605,13 @@ export default function BioPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "16px 20px",
-                  background: plan.highlight ? "#f97316" : "#0a0a0a",
-                  border: `1px solid ${plan.highlight ? "#f97316" : "#1a2744"}`,
-                  borderRadius: "12px",
+                  padding: "20px 24px",
+                  background: plan.highlight ? "#f97316" : "#ffffff",
+                  border: `2px solid ${plan.highlight ? "#f97316" : "#e5e7eb"}`,
+                  borderRadius: "14px",
                   textDecoration: "none",
                   gap: "12px",
+                  boxShadow: plan.highlight ? "0 8px 32px #f9731630" : "0 1px 4px rgba(0,0,0,0.04)",
                 }}
               >
                 <div>
@@ -605,48 +619,60 @@ export default function BioPage() {
                     margin: "0 0 3px",
                     fontWeight: 800,
                     fontSize: "1rem",
-                    color: "white",
+                    color: plan.highlight ? "white" : "#0a0a0a",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
                   }}>
                     {plan.name}
-                    {plan.highlight && (
+                    {plan.badge && (
                       <span style={{
-                        marginLeft: "8px",
                         background: "white",
                         color: "#f97316",
-                        fontSize: "0.65rem",
+                        fontSize: "0.6rem",
                         fontWeight: 800,
                         padding: "2px 8px",
-                        borderRadius: "10px",
-                        verticalAlign: "middle",
+                        borderRadius: "999px",
                       }}>
-                        POPULAR
+                        {plan.badge}
                       </span>
                     )}
                   </p>
                   <p style={{
-                    margin: 0,
-                    fontSize: "0.75rem",
-                    color: plan.highlight ? "#fed7aa" : "#737373",
+                    margin: "0 0 8px",
+                    fontSize: "0.78rem",
+                    color: plan.highlight ? "#fed7aa" : "#9ca3af",
                   }}>
                     {plan.desc}
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    color: plan.highlight ? "#fff7ed" : "#f97316",
+                  }}>
+                    {plan.cta} →
                   </p>
                 </div>
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
                   <p style={{
                     margin: 0,
                     fontWeight: 900,
-                    fontSize: "1.3rem",
-                    color: "white",
+                    fontSize: "1.4rem",
+                    color: plan.highlight ? "white" : "#0a0a0a",
+                    letterSpacing: "-1px",
                   }}>
                     {plan.price}
                   </p>
-                  <p style={{
-                    margin: 0,
-                    fontSize: "0.7rem",
-                    color: plan.highlight ? "#fed7aa" : "#525252",
-                  }}>
-                    /mês
-                  </p>
+                  {plan.price !== "Grátis" && (
+                    <p style={{
+                      margin: 0,
+                      fontSize: "0.7rem",
+                      color: plan.highlight ? "#fed7aa" : "#9ca3af",
+                    }}>
+                      /mês
+                    </p>
+                  )}
                 </div>
               </a>
             ))}
@@ -656,98 +682,80 @@ export default function BioPage() {
 
       {/* ======= FAQ ======= */}
       <section style={{
-        padding: "48px 24px",
-        maxWidth: "480px",
-        margin: "0 auto",
+        background: "#f9fafb",
+        borderTop: "1px solid #e5e7eb",
+        borderBottom: "1px solid #e5e7eb",
+        padding: "64px 24px",
       }}>
-        <h2 style={{
-          fontSize: "1.3rem",
-          fontWeight: 900,
-          textAlign: "center",
-          marginBottom: "24px",
-        }}>
-          Perguntas frequentes
-        </h2>
+        <div style={{ maxWidth: "560px", margin: "0 auto" }}>
+          <h2 style={{
+            fontSize: "1.5rem",
+            fontWeight: 900,
+            textAlign: "center",
+            marginBottom: "36px",
+            letterSpacing: "-0.5px",
+            color: "#0a0a0a",
+          }}>
+            Perguntas Frequentes
+          </h2>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {[
-            {
-              q: "Precisa instalar alguma coisa?",
-              a: "Não. O GrúaOS funciona direto no navegador do celular ou computador. Sem download, sem instalação.",
-            },
-            {
-              q: "Meus dados ficam salvos se eu cancelar?",
-              a: "Sim. Todos os seus dados ficam salvos por 30 dias após o cancelamento. Você pode exportar tudo.",
-            },
-            {
-              q: "É difícil de configurar?",
-              a: "Não. Em menos de 5 minutos você cadastra sua empresa, adiciona os equipamentos e já começa a usar.",
-            },
-            {
-              q: "Funciona no celular?",
-              a: "100%. O GrúaOS foi desenvolvido mobile-first. Funciona perfeitamente em qualquer smartphone.",
-            },
-            {
-              q: "Como funciona o teste grátis?",
-              a: "7 dias com acesso completo a todas as funcionalidades. Sem cartão de crédito. Sem compromisso.",
-            },
-          ].map((item) => (
-            <div
-              key={item.q}
-              style={{
-                background: "#111",
-                border: "1px solid #1f1f1f",
-                borderRadius: "12px",
-                padding: "16px",
-              }}
-            >
-              <p style={{
-                margin: "0 0 6px",
-                fontWeight: 700,
-                fontSize: "0.875rem",
-                color: "#f5f5f5",
-              }}>
-                {item.q}
-              </p>
-              <p style={{
-                margin: 0,
-                fontSize: "0.8rem",
-                color: "#737373",
-                lineHeight: 1.6,
-              }}>
-                {item.a}
-              </p>
-            </div>
-          ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {[
+              { q: "Precisa instalar alguma coisa?", a: "Não. O GrúaOS funciona direto no navegador do celular ou computador. Sem download, sem instalação." },
+              { q: "Como funciona o teste grátis?", a: "7 dias com acesso completo. Cartão obrigatório, mas não há cobrança durante o período de teste. Cancele antes do 8º dia e não paga nada." },
+              { q: "É difícil de configurar?", a: "Não. Em menos de 5 minutos você cadastra sua empresa, adiciona os equipamentos e já começa a usar." },
+              { q: "Funciona no celular?", a: "100%. O GrúaOS foi desenvolvido mobile-first. Funciona perfeitamente em qualquer smartphone." },
+              { q: "Posso cancelar quando quiser?", a: "Sim. Sem fidelidade, sem multa. Cancele a qualquer momento direto pelo painel." },
+              { q: "O GrúaOS emite nota fiscal?", a: "Sim. O sistema emite NFS-e automaticamente para qualquer prefeitura do Brasil, integrado ao NFE.io." },
+            ].map((item) => (
+              <div
+                key={item.q}
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "12px",
+                  padding: "18px 20px",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                }}
+              >
+                <p style={{ margin: "0 0 6px", fontWeight: 700, fontSize: "0.875rem", color: "#0a0a0a" }}>
+                  {item.q}
+                </p>
+                <p style={{ margin: 0, fontSize: "0.82rem", color: "#6b7280", lineHeight: 1.6 }}>
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ======= CTA FINAL ======= */}
       <section style={{
-        background: "linear-gradient(180deg, #0d1a2e 0%, #0a0a0a 100%)",
-        borderTop: "1px solid #1a2744",
-        padding: "48px 24px 60px",
+        background: "linear-gradient(135deg, #fff7ed 0%, #ffffff 100%)",
+        borderTop: "1px solid #fed7aa",
+        padding: "64px 24px 80px",
         textAlign: "center",
       }}>
-        <div style={{ maxWidth: "400px", margin: "0 auto" }}>
-          <span style={{ fontSize: "2.5rem" }}>🏗️</span>
+        <div style={{ maxWidth: "440px", margin: "0 auto" }}>
+          <span style={{ fontSize: "3rem" }}>🏗️</span>
           <h2 style={{
-            fontSize: "1.5rem",
+            fontSize: "1.7rem",
             fontWeight: 900,
             margin: "16px 0 12px",
             lineHeight: 1.2,
             letterSpacing: "-0.5px",
+            color: "#0a0a0a",
           }}>
             Sua locadora merece um sistema profissional
           </h2>
           <p style={{
-            fontSize: "0.9rem",
-            color: "#a3a3a3",
-            marginBottom: "28px",
-            lineHeight: 1.6,
+            fontSize: "0.95rem",
+            color: "#6b7280",
+            marginBottom: "32px",
+            lineHeight: 1.7,
           }}>
-            7 dias grátis. Sem cartão. Sem burocracia.
-            Configure em 5 minutos e comece hoje.
+            7 dias grátis com cartão. Configure em 5 minutos e comece hoje.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -767,13 +775,11 @@ export default function BioPage() {
                 textDecoration: "none",
                 fontWeight: 800,
                 fontSize: "1rem",
-                boxShadow: "0 4px 20px #25D36640",
+                boxShadow: "0 4px 24px #25D36630",
               }}
             >
-              <span style={{ fontSize: "1.2rem" }}>💬</span>
-              Falar com especialista no WhatsApp
+              💬 Falar com especialista no WhatsApp
             </a>
-
             <Link
               href="/login"
               style={{
@@ -788,68 +794,58 @@ export default function BioPage() {
                 textDecoration: "none",
                 fontWeight: 800,
                 fontSize: "1rem",
-                boxShadow: "0 4px 20px #f9731640",
+                boxShadow: "0 4px 24px #f9731630",
               }}
             >
-              <span style={{ fontSize: "1.2rem" }}>🚀</span>
-              Começar teste grátis agora
+              🚀 Começar 7 dias grátis agora
             </Link>
           </div>
 
-          {/* Garantia */}
           <div style={{
             marginTop: "24px",
             padding: "14px",
-            background: "#ffffff05",
-            border: "1px solid #1f1f1f",
+            background: "#ffffff",
+            border: "1px solid #e5e7eb",
             borderRadius: "10px",
             fontSize: "0.78rem",
-            color: "#525252",
+            color: "#9ca3af",
             lineHeight: 1.6,
           }}>
-            🔒 Pagamento seguro via Mercado Pago · Cancele quando quiser · Seus dados sempre seguros
+            🔒 Pagamento seguro via Stripe · Cancele quando quiser · Seus dados sempre seguros
           </div>
         </div>
       </section>
 
       {/* ======= FOOTER ======= */}
       <footer style={{
-        padding: "24px",
-        borderTop: "1px solid #1f1f1f",
+        padding: "32px 24px",
+        borderTop: "1px solid #e5e7eb",
         textAlign: "center",
+        background: "#ffffff",
       }}>
         <p style={{
-          fontSize: "0.8rem",
-          fontWeight: 800,
+          fontSize: "0.9rem",
+          fontWeight: 900,
           margin: "0 0 4px",
           letterSpacing: "-0.3px",
+          color: "#0a0a0a",
         }}>
           Grúa<span style={{ color: "#f97316" }}>OS</span>
         </p>
-        <p style={{ fontSize: "0.72rem", color: "#525252", margin: "0 0 10px" }}>
+        <p style={{ fontSize: "0.72rem", color: "#9ca3af", margin: "0 0 14px" }}>
           © {new Date().getFullYear()} · Todos os direitos reservados
         </p>
-        <div style={{ display: "flex", gap: "20px", justifyContent: "center" }}>
-          <a
-            href="https://instagram.com/gruaossolucoes"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#525252", textDecoration: "none", fontSize: "0.75rem" }}
-          >
+        <div style={{ display: "flex", gap: "24px", justifyContent: "center" }}>
+          <a href="https://instagram.com/gruaossolucoes" target="_blank" rel="noopener noreferrer"
+            style={{ color: "#9ca3af", textDecoration: "none", fontSize: "0.78rem" }}>
             @gruaossolucoes
           </a>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#525252", textDecoration: "none", fontSize: "0.75rem" }}
-          >
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+            style={{ color: "#9ca3af", textDecoration: "none", fontSize: "0.78rem" }}>
             Suporte
           </a>
-          <Link
-            href="/login"
-            style={{ color: "#525252", textDecoration: "none", fontSize: "0.75rem" }}
-          >
+          <Link href="/login"
+            style={{ color: "#9ca3af", textDecoration: "none", fontSize: "0.78rem" }}>
             Entrar
           </Link>
         </div>
