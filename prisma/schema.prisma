@@ -29,7 +29,7 @@ model User {
   sessions          Session[]
   payments          Payment[]
   cotacoes          Cotacao[]
-  companyFiscalConfig CompanyFiscalConfig?  // ← NOVO
+  companyFiscalConfig CompanyFiscalConfig?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -143,6 +143,7 @@ model Equipment {
   maintenanceAlerts MaintenanceAlert[]
   equipmentCosts    EquipmentCost[]
   contracts         Contract[]
+  fuelSupplies      FuelSupply[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -340,14 +341,14 @@ model MunicipalityTaxConfig {
   isActive           Boolean @default(true)
 
   invoices           Invoice[]
-  companyConfigs     CompanyFiscalConfig[]  // ← NOVO
+  companyConfigs     CompanyFiscalConfig[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 // ============================================================
-// FISCAL — Configuração da Empresa (por locadora)   ← NOVO
+// FISCAL — Configuração da Empresa (por locadora)
 // ============================================================
 
 model CompanyFiscalConfig {
@@ -355,22 +356,18 @@ model CompanyFiscalConfig {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Qual município esta locadora está cadastrada
   municipalityConfigId String
   municipalityConfig   MunicipalityTaxConfig @relation(fields: [municipalityConfigId], references: [id])
 
-  // Dados da empresa no NFE.io
-  nfeApiKey    String       // API Key do NFE.io
-  nfeCompanyId String       // Company ID no NFE.io
+  nfeApiKey    String
+  nfeCompanyId String
 
-  // Dados fiscais específicos da empresa
-  razaoSocial     String?
-  cnpj            String?
+  razaoSocial        String?
+  cnpj               String?
   inscricaoMunicipal String?
-  codigoServico   String?   // pode sobrescrever o do município
-  aliquotaIss     Float?    // pode sobrescrever a do município
+  codigoServico      String?
+  aliquotaIss        Float?
 
-  // Ambiente: "homologacao" | "producao"
   ambiente     String  @default("homologacao")
   ativo        Boolean @default(true)
 
@@ -383,13 +380,13 @@ model CompanyFiscalConfig {
 // ============================================================
 
 model BankAccount {
-  id          String  @id @default(cuid())
-  userId      String
-  bankName    String
-  bankCode    String?
-  agency      String?
+  id            String  @id @default(cuid())
+  userId        String
+  bankName      String
+  bankCode      String?
+  agency        String?
   accountNumber String?
-  accountType String?
+  accountType   String?
 
   integrationType   String?
   apiCredentials    Json?
@@ -414,7 +411,7 @@ model Receivable {
   id            String  @id @default(cuid())
   userId        String
   invoiceId     String? @unique
-  invoice       Invoice? @relation(fields: [invoiceId], references: [id])
+  invoice       Invoice?     @relation(fields: [invoiceId], references: [id])
   bankAccountId String?
   bankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
 
@@ -430,16 +427,16 @@ model Receivable {
   pixQrcode   String?  @db.Text
   paymentUrl  String?
 
-  status    String   @default("pending")
-  paidAmount Float?
-  paidAt    DateTime?
+  status            String   @default("pending")
+  paidAmount        Float?
+  paidAt            DateTime?
   paymentMethodUsed String?
 
   fineAmount     Float @default(0)
   interestAmount Float @default(0)
   discountAmount Float @default(0)
 
-  bankTransactionId String?        @unique
+  bankTransactionId String?         @unique
   bankTransaction   BankTransaction? @relation(fields: [bankTransactionId], references: [id])
   reconciledAt      DateTime?
   reconciledBy      String?
@@ -453,7 +450,7 @@ model Receivable {
 // ============================================================
 
 model BankTransaction {
-  id            String  @id @default(cuid())
+  id            String      @id @default(cuid())
   bankAccountId String
   bankAccount   BankAccount @relation(fields: [bankAccountId], references: [id])
   userId        String
@@ -463,7 +460,7 @@ model BankTransaction {
   amount           Float
   balanceAfter     Float?
 
-  externalId          String?  @unique
+  externalId          String? @unique
   documentNumber      String?
   counterpartDocument String?
   counterpartName     String?
@@ -646,6 +643,34 @@ model ContractInvoice {
   invoiceId     String?
 
   status      String  @default("draft")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// ABASTECIMENTO / CONTROLE DE COMBUSTÍVEL
+// ============================================================
+
+model FuelSupply {
+  id          String    @id @default(cuid())
+  userId      String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  supplyDate    DateTime @default(now())
+  fuelType      String   @default("diesel") // diesel | gasolina | etanol | arla
+  liters        Float
+  pricePerLiter Float
+  totalCost     Float
+
+  meterType    String  @default("hourmeter") // hourmeter | odometer
+  meterReading Float?
+
+  supplier      String?
+  invoiceNumber String?
+  operatorName  String?
+  notes         String? @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
