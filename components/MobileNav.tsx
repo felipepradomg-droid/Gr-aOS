@@ -30,6 +30,7 @@ const ALL_ITEMS = [
     { href: '/faturas',     icon: '💰', label: 'Faturas' },
     { href: '/financeiro',  icon: '🏦', label: 'Cobranças' },
     { href: '/fiscal',      icon: '🧾', label: 'Fiscal' },
+    { href: '/impostos',    icon: '📑', label: 'Impostos' },
   ]},
   { group: 'Gestão', items: [
     { href: '/configuracoes', icon: '⚙️', label: 'Config.' },
