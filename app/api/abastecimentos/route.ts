@@ -1,5 +1,3 @@
-// app/api/abastecimentos/route.ts
-
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -34,7 +32,6 @@ export async function GET(req: NextRequest) {
       orderBy: { supplyDate: 'desc' },
     })
 
-    // Totais agregados
     const totalLitros = abastecimentos.reduce((s, a) => s + a.liters, 0)
     const totalCusto  = abastecimentos.reduce((s, a) => s + a.totalCost, 0)
 
@@ -61,7 +58,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Verifica se equipamento pertence ao usuário
     const equipment = await prisma.equipment.findFirst({
       where: { id: body.equipmentId, userId: session.user.id },
     })
@@ -92,7 +88,6 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    // Registra também como custo do equipamento
     await prisma.equipmentCost.create({
       data: {
         userId:      session.user.id,
