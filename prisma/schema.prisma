@@ -1,12 +1,9 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ============================================================
@@ -348,7 +345,7 @@ model MunicipalityTaxConfig {
 }
 
 // ============================================================
-// FISCAL — Configuração da Empresa (por locadora)
+// FISCAL — Configuração da Empresa
 // ============================================================
 
 model CompanyFiscalConfig {
@@ -659,12 +656,12 @@ model FuelSupply {
   equipment   Equipment @relation(fields: [equipmentId], references: [id])
 
   supplyDate    DateTime @default(now())
-  fuelType      String   @default("diesel") // diesel | gasolina | etanol | arla
+  fuelType      String   @default("diesel")
   liters        Float
   pricePerLiter Float
   totalCost     Float
 
-  meterType    String  @default("hourmeter") // hourmeter | odometer
+  meterType    String  @default("hourmeter")
   meterReading Float?
 
   supplier      String?
