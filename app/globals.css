@@ -241,7 +241,8 @@ tbody tr:hover { background: var(--bg-3); }
 @media (max-width: 768px) {
   .sidebar { display: none; }
   .app-topbar h1 { font-size: 1rem; }
-  .app-content { padding: 20px 16px 100px; }
+  .app-content { padding: 20px 16px 140px; }
+
   .nav-links .btn-outline { display: none; }
   .hero { padding: 80px 16px 60px; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
