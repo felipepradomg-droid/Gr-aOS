@@ -1,6 +1,4 @@
 // app/api/invoices/[id]/emit/route.ts
-// Emite a NFS-e de uma fatura e envia por WhatsApp
-
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -19,10 +17,7 @@ export async function POST(
 
     // Busca a fatura
     const invoice = await prisma.invoice.findFirst({
-      where: {
-        id: params.id,
-        userId: session.user.id,
-      },
+      where: { id: params.id, userId: session.user.id },
       include: {
         municipalityConfig: {
           include: { provider: true }
@@ -38,13 +33,6 @@ export async function POST(
       return NextResponse.json({ error: 'NFS-e já emitida' }, { status: 400 })
     }
 
-    if (!invoice.municipalityConfigId) {
-      return NextResponse.json(
-        { error: 'Configure o município antes de emitir a NFS-e' },
-        { status: 400 }
-      )
-    }
-
     if (!invoice.clienteCnpjCpf) {
       return NextResponse.json(
         { error: 'CPF/CNPJ do cliente é obrigatório para emitir NFS-e' },
@@ -52,54 +40,62 @@ export async function POST(
       )
     }
 
-    // Atualiza status para emissão em andamento
+    // Busca as credenciais da locadora no CompanyFiscalConfig
+    const fiscalConfig = await prisma.companyFiscalConfig.findUnique({
+      where: { userId: session.user.id },
+      include: { municipalityConfig: true }
+    })
+
+    if (!fiscalConfig) {
+      return NextResponse.json(
+        { error: 'Configure os dados fiscais antes de emitir. Acesse Configurações → Fiscal.' },
+        { status: 400 }
+      )
+    }
+
+    if (!fiscalConfig.ativo) {
+      return NextResponse.json(
+        { error: 'Emissão de NFS-e está desativada nas configurações fiscais.' },
+        { status: 400 }
+      )
+    }
+
+    // Atualiza para emissão em andamento
     await prisma.invoice.update({
       where: { id: invoice.id },
       data: { status: 'pending_emission' }
     })
 
-    // Busca o companyId do NFE.io nas credenciais do município
-    const credentials = invoice.municipalityConfig?.providerCredentials as any
-    const companyId = credentials?.companyId
+    const serviceCode = fiscalConfig.codigoServico
+      || fiscalConfig.municipalityConfig.serviceCode
+      || '07.09'
 
-    if (!companyId) {
-      await prisma.invoice.update({
-        where: { id: invoice.id },
-        data: {
-          status: 'error',
-          errorMessage: 'companyId do NFE.io não configurado'
+    // Emite com as credenciais da locadora
+    const resultado = await emitirNfse(
+      fiscalConfig.nfeCompanyId,
+      fiscalConfig.nfeApiKey,
+      fiscalConfig.ambiente,
+      {
+        cityServiceCode: serviceCode,
+        description: `Locação de equipamento - Fatura ${invoice.invoiceNumber}`,
+        servicesAmount: invoice.amount,
+        borrower: {
+          name: invoice.clienteNome,
+          email: invoice.clienteEmail || undefined,
+          federalTaxNumber: invoice.clienteCnpjCpf.replace(/\D/g, ''),
         }
-      })
-      return NextResponse.json(
-        { error: 'Configuração do NFE.io incompleta' },
-        { status: 400 }
-      )
-    }
-
-    // Emite a NFS-e
-    const resultado = await emitirNfse(companyId, {
-      cityServiceCode: invoice.municipalityConfig?.serviceCode || '07.09',
-      description: `Locação de guindaste - OS referente à fatura ${invoice.invoiceNumber}`,
-      servicesAmount: invoice.amount,
-      borrower: {
-        name: invoice.clienteNome,
-        email: invoice.clienteEmail || undefined,
-        federalTaxNumber: invoice.clienteCnpjCpf.replace(/\D/g, ''),
       }
-    })
+    )
 
     if (resultado.error) {
       await prisma.invoice.update({
         where: { id: invoice.id },
-        data: {
-          status: 'error',
-          errorMessage: resultado.error
-        }
+        data: { status: 'error', errorMessage: resultado.error }
       })
       return NextResponse.json({ error: resultado.error }, { status: 422 })
     }
 
-    // Salva os dados da NFS-e emitida
+    // Salva os dados da NFS-e
     const nfse = resultado.serviceInvoice!
     const invoiceAtualizada = await prisma.invoice.update({
       where: { id: invoice.id },
@@ -112,6 +108,7 @@ export async function POST(
         providerResponse: nfse as any,
         emittedAt: new Date(),
         errorMessage: null,
+        municipalityConfigId: fiscalConfig.municipalityConfigId,
       }
     })
 
