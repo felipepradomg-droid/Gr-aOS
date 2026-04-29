@@ -61,6 +61,18 @@ export default function NovaFaturaPage() {
             />
           </div>
 
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-700">
+              CPF / CNPJ
+            </label>
+            <input
+              name="clienteCnpjCpf"
+              placeholder="00.000.000/0001-00 ou 000.000.000-00"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+            />
+            <p className="text-xs text-gray-400">Obrigatório para emitir NFS-e</p>
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="text-sm font-medium text-gray-700">
