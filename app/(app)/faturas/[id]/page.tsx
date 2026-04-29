@@ -188,7 +188,13 @@ export default async function InvoiceDetailPage({
           status={invoice.status}
           paymentMethod={invoice.paymentMethod}
         />
-        <InvoiceActions invoiceId={invoice.id} status={invoice.status} />
+        <InvoiceActions
+          invoiceId={invoice.id}
+          status={invoice.status}
+          clienteCnpjCpf={invoice.clienteCnpjCpf}
+          nfseNumber={invoice.nfseNumber}
+          nfsePdfUrl={invoice.nfsePdfUrl}
+        />
       </div>
     </div>
   )
