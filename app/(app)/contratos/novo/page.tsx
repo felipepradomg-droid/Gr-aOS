@@ -27,6 +27,8 @@ export default function NovoContratoPage() {
     clienteTel: '',
     billingType: 'daily',
     rate: '',
+    totalContractValue: '',
+    advancePercent: '',
     startDate: new Date().toISOString().split('T')[0],
     endDate: '',
     siteAddress: '',
@@ -48,7 +50,6 @@ export default function NovoContratoPage() {
     const { name, value } = e.target
     setForm(prev => {
       const updated = { ...prev, [name]: value }
-      // Preenche taxa automaticamente ao selecionar equipamento e tipo
       if (name === 'equipmentId' || name === 'billingType') {
         const eq = equipamentos.find(e => e.id === (name === 'equipmentId' ? value : prev.equipmentId))
         if (eq) {
@@ -57,6 +58,8 @@ export default function NovoContratoPage() {
             updated.rate = String(eq.dailyRate)
           } else if (billingType === 'hourly' && eq.hourlyRate) {
             updated.rate = String(eq.hourlyRate)
+          } else if (billingType === 'fixed') {
+            updated.rate = '0'
           }
         }
       }
@@ -64,11 +67,25 @@ export default function NovoContratoPage() {
     })
   }
 
+  const advanceAmount = form.totalContractValue && form.advancePercent
+    ? (parseFloat(form.totalContractValue) * parseFloat(form.advancePercent)) / 100
+    : null
+
   async function handleSubmit() {
     setError('')
 
-    if (!form.equipmentId || !form.clienteNome || !form.rate || !form.startDate) {
+    if (!form.equipmentId || !form.clienteNome || !form.startDate) {
       setError('Preencha todos os campos obrigatórios.')
+      return
+    }
+
+    if (form.billingType === 'fixed' && !form.totalContractValue) {
+      setError('Informe o valor total da obra.')
+      return
+    }
+
+    if (form.billingType !== 'fixed' && !form.rate) {
+      setError('Informe o valor da taxa.')
       return
     }
 
@@ -79,7 +96,10 @@ export default function NovoContratoPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
-          rate: parseFloat(form.rate),
+          rate: form.billingType === 'fixed' ? 0 : parseFloat(form.rate),
+          totalContractValue: form.totalContractValue ? parseFloat(form.totalContractValue) : null,
+          advancePercent: form.advancePercent ? parseFloat(form.advancePercent) : null,
+          advanceAmount: advanceAmount,
         }),
       })
 
@@ -100,7 +120,6 @@ export default function NovoContratoPage() {
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-lg">
-      {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/contratos">
           <button className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
@@ -140,16 +159,17 @@ export default function NovoContratoPage() {
           <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Tipo de Cobrança *
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {[
-              { value: 'hourly', label: '⏱️ Por Hora' },
-              { value: 'daily', label: '📅 Por Diária' },
+              { value: 'hourly',  label: '⏱️ Por Hora' },
+              { value: 'daily',   label: '📅 Por Diária' },
               { value: 'monthly', label: '🗓️ Por Mês' },
+              { value: 'fixed',   label: '🏗️ Valor por Obra' },
             ].map(opt => (
               <button
                 key={opt.value}
                 onClick={() => setForm(prev => ({ ...prev, billingType: opt.value }))}
-                className={`py-2 rounded-lg text-xs font-semibold border transition-colors ${
+                className={`py-2.5 rounded-lg text-xs font-semibold border transition-colors ${
                   form.billingType === opt.value
                     ? 'bg-gray-900 text-white border-gray-900'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
@@ -161,22 +181,81 @@ export default function NovoContratoPage() {
           </div>
         </div>
 
-        {/* Taxa */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Valor {form.billingType === 'hourly' ? 'por Hora' : form.billingType === 'daily' ? 'por Diária' : 'por Mês'} (R$) *
-          </label>
-          <input
-            name="rate"
-            type="number"
-            min="0"
-            step="0.01"
-            value={form.rate}
-            onChange={handleChange}
-            placeholder="0,00"
-            className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-gray-400"
-          />
-        </div>
+        {/* Campos para Valor por Obra */}
+        {form.billingType === 'fixed' ? (
+          <div className="space-y-4 bg-orange-50 border border-orange-200 rounded-xl p-4">
+            <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide">
+              🏗️ Contrato por Empreitada
+            </p>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                Valor Total da Obra (R$) *
+              </label>
+              <input
+                name="totalContractValue"
+                type="number"
+                min="0"
+                step="0.01"
+                value={form.totalContractValue}
+                onChange={handleChange}
+                placeholder="0,00"
+                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-gray-400 bg-white"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                % de Adiantamento
+              </label>
+              <input
+                name="advancePercent"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                value={form.advancePercent}
+                onChange={handleChange}
+                placeholder="Ex: 30"
+                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-gray-400 bg-white"
+              />
+            </div>
+            {advanceAmount !== null && (
+              <div className="bg-white border border-orange-200 rounded-lg px-4 py-2 flex justify-between items-center">
+                <span className="text-sm text-orange-700 font-medium">Valor do adiantamento</span>
+                <span className="text-lg font-bold text-orange-900">
+                  {advanceAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              Valor {form.billingType === 'hourly' ? 'por Hora' : form.billingType === 'daily' ? 'por Diária' : 'por Mês'} (R$) *
+            </label>
+            <input
+              name="rate"
+              type="number"
+              min="0"
+              step="0.01"
+              value={form.rate}
+              onChange={handleChange}
+              placeholder="0,00"
+              className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-gray-400"
+            />
+          </div>
+        )}
+
+        {/* Diária parada — só aparece quando billingType = daily */}
+        {form.billingType === 'daily' && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 space-y-1.5">
+            <p className="text-xs font-semibold text-yellow-700 uppercase tracking-wide">
+              ⚠️ Diárias Paradas
+            </p>
+            <p className="text-xs text-yellow-600">
+              Nas medições você poderá registrar diárias paradas (standby) separadamente com valor próprio.
+            </p>
+          </div>
+        )}
 
         {/* Cliente */}
         <div className="space-y-1.5">
