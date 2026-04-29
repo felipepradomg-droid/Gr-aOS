@@ -673,3 +673,153 @@ model FuelSupply {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// ============================================================
+// IMPOSTOS
+// ============================================================
+
+model TaxSettings {
+  id                      String   @id @default(cuid())
+  companyId               String   @default("default") @map("company_id")
+  regime                  String   @default("SIMPLES_NACIONAL")
+
+  simplesAnexo            String?  @default("III") @map("simples_anexo")
+  simplesAliquotaNominal  Decimal? @default(0.06) @map("simples_aliquota_nominal") @db.Decimal(5, 4)
+  simplesFatorReducao     Decimal? @default(0.00) @map("simples_fator_reducao") @db.Decimal(5, 4)
+
+  issAliquota             Decimal? @default(0.05) @map("iss_aliquota") @db.Decimal(5, 4)
+  issMunicipio            String?  @default("") @map("iss_municipio")
+  issCodigoServico        String?  @default("7.09") @map("iss_codigo_servico")
+
+  irpjPercentualPresuncao Decimal? @default(0.08) @map("irpj_percentual_presuncao") @db.Decimal(5, 4)
+  irpjAliquota            Decimal? @default(0.15) @map("irpj_aliquota") @db.Decimal(5, 4)
+  irpjAdicionalAliquota   Decimal? @default(0.10) @map("irpj_adicional_aliquota") @db.Decimal(5, 4)
+  irpjAdicionalLimite     Decimal? @default(20000) @map("irpj_adicional_limite_mensal") @db.Decimal(15, 2)
+
+  csllPercentualPresuncao Decimal? @default(0.12) @map("csll_percentual_presuncao") @db.Decimal(5, 4)
+  csllAliquota            Decimal? @default(0.09) @map("csll_aliquota") @db.Decimal(5, 4)
+
+  pisRegime               String?  @default("CUMULATIVO") @map("pis_regime")
+  pisAliquota             Decimal? @default(0.0065) @map("pis_aliquota") @db.Decimal(5, 4)
+
+  cofinsRegime            String?  @default("CUMULATIVO") @map("cofins_regime")
+  cofinsAliquota          Decimal? @default(0.03) @map("cofins_aliquota") @db.Decimal(5, 4)
+
+  inssAliquotaPatronal    Decimal? @default(0.20) @map("inss_aliquota_patronal") @db.Decimal(5, 4)
+  inssRatAliquota         Decimal? @default(0.03) @map("inss_rat_aliquota") @db.Decimal(5, 4)
+  inssFap                 Decimal? @default(1.00) @map("inss_fap") @db.Decimal(5, 4)
+  inssTermceirosAliquota  Decimal? @default(0.058) @map("inss_terceiros_aliquota") @db.Decimal(5, 4)
+
+  fgtsAliquota            Decimal? @default(0.08) @map("fgts_aliquota") @db.Decimal(5, 4)
+
+  ativo                   Boolean  @default(true)
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  @@map("tax_settings")
+}
+
+model TaxApuration {
+  id                    String    @id @default(cuid())
+  competencia           String    @unique
+  regime                String
+
+  faturamentoBruto      Decimal   @default(0) @map("faturamento_bruto") @db.Decimal(15, 2)
+  deducoes              Decimal   @default(0) @db.Decimal(15, 2)
+  faturamentoLiquido    Decimal   @default(0) @map("faturamento_liquido") @db.Decimal(15, 2)
+  folhaPagamento        Decimal   @default(0) @map("folha_pagamento") @db.Decimal(15, 2)
+
+  simplesReceitaBruta12m Decimal? @default(0) @map("simples_receita_bruta_12m") @db.Decimal(15, 2)
+  simplesAliquotaEfetiva Decimal? @default(0) @map("simples_aliquota_efetiva") @db.Decimal(7, 6)
+  simplesValor           Decimal? @default(0) @map("simples_valor") @db.Decimal(15, 2)
+  simplesVencimento      DateTime? @map("simples_vencimento") @db.Date
+  simplesPago            Boolean? @default(false) @map("simples_pago")
+  simplesDataPagamento   DateTime? @map("simples_data_pagamento") @db.Date
+
+  issBase               Decimal?  @default(0) @map("iss_base") @db.Decimal(15, 2)
+  issValor              Decimal?  @default(0) @map("iss_valor") @db.Decimal(15, 2)
+  issVencimento         DateTime? @map("iss_vencimento") @db.Date
+  issPago               Boolean?  @default(false) @map("iss_pago")
+  issDataPagamento      DateTime? @map("iss_data_pagamento") @db.Date
+
+  irpjBase              Decimal?  @default(0) @map("irpj_base") @db.Decimal(15, 2)
+  irpjValor             Decimal?  @default(0) @map("irpj_valor") @db.Decimal(15, 2)
+  irpjAdicional         Decimal?  @default(0) @map("irpj_adicional") @db.Decimal(15, 2)
+  irpjTotal             Decimal?  @default(0) @map("irpj_total") @db.Decimal(15, 2)
+  irpjVencimento        DateTime? @map("irpj_vencimento") @db.Date
+  irpjPago              Boolean?  @default(false) @map("irpj_pago")
+  irpjDataPagamento     DateTime? @map("irpj_data_pagamento") @db.Date
+
+  csllBase              Decimal?  @default(0) @map("csll_base") @db.Decimal(15, 2)
+  csllValor             Decimal?  @default(0) @map("csll_valor") @db.Decimal(15, 2)
+  csllVencimento        DateTime? @map("csll_vencimento") @db.Date
+  csllPago              Boolean?  @default(false) @map("csll_pago")
+  csllDataPagamento     DateTime? @map("csll_data_pagamento") @db.Date
+
+  pisBase               Decimal?  @default(0) @map("pis_base") @db.Decimal(15, 2)
+  pisValor              Decimal?  @default(0) @map("pis_valor") @db.Decimal(15, 2)
+  pisVencimento         DateTime? @map("pis_vencimento") @db.Date
+  pisPago               Boolean?  @default(false) @map("pis_pago")
+  pisDataPagamento      DateTime? @map("pis_data_pagamento") @db.Date
+
+  cofinsBase            Decimal?  @default(0) @map("cofins_base") @db.Decimal(15, 2)
+  cofinsValor           Decimal?  @default(0) @map("cofins_valor") @db.Decimal(15, 2)
+  cofinsVencimento      DateTime? @map("cofins_vencimento") @db.Date
+  cofinsPago            Boolean?  @default(false) @map("cofins_pago")
+  cofinsDataPagamento   DateTime? @map("cofins_data_pagamento") @db.Date
+
+  inssBaaseFolha        Decimal?  @default(0) @map("inss_base_folha") @db.Decimal(15, 2)
+  inssPatronalValor     Decimal?  @default(0) @map("inss_patronal_valor") @db.Decimal(15, 2)
+  inssRatValor          Decimal?  @default(0) @map("inss_rat_valor") @db.Decimal(15, 2)
+  inssTermceirosValor   Decimal?  @default(0) @map("inss_terceiros_valor") @db.Decimal(15, 2)
+  inssTotal             Decimal?  @default(0) @map("inss_total") @db.Decimal(15, 2)
+  inssVencimento        DateTime? @map("inss_vencimento") @db.Date
+  inssPago              Boolean?  @default(false) @map("inss_pago")
+  inssDataPagamento     DateTime? @map("inss_data_pagamento") @db.Date
+
+  fgtsBase              Decimal?  @default(0) @map("fgts_base") @db.Decimal(15, 2)
+  fgtsValor             Decimal?  @default(0) @map("fgts_valor") @db.Decimal(15, 2)
+  fgtsVencimento        DateTime? @map("fgts_vencimento") @db.Date
+  fgtsPago              Boolean?  @default(false) @map("fgts_pago")
+  fgtsDataPagamento     DateTime? @map("fgts_data_pagamento") @db.Date
+
+  totalImpostos         Decimal   @default(0) @map("total_impostos") @db.Decimal(15, 2)
+  totalPago             Decimal   @default(0) @map("total_pago") @db.Decimal(15, 2)
+  totalPendente         Decimal   @default(0) @map("total_pendente") @db.Decimal(15, 2)
+
+  observacoes           String?
+  status                String    @default("RASCUNHO")
+
+  pagamentos            TaxPayment[]
+
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  @@index([competencia])
+  @@map("tax_apurations")
+}
+
+model TaxPayment {
+  id            String    @id @default(cuid())
+  apurationId   String?   @map("apuration_id")
+  competencia   String
+  tributo       String
+  descricao     String
+  valor         Decimal   @db.Decimal(15, 2)
+  vencimento    DateTime  @db.Date
+  dataPagamento DateTime? @map("data_pagamento") @db.Date
+  status        String    @default("PENDENTE")
+  numeroGuia    String?   @map("numero_guia")
+  banco         String?
+  observacoes   String?
+
+  apuration     TaxApuration? @relation(fields: [apurationId], references: [id])
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([competencia])
+  @@index([status])
+  @@index([vencimento])
+  @@map("tax_payments")
+}
