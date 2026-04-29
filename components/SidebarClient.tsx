@@ -23,6 +23,7 @@ const NAV = [
       { href: "/os", icon: "📝", label: "Ordens de Serviço" },
       { href: "/contratos", icon: "📃", label: "Contratos" },
       { href: "/manutencao", icon: "🔧", label: "Manutenção" },
+      { href: "/abastecimentos", icon: "⛽", label: "Abastecimentos" },
     ],
   },
   {
