@@ -19,11 +19,12 @@ const ALL_ITEMS = [
     { href: '/bi',          icon: '🧠', label: 'Inteligência' },
   ]},
   { group: 'Operação', items: [
-    { href: '/frota',       icon: '🏗️', label: 'Frota' },
-    { href: '/agenda',      icon: '📅', label: 'Agenda' },
-    { href: '/os',          icon: '📝', label: 'OS' },
-    { href: '/contratos',   icon: '📃', label: 'Contratos' },
-    { href: '/manutencao',  icon: '🔧', label: 'Manutenção' },
+    { href: '/frota',          icon: '🏗️', label: 'Frota' },
+    { href: '/agenda',         icon: '📅', label: 'Agenda' },
+    { href: '/os',             icon: '📝', label: 'OS' },
+    { href: '/contratos',      icon: '📃', label: 'Contratos' },
+    { href: '/manutencao',     icon: '🔧', label: 'Manutenção' },
+    { href: '/abastecimentos', icon: '⛽', label: 'Abastecimentos' },
   ]},
   { group: 'Financeiro', items: [
     { href: '/faturas',     icon: '💰', label: 'Faturas' },
