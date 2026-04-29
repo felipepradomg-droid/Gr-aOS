@@ -59,8 +59,6 @@ export function InvoiceActions({ invoiceId, status, clienteCnpjCpf, nfseNumber, 
     }
   }
 
-  if (status === 'paid' || status === 'cancelled') return null
-
   return (
     <div className="flex flex-col gap-2">
       {/* NFS-e já emitida */}
@@ -84,7 +82,7 @@ export function InvoiceActions({ invoiceId, status, clienteCnpjCpf, nfseNumber, 
         </div>
       )}
 
-      {/* Botão emitir NFS-e — só aparece se ainda não emitiu */}
+      {/* Botão emitir NFS-e — sempre visível se ainda não emitiu */}
       {status !== 'emitted' && (
         <button
           onClick={handleEmitirNfse}
@@ -108,26 +106,30 @@ export function InvoiceActions({ invoiceId, status, clienteCnpjCpf, nfseNumber, 
         </a>
       )}
 
-      {status === 'draft' && (
-        <button
-          onClick={handleMarkSent}
-          disabled={loading || emitting}
-          className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50"
-        >
-          <Send className="h-4 w-4" />
-          Marcar como Enviada
-        </button>
-      )}
-
-      {(status === 'draft' || status === 'sent' || status === 'overdue') && (
-        <button
-          onClick={handleMarkPaid}
-          disabled={loading || emitting}
-          className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-colors text-sm font-medium disabled:opacity-50"
-        >
-          <CheckCircle className="h-4 w-4" />
-          {loading ? 'Salvando...' : 'Marcar como Paga'}
-        </button>
+      {/* Ações de status — só para não pagas/canceladas */}
+      {status !== 'paid' && status !== 'cancelled' && (
+        <>
+          {status === 'draft' && (
+            <button
+              onClick={handleMarkSent}
+              disabled={loading || emitting}
+              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              <Send className="h-4 w-4" />
+              Marcar como Enviada
+            </button>
+          )}
+          {(status === 'draft' || status === 'sent' || status === 'overdue') && (
+            <button
+              onClick={handleMarkPaid}
+              disabled={loading || emitting}
+              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              <CheckCircle className="h-4 w-4" />
+              {loading ? 'Salvando...' : 'Marcar como Paga'}
+            </button>
+          )}
+        </>
       )}
     </div>
   )
