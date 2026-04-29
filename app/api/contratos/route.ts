@@ -1,6 +1,3 @@
-// app/api/contratos/route.ts
-// Lista e cria contratos de locação
-
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -35,7 +32,6 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: 'desc' },
     })
 
-    // Adiciona totais calculados
     const contratosComTotais = contratos.map(c => {
       const totalMedicoesPendentes = c.measurements.reduce(
         (s, m) => s + m.amount, 0
@@ -60,14 +56,27 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
 
-    if (!body.equipmentId || !body.clienteNome || !body.rate || !body.startDate) {
+    if (!body.equipmentId || !body.clienteNome || !body.startDate) {
       return NextResponse.json(
-        { error: 'equipmentId, clienteNome, rate e startDate são obrigatórios' },
+        { error: 'equipmentId, clienteNome e startDate são obrigatórios' },
         { status: 400 }
       )
     }
 
-    // Verifica se equipamento pertence ao usuário
+    if (body.billingType === 'fixed' && !body.totalContractValue) {
+      return NextResponse.json(
+        { error: 'Informe o valor total da obra para contratos por empreitada.' },
+        { status: 400 }
+      )
+    }
+
+    if (body.billingType !== 'fixed' && !body.rate) {
+      return NextResponse.json(
+        { error: 'Informe a taxa para este tipo de contrato.' },
+        { status: 400 }
+      )
+    }
+
     const equipment = await prisma.equipment.findFirst({
       where: { id: body.equipmentId, userId: session.user.id }
     })
@@ -76,7 +85,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Equipamento não encontrado' }, { status: 404 })
     }
 
-    // Gera número do contrato automaticamente
     const count = await prisma.contract.count({
       where: { userId: session.user.id }
     })
@@ -84,29 +92,31 @@ export async function POST(req: NextRequest) {
 
     const contrato = await prisma.contract.create({
       data: {
-        userId: session.user.id,
-        equipmentId: body.equipmentId,
+        userId:             session.user.id,
+        equipmentId:        body.equipmentId,
         contractNumber,
-        clienteNome: body.clienteNome,
-        clienteTel: body.clienteTel || null,
-        clienteEmail: body.clienteEmail || null,
-        clienteCnpjCpf: body.clienteCnpjCpf || null,
-        billingType: body.billingType || 'daily',
-        rate: body.rate,
-        startDate: new Date(body.startDate),
-        endDate: body.endDate ? new Date(body.endDate) : null,
-        siteAddress: body.siteAddress || null,
-        siteCity: body.siteCity || null,
-        operatorName: body.operatorName || null,
-        notes: body.notes || null,
-        status: 'active',
+        clienteNome:        body.clienteNome,
+        clienteTel:         body.clienteTel         || null,
+        clienteEmail:       body.clienteEmail        || null,
+        clienteCnpjCpf:     body.clienteCnpjCpf      || null,
+        billingType:        body.billingType          || 'daily',
+        rate:               body.billingType === 'fixed' ? 0 : body.rate,
+        totalContractValue: body.totalContractValue   ?? null,
+        advancePercent:     body.advancePercent       ?? null,
+        advanceAmount:      body.advanceAmount        ?? null,
+        startDate:          new Date(body.startDate),
+        endDate:            body.endDate ? new Date(body.endDate) : null,
+        siteAddress:        body.siteAddress         || null,
+        siteCity:           body.siteCity            || null,
+        operatorName:       body.operatorName         || null,
+        notes:              body.notes               || null,
+        status:             'active',
       },
       include: {
         equipment: { select: { name: true, type: true } }
       }
     })
 
-    // Atualiza status do equipamento para em uso
     await prisma.equipment.update({
       where: { id: body.equipmentId },
       data: { status: 'in_use' }
