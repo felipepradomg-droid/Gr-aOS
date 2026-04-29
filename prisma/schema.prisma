@@ -25,10 +25,11 @@ model User {
   planExpiresAt DateTime?
   trialEndsAt   DateTime?
 
-  accounts  Account[]
-  sessions  Session[]
-  payments  Payment[]
-  cotacoes  Cotacao[]
+  accounts          Account[]
+  sessions          Session[]
+  payments          Payment[]
+  cotacoes          Cotacao[]
+  companyFiscalConfig CompanyFiscalConfig?  // ← NOVO
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -338,7 +339,40 @@ model MunicipalityTaxConfig {
   nfseEnvironment    String  @default("homologacao")
   isActive           Boolean @default(true)
 
-  invoices    Invoice[]
+  invoices           Invoice[]
+  companyConfigs     CompanyFiscalConfig[]  // ← NOVO
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// FISCAL — Configuração da Empresa (por locadora)   ← NOVO
+// ============================================================
+
+model CompanyFiscalConfig {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Qual município esta locadora está cadastrada
+  municipalityConfigId String
+  municipalityConfig   MunicipalityTaxConfig @relation(fields: [municipalityConfigId], references: [id])
+
+  // Dados da empresa no NFE.io
+  nfeApiKey    String       // API Key do NFE.io
+  nfeCompanyId String       // Company ID no NFE.io
+
+  // Dados fiscais específicos da empresa
+  razaoSocial     String?
+  cnpj            String?
+  inscricaoMunicipal String?
+  codigoServico   String?   // pode sobrescrever o do município
+  aliquotaIss     Float?    // pode sobrescrever a do município
+
+  // Ambiente: "homologacao" | "producao"
+  ambiente     String  @default("homologacao")
+  ativo        Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -561,14 +595,12 @@ model Contract {
   clienteEmail   String?
   clienteCnpjCpf String?
 
-  // 'hourly' | 'daily' | 'monthly'
   billingType    String  @default("daily")
   rate           Float
   currency       String  @default("BRL")
 
   startDate      DateTime
   endDate        DateTime?
-  // 'active' | 'paused' | 'completed' | 'cancelled'
   status         String  @default("active")
 
   siteAddress    String?
@@ -596,7 +628,6 @@ model Measurement {
   operatorName String?
   notes        String? @db.Text
 
-  // 'pending' | 'invoiced'
   status       String  @default("pending")
 
   createdAt DateTime @default(now())
@@ -614,7 +645,6 @@ model ContractInvoice {
   totalAmount   Float
   invoiceId     String?
 
-  // 'draft' | 'sent' | 'paid'
   status      String  @default("draft")
 
   createdAt DateTime @default(now())
