@@ -142,6 +142,7 @@ model Equipment {
   equipmentCosts    EquipmentCost[]
   contracts         Contract[]
   fuelSupplies      FuelSupply[]
+  operatorAssignments OperatorAssignment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -590,14 +591,12 @@ model Contract {
   clienteEmail   String?
   clienteCnpjCpf String?
 
-  // daily | hourly | monthly | fixed (valor por obra)
   billingType    String  @default("daily")
   rate           Float
 
-  // Campos novos para "valor por obra"
-  totalContractValue Float?   // valor total fechado da obra
-  advancePercent     Float?   // % de adiantamento
-  advanceAmount      Float?   // valor do adiantamento
+  totalContractValue Float?
+  advancePercent     Float?
+  advanceAmount      Float?
 
   currency       String  @default("BRL")
 
@@ -612,6 +611,7 @@ model Contract {
 
   measurements   Measurement[]
   invoices       ContractInvoice[]
+  operatorAssignments OperatorAssignment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -626,8 +626,8 @@ model Measurement {
   measureDate  DateTime @default(now())
   hoursWorked  Float?
   daysWorked   Float?
-  daysIdle     Float?   // diárias paradas/standby
-  idleRate     Float?   // valor da diária parada (pode ser diferente da trabalhada)
+  daysIdle     Float?
+  idleRate     Float?
   amount       Float
   operatorName String?
   notes        String? @db.Text
@@ -682,6 +682,7 @@ model FuelSupply {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 // ============================================================
 // IMPOSTOS
 // ============================================================
@@ -830,4 +831,91 @@ model TaxPayment {
   @@index([status])
   @@index([vencimento])
   @@map("tax_payments")
+}
+
+// ============================================================
+// OPERADORES
+// ============================================================
+
+model Operator {
+  id     String @id @default(cuid())
+  userId String
+
+  // Cadastro pessoal
+  nome     String
+  cpf      String?
+  rg       String?
+  telefone String?
+  email    String?
+
+  // Endereço
+  endereco  String?
+  cidade    String?
+  estado    String?
+  cep       String?
+
+  // CNH
+  cnhNumero    String?
+  cnhCategoria String? // A, B, C, D, E, AB, etc.
+  cnhValidade  DateTime?
+
+  // Pagamento
+  // fixed | daily | hourly
+  paymentType   String  @default("daily")
+  salarioFixo   Float?  // usado quando paymentType = fixed
+  valorDiaria   Float?  // usado quando paymentType = daily
+  valorHora     Float?  // usado quando paymentType = hourly
+
+  status String @default("active") // active | inactive
+
+  notes String? @db.Text
+
+  workLogs            OperatorWorkLog[]
+  operatorAssignments OperatorAssignment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Vínculo entre Operador ↔ Equipamento ↔ Contrato
+model OperatorAssignment {
+  id         String @id @default(cuid())
+  userId     String
+  operatorId String
+  operator   Operator  @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  equipmentId String?
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+
+  contractId String?
+  contract   Contract?  @relation(fields: [contractId], references: [id])
+
+  startDate DateTime
+  endDate   DateTime?
+  notes     String?   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Controle de jornada — horas trabalhadas por dia/contrato
+model OperatorWorkLog {
+  id         String   @id @default(cuid())
+  userId     String
+  operatorId String
+  operator   Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  workDate     DateTime @default(now())
+  hoursWorked  Float
+  contractId   String?
+  equipmentId  String?
+
+  // Valor calculado no momento do registro
+  // (baseado no paymentType do operador naquela data)
+  paymentType  String? // fixed | daily | hourly
+  amountDue    Float?
+
+  notes String? @db.Text
+
+  createdAt DateTime @default(now())
 }
