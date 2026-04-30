@@ -26,6 +26,7 @@ const ALL_ITEMS = [
     { href: '/contratos/novo', icon: '🏗️', label: 'Nova Empreitada' },
     { href: '/manutencao',     icon: '🔧', label: 'Manutenção' },
     { href: '/abastecimentos', icon: '⛽', label: 'Abastecimentos' },
+    { href: '/operadores',     icon: '👷', label: 'Operadores' },
   ]},
   { group: 'Financeiro', items: [
     { href: '/faturas',     icon: '💰', label: 'Faturas' },
