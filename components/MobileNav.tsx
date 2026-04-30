@@ -23,6 +23,7 @@ const ALL_ITEMS = [
     { href: '/agenda',         icon: '📅', label: 'Agenda' },
     { href: '/os',             icon: '📝', label: 'OS' },
     { href: '/contratos',      icon: '📃', label: 'Contratos' },
+    { href: '/contratos/novo', icon: '🏗️', label: 'Nova Empreitada' },
     { href: '/manutencao',     icon: '🔧', label: 'Manutenção' },
     { href: '/abastecimentos', icon: '⛽', label: 'Abastecimentos' },
   ]},
@@ -59,7 +60,6 @@ export function MobileNav() {
               maxHeight: '85vh',
             }}
           >
-            {/* Header do drawer */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>
                 GrúaOS
@@ -81,7 +81,6 @@ export function MobileNav() {
               </button>
             </div>
 
-            {/* Grupos */}
             {ALL_ITEMS.map((group) => (
               <div key={group.group} style={{ marginBottom: '16px' }}>
                 <p style={{
@@ -135,7 +134,6 @@ export function MobileNav() {
         </div>
       )}
 
-      {/* Barra inferior */}
       <nav className="mobile-nav">
         {MAIN_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
