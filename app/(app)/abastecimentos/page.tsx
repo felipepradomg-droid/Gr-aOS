@@ -30,9 +30,12 @@ export default function AbastecimentosPage() {
   const [erro, setErro]         = useState('')
 
   useEffect(() => {
-    fetch('/api/equipment').then(r => r.json()).then(data => {
-      setEquipamentos(Array.isArray(data) ? data : data.equipment || [])
-    })
+    fetch('/api/abastecimentos/equipamentos')
+      .then(r => r.json())
+      .then(data => {
+        setEquipamentos(Array.isArray(data) ? data : [])
+      })
+      .catch(() => setEquipamentos([]))
   }, [])
 
   const set = (field: keyof AbastecimentoFormData, value: any) =>
