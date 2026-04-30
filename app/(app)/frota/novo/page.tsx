@@ -42,7 +42,7 @@ export default function NovoEquipamentoPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4 md:p-6 pb-24 space-y-6">
+    <div className="max-w-2xl mx-auto p-4 md:p-6" style={{ paddingBottom: '120px' }}>
       <div className="flex items-center gap-3">
         <Link href="/frota">
           <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -55,7 +55,7 @@ export default function NovoEquipamentoPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form id="equipment-form" onSubmit={handleSubmit} className="space-y-5 mt-6">
         <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
           <h2 className="font-semibold text-gray-700">Dados Básicos</h2>
 
@@ -232,15 +232,41 @@ export default function NovoEquipamentoPage() {
             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 resize-none"
           />
         </div>
+      </form>
 
+      {/* Botão fixo no rodapé — sempre visível acima da bottom nav */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 40,
+          background: 'var(--bg, #0A0A0A)',
+          borderTop: '1px solid var(--border, #2A2A2A)',
+          padding: '12px 16px 80px',
+        }}
+      >
         <button
           type="submit"
+          form="equipment-form"
           disabled={loading}
-          className="w-full py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-700 transition-colors disabled:opacity-50"
+          style={{
+            width: '100%',
+            padding: '14px',
+            background: '#111827',
+            color: '#fff',
+            borderRadius: '12px',
+            fontWeight: 700,
+            fontSize: '1rem',
+            border: 'none',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? 0.5 : 1,
+          }}
         >
           {loading ? 'Salvando...' : 'Cadastrar Equipamento'}
         </button>
-      </form>
+      </div>
     </div>
   )
 }
