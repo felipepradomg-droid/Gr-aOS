@@ -54,8 +54,6 @@
     .section-tag{display:inline-block;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--brand);margin-bottom:16px;}
     .section-title{font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-0.02em;line-height:1.2;color:#fff;margin-bottom:20px;}
     .section-sub{font-size:1rem;color:var(--text-2);font-weight:300;max-width:560px;line-height:1.8;}
-
-    /* HISTÓRIA */
     .historia{background:var(--bg-2);}
     .historia-inner{max-width:860px;margin:0 auto;}
     .historia-inner .section-tag,.historia-inner .section-title{text-align:center;}
@@ -77,8 +75,6 @@
     .story-divider{display:flex;align-items:center;gap:16px;margin:48px 0;}
     .story-divider::before,.story-divider::after{content:'';flex:1;height:1px;background:var(--border);}
     .story-divider-icon{width:32px;height:32px;background:var(--brand-dim);border:1px solid rgba(255,107,26,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
-
-    /* MÓDULOS */
     .modulos{background:var(--bg);}
     .modulos-inner{max-width:1100px;margin:0 auto;}
     .modulos-header{text-align:center;margin-bottom:60px;}
@@ -89,39 +85,34 @@
     .mod-icon{font-size:1.6rem;margin-bottom:12px;display:block;}
     .mod-name{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:6px;}
     .mod-desc{font-size:0.75rem;color:var(--text-2);font-weight:300;line-height:1.5;}
-
-    /* STATS STRIP */
     .stats-strip{background:var(--blue);padding:60px;}
     .stats-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;}
     .strip-stat{text-align:center;padding:0 20px;border-right:1px solid rgba(255,255,255,0.2);}
     .strip-stat:last-child{border-right:none;}
     .strip-val{font-size:2.8rem;font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1;margin-bottom:8px;}
     .strip-label{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.7);}
-
-    /* FAQ */
     .faq{background:var(--bg-2);}
     .faq-inner{max-width:800px;margin:0 auto;}
     .faq-header{text-align:center;margin-bottom:56px;}
     .faq-header .section-sub{margin:0 auto;}
     .faq-list{display:flex;flex-direction:column;gap:12px;}
-    .faq-item{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s;}
-    .faq-item.open{border-color:rgba(26,86,219,0.4);}
+    .faq-item{background:var(--blue);border:1px solid rgba(26,86,219,0.5);border-radius:12px;overflow:hidden;transition:border-color 0.2s;}
+    .faq-item.open{border-color:var(--blue-light);background:var(--blue-light);}
     .faq-q{width:100%;background:none;border:none;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;text-align:left;}
-    .faq-q-text{font-size:0.95rem;font-weight:600;color:#fff;font-family:'Montserrat',sans-serif;line-height:1.4;}
-    .faq-icon{width:28px;height:28px;flex-shrink:0;background:var(--bg-3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--blue-light);font-size:1.2rem;transition:transform 0.3s,background 0.2s,color 0.2s;}
-    .faq-item.open .faq-icon{transform:rotate(45deg);background:var(--blue);color:#fff;}
+    .faq-q-text{font-size:0.95rem;font-weight:700;color:#fff;font-family:'Montserrat',sans-serif;line-height:1.4;}
+    .faq-icon{width:28px;height:28px;flex-shrink:0;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;transition:transform 0.3s,background 0.2s;}
+    .faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(255,255,255,0.3);}
     .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
-    .faq-a-inner{font-size:0.9rem;color:var(--text-2);font-weight:300;line-height:1.8;padding:0 28px 24px;}
+    .faq-a-inner{font-size:0.9rem;color:rgba(255,255,255,0.85);font-weight:300;line-height:1.8;padding:0 28px 24px;}
     .faq-item.open .faq-a{max-height:300px;}
-
-    /* CTA */
     .cta{background:var(--bg);text-align:center;}
     .cta-inner{max-width:680px;margin:0 auto;}
     .cta h2{font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-0.02em;color:#fff;line-height:1.15;margin-bottom:20px;}
     .cta h2 span{color:var(--brand);}
     .cta p{font-size:1rem;color:var(--text-2);font-weight:300;margin-bottom:40px;line-height:1.8;}
-
-    /* FOOTER */
+    .compat-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+    .compat-badge{display:inline-flex;align-items:center;gap:8px;background:var(--bg-3);border:1px solid var(--border);border-radius:8px;padding:10px 20px;font-size:0.82rem;font-weight:600;color:var(--text-2);}
+    .compat-badge span{font-size:1.1rem;}
     footer{background:var(--bg-2);border-top:1px solid var(--border);padding:40px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
     .footer-logo{font-size:1.2rem;font-weight:800;text-decoration:none;letter-spacing:-0.02em;}
     .footer-logo .w{color:#fff;}.footer-logo .o{color:var(--brand);}
@@ -129,10 +120,8 @@
     .footer-links{display:flex;gap:24px;}
     .footer-links a{font-size:0.8rem;color:var(--text-3);text-decoration:none;transition:color 0.2s;}
     .footer-links a:hover{color:var(--text-2);}
-
     .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
     .reveal.visible{opacity:1;transform:translateY(0);}
-
     @media(max-width:1024px){.modulos-grid{grid-template-columns:repeat(3,1fr);}.stats-inner{grid-template-columns:repeat(2,1fr);gap:32px;}.strip-stat{border-right:none;padding:16px 0;}.story-stat-row{grid-template-columns:1fr 1fr;}}
     @media(max-width:768px){nav{padding:0 20px;}.nav-links{display:none;}section{padding:72px 24px;}.hero{padding:90px 24px 60px;}.modulos-grid{grid-template-columns:repeat(2,1fr);}.stats-strip{padding:48px 24px;}.stats-inner{grid-template-columns:1fr 1fr;}footer{padding:32px 24px;flex-direction:column;text-align:center;}.footer-links{justify-content:center;}.hero-meta{gap:24px;}.stat-div{display:none;}.story-stat-row{grid-template-columns:1fr;}}
     @media(max-width:480px){.modulos-grid{grid-template-columns:1fr 1fr;}}
@@ -202,7 +191,7 @@
     <div class="story-block reveal">
       <div class="story-num">01</div>
       <h3>O setor que ninguém <span>foi visitar</span></h3>
-      <p>Meu nome é <strong>Felipe Prado</strong>. Sou empreendedor — não desenvolvedor. E antes de escrever uma linha de código, fiz algo que a maioria das empresas de tecnologia não faz: fui conversar com os donos de locadoras.</p>
+      <p>Meu nome é <strong>Felipe Prado</strong>. Sou empreendedor. E antes de escrever uma linha de código, fiz algo que a maioria das empresas de tecnologia não faz: fui conversar com os donos de locadoras.</p>
       <p>Visitei empresas de diferentes tamanhos. Conversei com quem opera no interior, com quem atende grandes construtoras, com quem tem dois guindastes e com quem tem trinta. E o que ouvi me surpreendeu — não pela complexidade, mas pela simplicidade do problema.</p>
       <p>Todos eles tinham as mesmas dores. E nenhum sistema no mercado estava resolvendo.</p>
     </div>
@@ -231,7 +220,6 @@
         <p>"Eu sabia que tinha vazamento em algum lugar, mas não conseguia rastrear. Todo mês saía mais combustível do que devia."</p>
       </div>
       <p>Quando fizemos o levantamento real com ele, chegamos a um número que assustou: <strong>cerca de 30% do combustível da frota estava sendo consumido sem justificativa registrada.</strong></p>
-
       <div class="story-stat-row">
         <div class="story-stat-card reveal">
           <div class="val">30%</div>
@@ -246,7 +234,6 @@
           <div class="lbl">Rastreável por equipamento hoje</div>
         </div>
       </div>
-
       <p>No GrúaOS, cada abastecimento é registrado por equipamento, com data, litros, valor, horímetro e operador. O gestor vê em tempo real o consumo de cada máquina — e consegue agir quando algo foge do padrão.</p>
     </div>
 
@@ -270,7 +257,7 @@
       <h3>A decisão de <span>construir do zero</span></h3>
       <p>Depois de ouvir tudo isso, ficou claro que não faltava tecnologia no Brasil. Faltava tecnologia <strong>para esse setor específico</strong>. Os sistemas existentes eram genéricos, caros, difíceis de usar — e nenhum entendia a realidade de quem opera guindastes e equipamentos pesados.</p>
       <p>Foi aí que nasceu o GrúaOS. Cada módulo foi pensado a partir de uma dor real, relatada por um dono de locadora de verdade. Nada foi inventado em reunião de produto. Tudo veio do campo.</p>
-      <p>O resultado é um sistema que resolve os problemas que mais custam tempo e dinheiro para essas empresas — <strong>de forma simples, pelo celular, sem precisar de treinamento técnico.</strong></p>
+      <p>O resultado é um sistema que resolve os problemas que mais custam tempo e dinheiro para essas empresas — <strong>de forma simples, sem precisar de treinamento técnico.</strong></p>
     </div>
   </div>
 </section>
@@ -318,10 +305,10 @@
     <div class="faq-list">
       <div class="faq-item reveal">
         <button class="faq-q" onclick="toggleFaq(this)">
-          <span class="faq-q-text">O GrúaOS funciona pelo celular?</span>
+          <span class="faq-q-text">O GrúaOS é compatível com desktop e mobile?</span>
           <span class="faq-icon">+</span>
         </button>
-        <div class="faq-a"><div class="faq-a-inner">Sim. O GrúaOS funciona pelo celular e pelo computador. Você acessa pelo navegador, sem instalar nada. A interface se adapta a qualquer tela.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Sim. O GrúaOS é totalmente compatível com desktop e mobile. Você acessa pelo navegador, sem instalar nada, e a interface se adapta perfeitamente a qualquer tamanho de tela — seja no computador do escritório ou no celular em campo.</div></div>
       </div>
       <div class="faq-item reveal">
         <button class="faq-q" onclick="toggleFaq(this)">
@@ -367,6 +354,11 @@
     <div class="section-tag">Comece agora</div>
     <h2>Sua locadora merece um sistema <span>à altura</span></h2>
     <p>Acesse o GrúaOS, cadastre sua frota e veja como a gestão da sua empresa pode ser completamente diferente. Simples, completo e feito para o seu setor.</p>
+    <div class="compat-badges">
+      <div class="compat-badge"><span>🖥️</span> Compatível com Desktop</div>
+      <div class="compat-badge"><span>📱</span> Compatível com Mobile</div>
+      <div class="compat-badge"><span>🌐</span> Acesso pelo navegador</div>
+    </div>
     <a href="https://gruaos.vercel.app" class="btn-primary" style="margin:0 auto;display:inline-flex;">
       Acessar o GrúaOS
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
