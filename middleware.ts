@@ -6,17 +6,27 @@ export default withAuth(
     const token = req.nextauth.token;
     const pathname = req.nextUrl.pathname;
 
-    // Páginas públicas — libera sempre
-    const publicAppPaths = ["/assinatura", "/checkout", "/planos"];
+    // Páginas sempre liberadas
+    const publicAppPaths = ["/assinatura", "/checkout", "/planos", "/api"];
     if (publicAppPaths.some((p) => pathname.startsWith(p))) {
       return NextResponse.next();
     }
 
-    // Usuário autenticado — libera para todas as páginas
-    // Limitações de plano são controladas na UI, não no middleware
-    if (token) return NextResponse.next();
+    if (token) {
+      const plan = token.plan as string | null;
+      const trialEndsAt = token.trialEndsAt as string | null;
 
-    // Não autenticado → redireciona para login
+      // Se plano free e trial expirado → força checkout
+      if (plan === "free" || !plan) {
+        const trialExpired = !trialEndsAt || new Date(trialEndsAt) < new Date();
+        if (trialExpired) {
+          return NextResponse.redirect(new URL("/checkout?plan=pro", req.url));
+        }
+      }
+
+      return NextResponse.next();
+    }
+
     return NextResponse.redirect(new URL("/login", req.url));
   },
   {
