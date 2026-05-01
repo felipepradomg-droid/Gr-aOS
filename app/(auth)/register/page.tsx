@@ -27,8 +27,8 @@ function RegisterForm() {
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Erro ao criar conta."); return; }
       await signIn("credentials", { email, password, redirect: false });
-      if (planFromUrl && planFromUrl !== "free") router.push(`/checkout?plan=${planFromUrl}`);
-      else router.push("/dashboard");
+      const plan = (planFromUrl && planFromUrl !== "free") ? planFromUrl : "pro";
+      router.push(`/checkout?plan=${plan}`);
     } catch { setError("Erro de conexão."); }
     finally { setLoading(false); }
   }
