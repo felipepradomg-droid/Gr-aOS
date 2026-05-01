@@ -1,420 +1,472 @@
 import Link from "next/link";
 
 const modules = [
-  { icon: "🏗️", title: "Frota", desc: "Cadastre equipamentos com fotos, documentos e especificações. Acompanhe status e disponibilidade em tempo real." },
-  { icon: "📋", title: "Ordens de Serviço", desc: "Gere OS a partir de cotações aprovadas. Controle operadores, endereços e status do início ao fim." },
-  { icon: "📅", title: "Agenda", desc: "Calendário Gantt com disponibilidade de toda a frota. Evite conflitos e maximize a ocupação." },
-  { icon: "💬", title: "Cotações", desc: "Propostas profissionais em segundos. Envie por WhatsApp e converta em OS com um clique." },
-  { icon: "📃", title: "Contratos", desc: "Diária, hora, mês ou valor fechado por obra. Medições automáticas vinculadas à frota." },
-  { icon: "👷", title: "Operadores", desc: "Cadastro de operadores com registros de trabalho, vinculação a OS e histórico completo." },
-  { icon: "🔧", title: "Manutenção", desc: "Planos preditivos com alertas por horímetro. Preventivas, corretivas e inspeções com histórico por equipamento." },
-  { icon: "⛽", title: "Combustível", desc: "Controle de abastecimento por equipamento. Identifique desperdícios e consuma com rastreabilidade total." },
-  { icon: "🧾", title: "NFS-e", desc: "Emissão automática de nota fiscal com um clique, direto da OS ou fatura. Integrado ao NFE.io." },
-  { icon: "💰", title: "Faturas", desc: "Gere faturas a partir das OS. Controle o que foi pago, enviado e vencido com envio por WhatsApp." },
-  { icon: "🏦", title: "Cobranças", desc: "Boleto e PIX automáticos com conciliação bancária via Asaas. Sem lançamento manual." },
+  { icon: "🏗️", title: "Frota", desc: "Cadastre equipamentos com fotos, documentos e especificações técnicas. Status em tempo real." },
+  { icon: "📋", title: "Ordens de Serviço", desc: "Gere OS a partir de cotações aprovadas. Controle operadores, endereços e status completo." },
+  { icon: "📅", title: "Agenda", desc: "Calendário Gantt com disponibilidade da frota. Evite conflitos e maximize a ocupação." },
+  { icon: "💬", title: "Cotações", desc: "Propostas profissionais em segundos. Envie por WhatsApp e converta com um clique." },
+  { icon: "📃", title: "Contratos", desc: "Diária, hora, mês ou obra. Medições automáticas vinculadas à frota e ao cliente." },
+  { icon: "👷", title: "Operadores", desc: "Cadastro completo com registros de trabalho, vinculação a OS e histórico de atividades." },
+  { icon: "🔧", title: "Manutenção", desc: "Planos preditivos com alertas por horímetro. Preventivas e corretivas com histórico por máquina." },
+  { icon: "⛽", title: "Combustível", desc: "Rastreamento de abastecimento por equipamento. Identifique desperdícios com dados reais." },
+  { icon: "🧾", title: "NFS-e", desc: "Nota fiscal emitida com um clique direto da OS ou fatura. Integrado ao NFE.io." },
+  { icon: "💰", title: "Faturas", desc: "Gere faturas vinculadas às OS. Controle pagamentos e envie por WhatsApp." },
+  { icon: "🏦", title: "Cobranças", desc: "Boleto e PIX automáticos com conciliação bancária via Asaas. Zero lançamento manual." },
   { icon: "📑", title: "Impostos", desc: "Apuração mensal automática para Simples Nacional, Lucro Presumido ou Real." },
-  { icon: "🧠", title: "Inteligência", desc: "Insights de negócio, KPIs e indicadores em tempo real. Tome decisões com dados, não com intuição." },
+  { icon: "🧠", title: "Inteligência", desc: "KPIs, insights e indicadores em tempo real. Decisões baseadas em dados, não em achismo." },
 ];
 
-const reasons = [
-  { stat: "13", label: "módulos integrados", desc: "Do agendamento ao faturamento, tudo conectado num só sistema." },
-  { stat: "1", label: "clique para emitir NFS-e", desc: "Nota fiscal gerada automaticamente a partir da OS ou fatura." },
-  { stat: "30%", label: "combustível economizado", desc: "Rastreamento por equipamento revela desperdícios invisíveis." },
-  { stat: "5min", label: "para começar a operar", desc: "Cadastre sua empresa, adicione a frota e comece hoje mesmo." },
+const stats = [
+  { value: "13", label: "Módulos integrados" },
+  { value: "1", label: "Clique para emitir NFS-e" },
+  { value: "30%", label: "Combustível economizado" },
+  { value: "5min", label: "Para começar a operar" },
 ];
 
 export default function LandingPage() {
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: "#080808", color: "#f0f0f0", minHeight: "100vh" }}>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+          --bg: #04080f;
+          --bg2: #07101f;
+          --bg3: #0a1628;
+          --border: #152035;
+          --border2: #1e3050;
+          --blue: #2563eb;
+          --blue2: #3b82f6;
+          --blue-glow: rgba(37,99,235,0.15);
+          --amber: #f59e0b;
+          --white: #eef2ff;
+          --gray: #7b90b8;
+          --gray2: #3d5070;
+        }
+        body { background: var(--bg); }
+        .land { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--white); min-height: 100vh; }
 
-      {/* NAVBAR */}
-      <nav style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "18px 40px", borderBottom: "1px solid #1c1c1c",
-        position: "sticky", top: 0, background: "#080808cc",
-        backdropFilter: "blur(12px)", zIndex: 100,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div style={{
-            width: 34, height: 34, background: "#f59e0b",
-            borderRadius: "6px", display: "flex", alignItems: "center",
-            justifyContent: "center", fontWeight: 900, fontSize: "1rem", color: "#080808",
-          }}>G</div>
-          <span style={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.5px" }}>GrúaOS</span>
-        </div>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <Link href="/login" style={{ color: "#737373", textDecoration: "none", fontSize: "0.875rem", fontWeight: 500 }}>
-            Entrar
+        /* NAV */
+        .nav {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 20px 48px;
+          border-bottom: 1px solid var(--border);
+          position: sticky; top: 0; z-index: 100;
+          background: rgba(4,8,15,0.85);
+          backdrop-filter: blur(16px);
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-logo-mark {
+          width: 36px; height: 36px; background: var(--blue); border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 900; font-size: 1rem; color: white; font-family: 'Montserrat', sans-serif;
+        }
+        .nav-logo-text { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px; }
+        .nav-logo-text span { color: var(--amber); }
+        .nav-links { display: flex; gap: 12px; align-items: center; }
+        .nav-login {
+          color: var(--gray); text-decoration: none; font-size: 0.875rem;
+          font-weight: 600; padding: 8px 16px;
+        }
+        .nav-cta {
+          background: var(--blue); color: white;
+          padding: 9px 22px; border-radius: 8px;
+          text-decoration: none; font-size: 0.875rem; font-weight: 700;
+          transition: background 0.2s;
+        }
+        .nav-cta:hover { background: var(--blue2); }
+
+        /* HERO */
+        .hero {
+          padding: 130px 48px 110px;
+          max-width: 1100px; margin: 0 auto;
+          position: relative;
+        }
+        .hero-badge {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: var(--bg3); border: 1px solid var(--border2);
+          padding: 6px 14px; border-radius: 100px;
+          font-size: 0.72rem; font-weight: 700; color: var(--gray);
+          letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 36px;
+        }
+        .hero-badge-dot { width: 6px; height: 6px; background: var(--blue2); border-radius: 50%; }
+        .hero-h1 {
+          font-size: clamp(2.8rem, 6vw, 5rem);
+          font-weight: 900; line-height: 1.0;
+          letter-spacing: -2.5px; margin-bottom: 28px;
+          max-width: 800px;
+        }
+        .hero-h1 em { font-style: normal; color: var(--blue2); }
+        .hero-h1 strong { font-style: normal; color: var(--amber); font-weight: 900; }
+        .hero-sub {
+          font-size: 1.1rem; color: var(--gray); line-height: 1.75;
+          max-width: 520px; margin-bottom: 52px; font-weight: 500;
+        }
+        .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 20px; }
+        .btn-primary {
+          background: var(--blue); color: white;
+          padding: 15px 36px; border-radius: 8px;
+          text-decoration: none; font-size: 1rem; font-weight: 800;
+          letter-spacing: -0.3px; transition: all 0.2s;
+          box-shadow: 0 0 40px rgba(37,99,235,0.35);
+        }
+        .btn-primary:hover { background: var(--blue2); box-shadow: 0 0 60px rgba(37,99,235,0.5); }
+        .btn-ghost {
+          background: transparent; color: var(--gray);
+          padding: 15px 28px; border-radius: 8px;
+          text-decoration: none; font-size: 1rem; font-weight: 600;
+          border: 1px solid var(--border2); transition: border-color 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--blue); color: var(--white); }
+        .hero-note { font-size: 0.75rem; color: var(--gray2); font-weight: 500; }
+
+        /* GLOW BG */
+        .hero-glow {
+          position: absolute; top: 60px; right: -100px;
+          width: 600px; height: 600px;
+          background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+          pointer-events: none; z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+
+        /* STATS */
+        .stats {
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+          background: var(--bg2);
+        }
+        .stats-inner {
+          max-width: 1100px; margin: 0 auto;
+          display: grid; grid-template-columns: repeat(4, 1fr);
+        }
+        .stat {
+          padding: 40px 36px;
+          border-right: 1px solid var(--border);
+        }
+        .stat:last-child { border-right: none; }
+        .stat-val {
+          font-size: 2.8rem; font-weight: 900;
+          color: var(--blue2); letter-spacing: -2px;
+          line-height: 1; margin-bottom: 8px;
+        }
+        .stat-label { font-size: 0.8rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* SECTION HEADER */
+        .section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+        .section-eyebrow {
+          font-size: 0.72rem; font-weight: 800; color: var(--blue2);
+          letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px;
+        }
+        .section-title {
+          font-size: clamp(1.8rem, 4vw, 2.6rem);
+          font-weight: 900; letter-spacing: -1.5px;
+          margin-bottom: 16px; line-height: 1.1;
+        }
+        .section-sub {
+          color: var(--gray); font-size: 1rem; line-height: 1.7;
+          max-width: 500px; font-weight: 500; margin-bottom: 56px;
+        }
+
+        /* MODULES GRID */
+        .modules-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+          border: 1px solid var(--border);
+          border-radius: 16px; overflow: hidden;
+        }
+        .module-card {
+          background: var(--bg2);
+          padding: 28px 28px;
+          border-right: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+          transition: background 0.2s;
+        }
+        .module-card:hover { background: var(--bg3); }
+        .module-icon {
+          width: 44px; height: 44px;
+          background: var(--bg3); border: 1px solid var(--border2);
+          border-radius: 10px; display: flex; align-items: center;
+          justify-content: center; font-size: 1.3rem; margin-bottom: 16px;
+        }
+        .module-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; color: var(--white); }
+        .module-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.65; font-weight: 500; }
+
+        /* WHY */
+        .why-section {
+          background: var(--bg2);
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+        }
+        .why-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 40px;
+        }
+        .why-item { display: flex; gap: 18px; }
+        .why-icon {
+          width: 42px; height: 42px; flex-shrink: 0;
+          background: var(--blue-glow); border: 1px solid var(--border2);
+          border-radius: 10px; display: flex; align-items: center;
+          justify-content: center; font-size: 1.1rem;
+        }
+        .why-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; }
+        .why-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.65; font-weight: 500; }
+
+        /* PLANS */
+        .plans-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 20px;
+        }
+        .plan-card {
+          background: var(--bg2);
+          border: 1px solid var(--border);
+          border-radius: 16px; padding: 36px; position: relative;
+        }
+        .plan-card.featured {
+          border-color: var(--blue);
+          background: var(--bg3);
+          box-shadow: 0 0 60px rgba(37,99,235,0.12);
+        }
+        .plan-badge {
+          position: absolute; top: -12px; left: 28px;
+          background: var(--blue); color: white;
+          padding: 4px 14px; border-radius: 100px;
+          font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em;
+        }
+        .plan-name { font-size: 0.85rem; font-weight: 800; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .plan-desc { font-size: 0.82rem; color: var(--gray2); margin-bottom: 24px; font-weight: 500; }
+        .plan-price { margin-bottom: 28px; }
+        .plan-amount { font-size: 2.8rem; font-weight: 900; letter-spacing: -2px; color: var(--white); }
+        .plan-period { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+        .plan-features { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 10px; }
+        .plan-features li { font-size: 0.82rem; color: var(--gray); display: flex; align-items: center; gap: 10px; font-weight: 500; }
+        .plan-features li::before { content: ""; width: 5px; height: 5px; background: var(--blue2); border-radius: 50%; flex-shrink: 0; }
+        .plan-btn {
+          display: block; text-align: center;
+          padding: 13px; border-radius: 8px;
+          text-decoration: none; font-weight: 800; font-size: 0.9rem;
+          transition: all 0.2s;
+        }
+        .plan-btn.primary { background: var(--blue); color: white; }
+        .plan-btn.primary:hover { background: var(--blue2); }
+        .plan-btn.secondary { background: transparent; color: var(--gray); border: 1px solid var(--border2); }
+        .plan-btn.secondary:hover { border-color: var(--blue); color: var(--white); }
+
+        /* CTA */
+        .cta-section {
+          padding: 120px 48px; text-align: center;
+          background: var(--bg2);
+          border-top: 1px solid var(--border);
+          position: relative; overflow: hidden;
+        }
+        .cta-glow {
+          position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+          width: 700px; height: 400px;
+          background: radial-gradient(ellipse, rgba(37,99,235,0.1) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .cta-title {
+          font-size: clamp(2rem, 5vw, 3.2rem);
+          font-weight: 900; letter-spacing: -2px;
+          line-height: 1.1; margin-bottom: 20px;
+        }
+        .cta-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; margin-bottom: 44px; font-weight: 500; }
+        .cta-note { margin-top: 18px; font-size: 0.75rem; color: var(--gray2); font-weight: 500; }
+
+        /* FOOTER */
+        .footer {
+          padding: 32px 48px;
+          border-top: 1px solid var(--border);
+          display: flex; justify-content: space-between; align-items: center;
+          flex-wrap: wrap; gap: 16px;
+        }
+        .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .footer-logo-mark {
+          width: 28px; height: 28px; background: var(--blue); border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 900; font-size: 0.85rem; color: white;
+        }
+        .footer-logo-text { font-size: 0.9rem; font-weight: 800; }
+        .footer-logo-text span { color: var(--amber); }
+        .footer-copy { font-size: 0.75rem; color: var(--gray2); font-weight: 500; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { font-size: 0.78rem; color: var(--gray2); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--gray); }
+
+        @media (max-width: 768px) {
+          .nav { padding: 16px 20px; }
+          .hero { padding: 80px 20px 70px; }
+          .section { padding: 70px 20px; }
+          .stats-inner { grid-template-columns: repeat(2, 1fr); }
+          .stat { border-bottom: 1px solid var(--border); }
+          .cta-section { padding: 80px 20px; }
+          .footer { padding: 24px 20px; }
+          .hero-glow { display: none; }
+        }
+      `}</style>
+
+      <div className="land">
+
+        {/* NAV */}
+        <nav className="nav">
+          <Link href="/" className="nav-logo">
+            <div className="nav-logo-mark">G</div>
+            <span className="nav-logo-text">Grúa<span>OS</span></span>
           </Link>
-          <Link href="/register?plan=pro" style={{
-            background: "#f59e0b", color: "#080808",
-            padding: "8px 20px", borderRadius: "6px",
-            textDecoration: "none", fontSize: "0.875rem", fontWeight: 700,
-          }}>
-            Começar grátis
-          </Link>
-        </div>
-      </nav>
-
-      {/* HERO */}
-      <section style={{ padding: "120px 24px 100px", maxWidth: "860px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: "8px",
-          background: "#1a1a1a", border: "1px solid #2a2a2a",
-          padding: "6px 14px", borderRadius: "4px",
-          fontSize: "0.75rem", fontWeight: 600, color: "#737373",
-          marginBottom: "32px", letterSpacing: "0.08em", textTransform: "uppercase",
-        }}>
-          <span style={{ width: 6, height: 6, background: "#f59e0b", borderRadius: "50%", display: "inline-block" }} />
-          ERP para locadoras de guindastes e equipamentos pesados
-        </div>
-
-        <h1 style={{
-          fontSize: "clamp(2.4rem, 7vw, 4.5rem)",
-          fontWeight: 900, lineHeight: 1.05,
-          marginBottom: "28px", letterSpacing: "-2px",
-          color: "#f0f0f0",
-        }}>
-          Sua operação.<br />
-          <span style={{
-            color: "#f59e0b",
-            borderBottom: "3px solid #f59e0b",
-            paddingBottom: "2px",
-          }}>Do primeiro agendamento</span><br />
-          ao último real recebido.
-        </h1>
-
-        <p style={{
-          fontSize: "1.1rem", color: "#737373", lineHeight: 1.7,
-          maxWidth: "580px", margin: "0 auto 48px",
-        }}>
-          13 módulos integrados para locadoras de guindastes e equipamentos pesados.
-          Substitua planilhas, WhatsApps soltos e sistemas genéricos de uma vez por todas.
-        </p>
-
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/register?plan=pro" style={{
-            background: "#f59e0b", color: "#080808",
-            padding: "14px 36px", borderRadius: "6px",
-            textDecoration: "none", fontSize: "1rem", fontWeight: 800,
-            letterSpacing: "-0.3px",
-          }}>
-            Testar 7 dias grátis →
-          </Link>
-          <Link href="/login" style={{
-            background: "transparent", color: "#a3a3a3",
-            padding: "14px 28px", borderRadius: "6px",
-            textDecoration: "none", fontSize: "1rem", fontWeight: 600,
-            border: "1px solid #2a2a2a",
-          }}>
-            Já tenho conta
-          </Link>
-        </div>
-
-        <p style={{ marginTop: "20px", fontSize: "0.78rem", color: "#404040" }}>
-          Cartão obrigatório · Sem cobrança nos primeiros 7 dias · Cancele quando quiser
-        </p>
-      </section>
-
-      {/* DIVISOR */}
-      <div style={{ borderTop: "1px solid #1c1c1c", maxWidth: "1100px", margin: "0 auto" }} />
-
-      {/* NÚMEROS */}
-      <section style={{ padding: "72px 24px", maxWidth: "1100px", margin: "0 auto" }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1px", background: "#1c1c1c",
-          border: "1px solid #1c1c1c", borderRadius: "12px", overflow: "hidden",
-        }}>
-          {reasons.map((r) => (
-            <div key={r.stat} style={{
-              background: "#0e0e0e", padding: "36px 28px",
-            }}>
-              <div style={{
-                fontSize: "2.6rem", fontWeight: 900,
-                color: "#f59e0b", letterSpacing: "-2px", marginBottom: "4px",
-              }}>
-                {r.stat}
-              </div>
-              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#f0f0f0", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                {r.label}
-              </div>
-              <div style={{ fontSize: "0.825rem", color: "#525252", lineHeight: 1.5 }}>
-                {r.desc}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* MÓDULOS */}
-      <section style={{ padding: "80px 24px", maxWidth: "1100px", margin: "0 auto" }}>
-        <div style={{ marginBottom: "56px" }}>
-          <p style={{
-            fontSize: "0.75rem", fontWeight: 700, color: "#f59e0b",
-            letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px",
-          }}>
-            Módulos
-          </p>
-          <h2 style={{
-            fontSize: "clamp(1.6rem, 4vw, 2.4rem)",
-            fontWeight: 900, letterSpacing: "-1px",
-            marginBottom: "12px", maxWidth: "600px",
-          }}>
-            Tudo integrado. Nada de retrabalho.
-          </h2>
-          <p style={{ color: "#525252", fontSize: "0.95rem", maxWidth: "500px", lineHeight: 1.6 }}>
-            Cada módulo foi construído a partir de conversas reais com donos de locadoras.
-            Não é sistema genérico adaptado — é feito para esse setor.
-          </p>
-        </div>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: "1px", background: "#1c1c1c",
-          border: "1px solid #1c1c1c", borderRadius: "12px", overflow: "hidden",
-        }}>
-          {modules.map((m) => (
-            <div key={m.title} style={{
-              background: "#0e0e0e", padding: "28px",
-              transition: "background 0.2s",
-            }}>
-              <div style={{
-                fontSize: "1.4rem", marginBottom: "14px",
-                width: 44, height: 44,
-                background: "#1a1a1a", borderRadius: "8px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                border: "1px solid #242424",
-              }}>
-                {m.icon}
-              </div>
-              <h3 style={{
-                fontSize: "0.95rem", fontWeight: 700,
-                marginBottom: "6px", color: "#e0e0e0",
-              }}>
-                {m.title}
-              </h3>
-              <p style={{ fontSize: "0.825rem", color: "#525252", lineHeight: 1.6, margin: 0 }}>
-                {m.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* DIFERENCIAIS */}
-      <section style={{
-        padding: "80px 24px",
-        borderTop: "1px solid #1c1c1c",
-        borderBottom: "1px solid #1c1c1c",
-        background: "#0b0b0b",
-      }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "56px" }}>
-            <p style={{
-              fontSize: "0.75rem", fontWeight: 700, color: "#f59e0b",
-              letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px",
-            }}>
-              Por que o GrúaOS
-            </p>
-            <h2 style={{
-              fontSize: "clamp(1.6rem, 4vw, 2.4rem)",
-              fontWeight: 900, letterSpacing: "-1px", maxWidth: "500px",
-            }}>
-              Feito para quem opera no campo.
-            </h2>
+          <div className="nav-links">
+            <Link href="/login" className="nav-login">Entrar</Link>
+            <Link href="/register?plan=pro" className="nav-cta">Testar grátis</Link>
           </div>
+        </nav>
 
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: "32px",
-          }}>
-            {[
-              { icon: "📱", title: "Mobile-first", desc: "Use na obra, no escritório ou em qualquer lugar. Interface pensada para o celular." },
-              { icon: "⚡", title: "Rápido e leve", desc: "Sem instalação, sem travamento. Acessa pelo navegador em qualquer dispositivo." },
-              { icon: "💬", title: "WhatsApp integrado", desc: "Envie cotações, OS e faturas pelo WhatsApp com 1 clique. Seus clientes adoram." },
-              { icon: "🔒", title: "Isolamento total", desc: "Cada empresa vê apenas seus próprios dados. Segurança e privacidade garantidas." },
-              { icon: "🧾", title: "Fiscal automatizado", desc: "NFS-e, apuração de impostos e cobranças automáticas. Sem retrabalho burocrático." },
-              { icon: "💰", title: "Preço justo", desc: "A partir de R$97/mês. Menos que um funcionário. Mais poderoso que qualquer planilha." },
-            ].map((item) => (
-              <div key={item.title} style={{ display: "flex", gap: "16px" }}>
-                <div style={{
-                  fontSize: "1.2rem", flexShrink: 0,
-                  width: 40, height: 40,
-                  background: "#141414", borderRadius: "8px",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  border: "1px solid #1f1f1f",
-                }}>
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 style={{ fontSize: "0.9rem", fontWeight: 700, marginBottom: "4px", color: "#e0e0e0" }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ fontSize: "0.825rem", color: "#525252", lineHeight: 1.6, margin: 0 }}>
-                    {item.desc}
-                  </p>
-                </div>
+        {/* HERO */}
+        <section className="hero">
+          <div className="hero-glow" />
+          <div className="hero-badge">
+            <span className="hero-badge-dot" />
+            ERP para locadoras de equipamentos pesados
+          </div>
+          <h1 className="hero-h1">
+            Gestão completa<br />
+            para sua <em>locadora</em><br />
+            de <strong>guindastes.</strong>
+          </h1>
+          <p className="hero-sub">
+            13 módulos integrados — frota, OS, contratos, fiscal e financeiro em um só lugar.
+            Substitua planilhas e sistemas genéricos de uma vez por todas.
+          </p>
+          <div className="hero-actions">
+            <Link href="/register?plan=pro" className="btn-primary">Testar 7 dias grátis →</Link>
+            <Link href="/login" className="btn-ghost">Já tenho conta</Link>
+          </div>
+          <p className="hero-note">Cartão obrigatório · Sem cobrança nos primeiros 7 dias · Cancele quando quiser</p>
+        </section>
+
+        {/* STATS */}
+        <div className="stats">
+          <div className="stats-inner">
+            {stats.map((s) => (
+              <div key={s.value} className="stat">
+                <div className="stat-val">{s.value}</div>
+                <div className="stat-label">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* PLANOS */}
-      <section style={{ padding: "80px 24px", maxWidth: "1000px", margin: "0 auto" }}>
-        <div style={{ marginBottom: "56px" }}>
-          <p style={{
-            fontSize: "0.75rem", fontWeight: 700, color: "#f59e0b",
-            letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px",
-          }}>
-            Planos
+        {/* MÓDULOS */}
+        <div className="section">
+          <p className="section-eyebrow">Módulos</p>
+          <h2 className="section-title">Tudo integrado.<br />Zero retrabalho.</h2>
+          <p className="section-sub">
+            Cada módulo foi construído a partir de conversas reais com donos de locadoras.
+            Feito para esse setor, não adaptado de outro.
           </p>
-          <h2 style={{
-            fontSize: "clamp(1.6rem, 4vw, 2.4rem)",
-            fontWeight: 900, letterSpacing: "-1px", marginBottom: "8px",
-          }}>
-            Simples e transparentes.
-          </h2>
-          <p style={{ color: "#525252", fontSize: "0.95rem" }}>
+          <div className="modules-grid">
+            {modules.map((m) => (
+              <div key={m.title} className="module-card">
+                <div className="module-icon">{m.icon}</div>
+                <div className="module-title">{m.title}</div>
+                <div className="module-desc">{m.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* POR QUE */}
+        <div className="why-section">
+          <div className="section">
+            <p className="section-eyebrow">Por que GrúaOS</p>
+            <h2 className="section-title">Feito para quem<br />opera no campo.</h2>
+            <p className="section-sub">
+              Simples no celular, poderoso no desktop. Sem treinamento técnico, sem instalação.
+            </p>
+            <div className="why-grid">
+              {[
+                { icon: "📱", title: "Desktop e mobile", desc: "Interface otimizada para qualquer dispositivo. Use no escritório ou direto da obra." },
+                { icon: "⚡", title: "Rápido e sem instalação", desc: "Acessa pelo navegador. Sem travamento, sem atualização manual." },
+                { icon: "💬", title: "WhatsApp integrado", desc: "Envie cotações, OS e faturas com 1 clique. Seus clientes recebem na hora." },
+                { icon: "🧾", title: "Fiscal automatizado", desc: "NFS-e, impostos e cobranças geradas automaticamente. Sem burocracia." },
+                { icon: "🔒", title: "Dados isolados por empresa", desc: "Cada conta vê apenas seus próprios dados. Segurança total." },
+                { icon: "💰", title: "Preço justo", desc: "A partir de R$97/mês. Menos que um funcionário. Mais poderoso que qualquer planilha." },
+              ].map((w) => (
+                <div key={w.title} className="why-item">
+                  <div className="why-icon">{w.icon}</div>
+                  <div>
+                    <div className="why-title">{w.title}</div>
+                    <div className="why-desc">{w.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* PLANOS */}
+        <div className="section">
+          <p className="section-eyebrow">Planos</p>
+          <h2 className="section-title">Simples e transparentes.</h2>
+          <p className="section-sub">
             Sem taxa de implantação. Sem contrato anual. Cancele quando quiser.
           </p>
-        </div>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: "16px",
-        }}>
-          {[
-            {
-              name: "Pro", price: "R$97", period: "/mês",
-              desc: "Para locadoras em crescimento",
-              features: ["Frota ilimitada", "Cotações ilimitadas", "OS ilimitadas", "Agenda + Gantt", "Manutenção preditiva", "Faturamento integrado", "NFS-e automática", "Boleto e PIX", "WhatsApp integrado", "BI e Inteligência"],
-              cta: "Testar 7 dias grátis", href: "/register?plan=pro", highlight: true,
-            },
-            {
-              name: "Enterprise", price: "R$197", period: "/mês",
-              desc: "Para grandes operações",
-              features: ["Tudo do Pro", "Múltiplos usuários", "Relatórios avançados", "Export CSV/Excel", "API de integração", "Suporte prioritário", "Onboarding dedicado", "SLA garantido"],
-              cta: "Falar com vendas",
-              href: "https://wa.me/5534991103401?text=Olá!%20Tenho%20interesse%20no%20plano%20Enterprise%20do%20GrúaOS.",
-              highlight: false,
-            },
-          ].map((plan) => (
-            <div key={plan.name} style={{
-              background: plan.highlight ? "#111" : "#0e0e0e",
-              border: `1px solid ${plan.highlight ? "#f59e0b44" : "#1c1c1c"}`,
-              borderRadius: "12px", padding: "32px", position: "relative",
-            }}>
-              {plan.highlight && (
-                <div style={{
-                  position: "absolute", top: -12, left: 28,
-                  background: "#f59e0b", color: "#080808",
-                  padding: "3px 14px", borderRadius: "4px",
-                  fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.05em",
-                }}>
-                  MAIS POPULAR
-                </div>
-              )}
-              <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "4px" }}>{plan.name}</h3>
-              <p style={{ fontSize: "0.8rem", color: "#525252", marginBottom: "20px" }}>{plan.desc}</p>
-              <div style={{ marginBottom: "24px" }}>
-                <span style={{ fontSize: "2.4rem", fontWeight: 900, letterSpacing: "-1px", color: "#f0f0f0" }}>
-                  {plan.price}
-                </span>
-                <span style={{ fontSize: "0.85rem", color: "#525252" }}>{plan.period}</span>
+          <div className="plans-grid">
+            <div className="plan-card featured">
+              <div className="plan-badge">MAIS POPULAR</div>
+              <div className="plan-name">Pro</div>
+              <div className="plan-desc">Para locadoras em crescimento</div>
+              <div className="plan-price">
+                <span className="plan-amount">R$97</span>
+                <span className="plan-period">/mês</span>
               </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 28px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                {plan.features.map((f) => (
-                  <li key={f} style={{ fontSize: "0.825rem", color: "#a3a3a3", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: "#f59e0b", fontWeight: 700, fontSize: "0.7rem" }}>✦</span>
-                    {f}
-                  </li>
-                ))}
+              <ul className="plan-features">
+                {["Frota ilimitada","OS ilimitadas","Agenda + Gantt","Cotações ilimitadas","Contratos e medições","Operadores","Manutenção preditiva","NFS-e automática","Boleto e PIX","Apuração de impostos","BI e Inteligência"].map(f => <li key={f}>{f}</li>)}
               </ul>
-              <a href={plan.href} style={{
-                display: "block", textAlign: "center",
-                padding: "12px", borderRadius: "6px",
-                background: plan.highlight ? "#f59e0b" : "#1a1a1a",
-                color: plan.highlight ? "#080808" : "#f0f0f0",
-                textDecoration: "none", fontWeight: 700, fontSize: "0.875rem",
-                border: plan.highlight ? "none" : "1px solid #2a2a2a",
-              }}>
-                {plan.cta}
-              </a>
+              <Link href="/register?plan=pro" className="plan-btn primary">Testar 7 dias grátis</Link>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA FINAL */}
-      <section style={{
-        padding: "100px 24px", textAlign: "center",
-        borderTop: "1px solid #1c1c1c", background: "#0b0b0b",
-      }}>
-        <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-          <div style={{
-            width: 56, height: 56, background: "#f59e0b",
-            borderRadius: "10px", margin: "0 auto 32px",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "1.6rem",
-          }}>
-            🏗️
+            <div className="plan-card">
+              <div className="plan-name">Enterprise</div>
+              <div className="plan-desc">Para grandes operações</div>
+              <div className="plan-price">
+                <span className="plan-amount">R$197</span>
+                <span className="plan-period">/mês</span>
+              </div>
+              <ul className="plan-features">
+                {["Tudo do Pro","Múltiplos usuários","Relatórios avançados","Export CSV/Excel","API de integração","Suporte prioritário","Onboarding dedicado","SLA garantido"].map(f => <li key={f}>{f}</li>)}
+              </ul>
+              <a href="https://wa.me/5534991103401?text=Olá!%20Tenho%20interesse%20no%20plano%20Enterprise%20do%20GrúaOS." className="plan-btn secondary">Falar com vendas</a>
+            </div>
           </div>
-          <h2 style={{
-            fontSize: "clamp(1.8rem, 5vw, 3rem)",
-            fontWeight: 900, letterSpacing: "-1.5px",
-            marginBottom: "16px", lineHeight: 1.1,
-          }}>
-            Sua locadora merece um sistema à altura.
-          </h2>
-          <p style={{
-            color: "#525252", fontSize: "1rem",
-            marginBottom: "40px", lineHeight: 1.6,
-          }}>
-            Configure em menos de 5 minutos. Comece a operar hoje mesmo.
-          </p>
-          <Link href="/register?plan=pro" style={{
-            background: "#f59e0b", color: "#080808",
-            padding: "16px 44px", borderRadius: "6px",
-            textDecoration: "none", fontSize: "1rem", fontWeight: 800,
-            display: "inline-block", letterSpacing: "-0.3px",
-          }}>
-            Testar 7 dias grátis →
+        </div>
+
+        {/* CTA FINAL */}
+        <div className="cta-section">
+          <div className="cta-glow" />
+          <div className="cta-inner">
+            <h2 className="cta-title">Sua locadora merece<br />um sistema à altura.</h2>
+            <p className="cta-sub">
+              Configure em menos de 5 minutos. Cadastre sua frota e comece a operar hoje mesmo.
+            </p>
+            <Link href="/register?plan=pro" className="btn-primary">Testar 7 dias grátis →</Link>
+            <p className="cta-note">Cartão obrigatório · Sem cobrança nos primeiros 7 dias</p>
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <footer className="footer">
+          <Link href="/" className="footer-logo">
+            <div className="footer-logo-mark">G</div>
+            <span className="footer-logo-text">Grúa<span>OS</span></span>
           </Link>
-          <p style={{ marginTop: "16px", fontSize: "0.78rem", color: "#2a2a2a" }}>
-            Cartão obrigatório · Sem cobrança nos primeiros 7 dias
-          </p>
-        </div>
-      </section>
+          <p className="footer-copy">© {new Date().getFullYear()} GrúaOS. Todos os direitos reservados.</p>
+          <div className="footer-links">
+            <Link href="/login">Entrar</Link>
+            <a href="https://wa.me/5534991103401">Suporte</a>
+          </div>
+        </footer>
 
-      {/* FOOTER */}
-      <footer style={{
-        padding: "28px 40px", borderTop: "1px solid #1c1c1c",
-        display: "flex", justifyContent: "space-between",
-        alignItems: "center", flexWrap: "wrap", gap: "12px",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <div style={{
-            width: 28, height: 28, background: "#f59e0b",
-            borderRadius: "5px", display: "flex", alignItems: "center",
-            justifyContent: "center", fontWeight: 900, fontSize: "0.85rem", color: "#080808",
-          }}>G</div>
-          <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>GrúaOS</span>
-        </div>
-        <p style={{ color: "#2a2a2a", fontSize: "0.78rem", margin: 0 }}>
-          © {new Date().getFullYear()} GrúaOS. Todos os direitos reservados.
-        </p>
-        <div style={{ display: "flex", gap: "20px" }}>
-          <Link href="/login" style={{ color: "#404040", textDecoration: "none", fontSize: "0.78rem" }}>Entrar</Link>
-          <a href="https://wa.me/5534991103401" style={{ color: "#404040", textDecoration: "none", fontSize: "0.78rem" }}>Suporte</a>
-        </div>
-      </footer>
-
-    </main>
+      </div>
+    </>
   );
 }
