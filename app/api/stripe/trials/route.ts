@@ -3,13 +3,12 @@ import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
-
 })
 
 export async function GET() {
   try {
     const subscriptions = await stripe.subscriptions.list({
-      status: 'trialing',
+      status: 'all',
       limit: 100,
       expand: ['data.customer', 'data.default_payment_method'],
     })
@@ -19,6 +18,7 @@ export async function GET() {
       const paymentMethod = sub.default_payment_method as Stripe.PaymentMethod | null
 
       const trialEnd = sub.trial_end ? new Date(sub.trial_end * 1000) : null
+      const created = new Date(sub.created * 1000)
       const now = new Date()
       const daysLeft = trialEnd
         ? Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
@@ -26,6 +26,7 @@ export async function GET() {
 
       return {
         id: sub.id,
+        status: sub.status,
         customerName: customer?.name || 'Sem nome',
         customerEmail: customer?.email || '',
         hasCard: !!paymentMethod && paymentMethod.type === 'card',
@@ -33,6 +34,7 @@ export async function GET() {
         cardLast4: paymentMethod?.card?.last4 || null,
         trialEnd: trialEnd?.toISOString() || null,
         daysLeft,
+        created: created.toISOString(),
       }
     })
 
