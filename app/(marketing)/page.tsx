@@ -46,7 +46,6 @@ export default function LandingPage() {
         body { background: var(--bg); }
         .land { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--white); min-height: 100vh; }
 
-        /* NAV */
         .nav {
           display: flex; align-items: center; justify-content: space-between;
           padding: 20px 48px;
@@ -61,13 +60,10 @@ export default function LandingPage() {
           display: flex; align-items: center; justify-content: center;
           font-weight: 900; font-size: 1rem; color: white; font-family: 'Montserrat', sans-serif;
         }
-        .nav-logo-text { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px; }
+        .nav-logo-text { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px; color: var(--white); }
         .nav-logo-text span { color: var(--amber); }
         .nav-links { display: flex; gap: 12px; align-items: center; }
-        .nav-login {
-          color: var(--gray); text-decoration: none; font-size: 0.875rem;
-          font-weight: 600; padding: 8px 16px;
-        }
+        .nav-login { color: var(--gray); text-decoration: none; font-size: 0.875rem; font-weight: 600; padding: 8px 16px; }
         .nav-cta {
           background: var(--blue); color: white;
           padding: 9px 22px; border-radius: 8px;
@@ -76,7 +72,6 @@ export default function LandingPage() {
         }
         .nav-cta:hover { background: var(--blue2); }
 
-        /* HERO */
         .hero {
           padding: 130px 48px 110px;
           max-width: 1100px; margin: 0 auto;
@@ -119,8 +114,6 @@ export default function LandingPage() {
         }
         .btn-ghost:hover { border-color: var(--blue); color: var(--white); }
         .hero-note { font-size: 0.75rem; color: var(--gray2); font-weight: 500; }
-
-        /* GLOW BG */
         .hero-glow {
           position: absolute; top: 60px; right: -100px;
           width: 600px; height: 600px;
@@ -129,105 +122,53 @@ export default function LandingPage() {
         }
         .hero > * { position: relative; z-index: 1; }
 
-        /* STATS */
-        .stats {
-          border-top: 1px solid var(--border);
-          border-bottom: 1px solid var(--border);
-          background: var(--bg2);
-        }
+        .stats { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg2); }
         .stats-inner {
           max-width: 1100px; margin: 0 auto;
           display: grid; grid-template-columns: repeat(4, 1fr);
         }
-        .stat {
-          padding: 40px 36px;
-          border-right: 1px solid var(--border);
-        }
+        .stat { padding: 40px 36px; border-right: 1px solid var(--border); }
         .stat:last-child { border-right: none; }
-        .stat-val {
-          font-size: 2.8rem; font-weight: 900;
-          color: var(--blue2); letter-spacing: -2px;
-          line-height: 1; margin-bottom: 8px;
-        }
+        .stat-val { font-size: 2.8rem; font-weight: 900; color: var(--blue2); letter-spacing: -2px; line-height: 1; margin-bottom: 8px; }
         .stat-label { font-size: 0.8rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
 
-        /* SECTION HEADER */
         .section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
-        .section-eyebrow {
-          font-size: 0.72rem; font-weight: 800; color: var(--blue2);
-          letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px;
-        }
-        .section-title {
-          font-size: clamp(1.8rem, 4vw, 2.6rem);
-          font-weight: 900; letter-spacing: -1.5px;
-          margin-bottom: 16px; line-height: 1.1;
-        }
-        .section-sub {
-          color: var(--gray); font-size: 1rem; line-height: 1.7;
-          max-width: 500px; font-weight: 500; margin-bottom: 56px;
-        }
+        .section-eyebrow { font-size: 0.72rem; font-weight: 800; color: var(--blue2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+        .section-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 16px; line-height: 1.1; }
+        .section-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; max-width: 500px; font-weight: 500; margin-bottom: 56px; }
 
-        /* MODULES GRID */
         .modules-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-          border: 1px solid var(--border);
-          border-radius: 16px; overflow: hidden;
+          display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+          border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
         }
         .module-card {
-          background: var(--bg2);
-          padding: 28px 28px;
-          border-right: 1px solid var(--border);
-          border-bottom: 1px solid var(--border);
+          background: var(--bg2); padding: 28px;
+          border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
           transition: background 0.2s;
         }
         .module-card:hover { background: var(--bg3); }
         .module-icon {
-          width: 44px; height: 44px;
-          background: var(--bg3); border: 1px solid var(--border2);
+          width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border2);
           border-radius: 10px; display: flex; align-items: center;
           justify-content: center; font-size: 1.3rem; margin-bottom: 16px;
         }
         .module-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; color: var(--white); }
         .module-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.65; font-weight: 500; }
 
-        /* WHY */
-        .why-section {
-          background: var(--bg2);
-          border-top: 1px solid var(--border);
-          border-bottom: 1px solid var(--border);
-        }
-        .why-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 40px;
-        }
+        .why-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; }
         .why-item { display: flex; gap: 18px; }
         .why-icon {
           width: 42px; height: 42px; flex-shrink: 0;
           background: var(--blue-glow); border: 1px solid var(--border2);
-          border-radius: 10px; display: flex; align-items: center;
-          justify-content: center; font-size: 1.1rem;
+          border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
         }
         .why-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; }
         .why-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.65; font-weight: 500; }
 
-        /* PLANS */
-        .plans-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 20px;
-        }
-        .plan-card {
-          background: var(--bg2);
-          border: 1px solid var(--border);
-          border-radius: 16px; padding: 36px; position: relative;
-        }
-        .plan-card.featured {
-          border-color: var(--blue);
-          background: var(--bg3);
-          box-shadow: 0 0 60px rgba(37,99,235,0.12);
-        }
+        .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .plan-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 36px; position: relative; }
+        .plan-card.featured { border-color: var(--blue); background: var(--bg3); box-shadow: 0 0 60px rgba(37,99,235,0.12); }
         .plan-badge {
           position: absolute; top: -12px; left: 28px;
           background: var(--blue); color: white;
@@ -239,27 +180,22 @@ export default function LandingPage() {
         .plan-price { margin-bottom: 28px; }
         .plan-amount { font-size: 2.8rem; font-weight: 900; letter-spacing: -2px; color: var(--white); }
         .plan-period { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+        .plan-saving {
+          display: inline-block; margin-top: 8px;
+          background: rgba(37,99,235,0.15); border: 1px solid var(--border2);
+          color: var(--blue2); font-size: 0.72rem; font-weight: 700;
+          padding: 3px 10px; border-radius: 100px; letter-spacing: 0.04em;
+        }
         .plan-features { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 10px; }
         .plan-features li { font-size: 0.82rem; color: var(--gray); display: flex; align-items: center; gap: 10px; font-weight: 500; }
         .plan-features li::before { content: ""; width: 5px; height: 5px; background: var(--blue2); border-radius: 50%; flex-shrink: 0; }
-        .plan-btn {
-          display: block; text-align: center;
-          padding: 13px; border-radius: 8px;
-          text-decoration: none; font-weight: 800; font-size: 0.9rem;
-          transition: all 0.2s;
-        }
+        .plan-btn { display: block; text-align: center; padding: 13px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 0.9rem; transition: all 0.2s; }
         .plan-btn.primary { background: var(--blue); color: white; }
         .plan-btn.primary:hover { background: var(--blue2); }
         .plan-btn.secondary { background: transparent; color: var(--gray); border: 1px solid var(--border2); }
         .plan-btn.secondary:hover { border-color: var(--blue); color: var(--white); }
 
-        /* CTA */
-        .cta-section {
-          padding: 120px 48px; text-align: center;
-          background: var(--bg2);
-          border-top: 1px solid var(--border);
-          position: relative; overflow: hidden;
-        }
+        .cta-section { padding: 120px 48px; text-align: center; background: var(--bg2); border-top: 1px solid var(--border); position: relative; overflow: hidden; }
         .cta-glow {
           position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
           width: 700px; height: 400px;
@@ -267,28 +203,17 @@ export default function LandingPage() {
           pointer-events: none;
         }
         .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
-        .cta-title {
-          font-size: clamp(2rem, 5vw, 3.2rem);
-          font-weight: 900; letter-spacing: -2px;
-          line-height: 1.1; margin-bottom: 20px;
-        }
+        .cta-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
         .cta-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; margin-bottom: 44px; font-weight: 500; }
         .cta-note { margin-top: 18px; font-size: 0.75rem; color: var(--gray2); font-weight: 500; }
 
-        /* FOOTER */
         .footer {
-          padding: 32px 48px;
-          border-top: 1px solid var(--border);
-          display: flex; justify-content: space-between; align-items: center;
-          flex-wrap: wrap; gap: 16px;
+          padding: 32px 48px; border-top: 1px solid var(--border);
+          display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
         }
         .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .footer-logo-mark {
-          width: 28px; height: 28px; background: var(--blue); border-radius: 6px;
-          display: flex; align-items: center; justify-content: center;
-          font-weight: 900; font-size: 0.85rem; color: white;
-        }
-        .footer-logo-text { font-size: 0.9rem; font-weight: 800; }
+        .footer-logo-mark { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem; color: white; }
+        .footer-logo-text { font-size: 0.9rem; font-weight: 800; color: var(--white); }
         .footer-logo-text span { color: var(--amber); }
         .footer-copy { font-size: 0.75rem; color: var(--gray2); font-weight: 500; }
         .footer-links { display: flex; gap: 24px; }
@@ -309,7 +234,6 @@ export default function LandingPage() {
 
       <div className="land">
 
-        {/* NAV */}
         <nav className="nav">
           <Link href="/" className="nav-logo">
             <div className="nav-logo-mark">G</div>
@@ -321,7 +245,6 @@ export default function LandingPage() {
           </div>
         </nav>
 
-        {/* HERO */}
         <section className="hero">
           <div className="hero-glow" />
           <div className="hero-badge">
@@ -344,7 +267,6 @@ export default function LandingPage() {
           <p className="hero-note">Cartão obrigatório · Sem cobrança nos primeiros 7 dias · Cancele quando quiser</p>
         </section>
 
-        {/* STATS */}
         <div className="stats">
           <div className="stats-inner">
             {stats.map((s) => (
@@ -356,7 +278,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* MÓDULOS */}
         <div className="section">
           <p className="section-eyebrow">Módulos</p>
           <h2 className="section-title">Tudo integrado.<br />Zero retrabalho.</h2>
@@ -375,7 +296,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* POR QUE */}
         <div className="why-section">
           <div className="section">
             <p className="section-eyebrow">Por que GrúaOS</p>
@@ -390,7 +310,7 @@ export default function LandingPage() {
                 { icon: "💬", title: "WhatsApp integrado", desc: "Envie cotações, OS e faturas com 1 clique. Seus clientes recebem na hora." },
                 { icon: "🧾", title: "Fiscal automatizado", desc: "NFS-e, impostos e cobranças geradas automaticamente. Sem burocracia." },
                 { icon: "🔒", title: "Dados isolados por empresa", desc: "Cada conta vê apenas seus próprios dados. Segurança total." },
-                { icon: "💰", title: "Preço justo", desc: "A partir de R$97/mês. Menos que um funcionário. Mais poderoso que qualquer planilha." },
+                { icon: "💰", title: "Preço justo", desc: "A partir de R$297/mês. Menos que um funcionário. Mais poderoso que qualquer planilha." },
               ].map((w) => (
                 <div key={w.title} className="why-item">
                   <div className="why-icon">{w.icon}</div>
@@ -404,7 +324,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* PLANOS */}
         <div className="section">
           <p className="section-eyebrow">Planos</p>
           <h2 className="section-title">Simples e transparentes.</h2>
@@ -417,11 +336,13 @@ export default function LandingPage() {
               <div className="plan-name">Pro</div>
               <div className="plan-desc">Para locadoras em crescimento</div>
               <div className="plan-price">
-                <span className="plan-amount">R$97</span>
+                <span className="plan-amount">R$297</span>
                 <span className="plan-period">/mês</span>
+                <br />
+                <span className="plan-saving">✦ 7 dias grátis para testar</span>
               </div>
               <ul className="plan-features">
-                {["Frota ilimitada","OS ilimitadas","Agenda + Gantt","Cotações ilimitadas","Contratos e medições","Operadores","Manutenção preditiva","NFS-e automática","Boleto e PIX","Apuração de impostos","BI e Inteligência"].map(f => <li key={f}>{f}</li>)}
+                {["Frota ilimitada","OS ilimitadas","Agenda + Gantt","Cotações ilimitadas","Contratos e medições","Operadores","Manutenção preditiva","NFS-e automática","Boleto e PIX","Apuração de impostos","BI e Inteligência","Suporte por WhatsApp"].map(f => <li key={f}>{f}</li>)}
               </ul>
               <Link href="/register?plan=pro" className="plan-btn primary">Testar 7 dias grátis</Link>
             </div>
@@ -429,18 +350,19 @@ export default function LandingPage() {
               <div className="plan-name">Enterprise</div>
               <div className="plan-desc">Para grandes operações</div>
               <div className="plan-price">
-                <span className="plan-amount">R$197</span>
+                <span className="plan-amount">R$597</span>
                 <span className="plan-period">/mês</span>
+                <br />
+                <span className="plan-saving">✦ Onboarding dedicado incluso</span>
               </div>
               <ul className="plan-features">
-                {["Tudo do Pro","Múltiplos usuários","Relatórios avançados","Export CSV/Excel","API de integração","Suporte prioritário","Onboarding dedicado","SLA garantido"].map(f => <li key={f}>{f}</li>)}
+                {["Tudo do Pro","Múltiplos usuários","Relatórios avançados","Export CSV/Excel","API de integração","Suporte prioritário 24h","Onboarding dedicado","SLA garantido"].map(f => <li key={f}>{f}</li>)}
               </ul>
               <a href="https://wa.me/5534991103401?text=Olá!%20Tenho%20interesse%20no%20plano%20Enterprise%20do%20GrúaOS." className="plan-btn secondary">Falar com vendas</a>
             </div>
           </div>
         </div>
 
-        {/* CTA FINAL */}
         <div className="cta-section">
           <div className="cta-glow" />
           <div className="cta-inner">
@@ -453,7 +375,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* FOOTER */}
         <footer className="footer">
           <Link href="/" className="footer-logo">
             <div className="footer-logo-mark">G</div>
